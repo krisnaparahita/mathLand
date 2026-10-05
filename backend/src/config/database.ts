@@ -4,12 +4,17 @@ import { logger } from './logger'
 const { Pool } = pg
 
 const connectionString =
-  process.env.DATABASE_URL || 'postgres://postgres:Tencent2025@localhost:5432/mathland'
+  process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/mathland'
+
+// Serverless functions run many short-lived instances, so each instance keeps
+// a very small pool (override with DB_POOL_MAX). Use a pooled connection
+// string (for example Neon's "-pooler" host) in production.
+const poolMax = Number(process.env.DB_POOL_MAX) || (process.env.VERCEL ? 1 : 10)
 
 export const pool = new Pool({
   connectionString,
-  max: 10,
-  idleTimeoutMillis: 30000,
+  max: poolMax,
+  idleTimeoutMillis: process.env.VERCEL ? 5000 : 30000,
   connectionTimeoutMillis: 10000,
 })
 

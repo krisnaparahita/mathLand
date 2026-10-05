@@ -501,7 +501,7 @@ const compare: Topic = {
     const max = [10, 20, 20, 99, 99][level - 1]
 
     makers.push(() => {
-      let a = rng.int(1, max)
+      const a = rng.int(1, max)
       let b = rng.int(1, max)
       while (a === b) b = rng.int(1, max)
       const symbol = a > b ? '>' : '<'

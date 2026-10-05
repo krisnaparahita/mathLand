@@ -33,7 +33,7 @@ docker exec postgres psql -U postgres -c "CREATE DATABASE mathland;"
 cd backend
 pnpm install
 cp .env.example .env        # adjust DATABASE_URL if needed
-pnpm dev                    # http://localhost:3000
+pnpm dev                    # http://localhost:3000 (API under /api)
 
 # 3. Frontend (in a new terminal)
 cd frontend
@@ -45,9 +45,25 @@ On first launch you are guided to create a profile. After that, pick a grade →
 
 > The database tables (`users`, `game_results`) are created automatically when the backend starts, so no manual migration is needed.
 
+## Deploy to Vercel
+
+The whole app runs on Vercel: the Vite frontend is served as static files, and the Express API runs as a single serverless function (`api/[...path].ts`) that reuses `backend/src/app.ts`. Routes under `/api/*` go to the function and every other path falls back to the single-page app (see `vercel.json`).
+
+1. Create a hosted PostgreSQL database (for example Neon, available from the Vercel Marketplace) and copy its **pooled** connection string. It should end with `?sslmode=require`.
+2. In Vercel, import the repository (or run `vercel link`) and add `DATABASE_URL` under Project Settings → Environment Variables for Production and Preview. Tables are created automatically on the first request.
+3. Add three repository secrets in GitHub (Settings → Secrets and variables → Actions): `VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID`. The IDs are in `.vercel/project.json` after `vercel link`.
+
+GitHub Actions then does the rest:
+
+- `.github/workflows/ci.yml` lints, builds and tests the frontend and backend on every pull request and push to `main`.
+- `.github/workflows/deploy.yml` deploys a preview for each pull request and a production deployment for every push to `main`. It skips itself with a warning while the secrets are missing.
+
+If you prefer Vercel's own Git integration instead, delete `deploy.yml` and import the repository in Vercel.
+
 ## Project structure
 
 ```
+api/            Vercel serverless entry point (wraps the Express app)
 backend/src
   config/       Environment variables and the database connection pool
   modules/      profiles / results / system routes

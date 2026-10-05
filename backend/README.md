@@ -7,7 +7,7 @@ Modern REST API template built with Express.js and TypeScript.
 - **Runtime**: Node.js
 - **Framework**: Express.js 4.21+
 - **Language**: TypeScript 5.9+
-- **Database**: TCB managed PostgreSQL (via CloudBase JS SDK)
+- **Database**: PostgreSQL (via `pg`)
 - **Validation**: Zod
 - **Testing**: Jest + Supertest
 
@@ -162,10 +162,9 @@ curl http://localhost:3000/api/v1/status
 |----------|-------------|---------|
 | `NODE_ENV` | Environment mode | `development` |
 | `PORT` | Server port | `3000` |
-| `API_PREFIX` | API route prefix | `/api/v1` |
-| `CLOUDBASE_ENV_ID` | CloudBase environment ID | - |
-| `CLOUDBASE_SECRET_ID` | CloudBase secret ID | - |
-| `CLOUDBASE_SECRET_KEY` | CloudBase secret key | - |
+| `API_PREFIX` | API route prefix | `/api` |
+| `DATABASE_URL` | PostgreSQL connection string | `postgres://postgres:postgres@localhost:5432/mathland` |
+| `DB_POOL_MAX` | Maximum connections per instance | `10` locally, `1` on Vercel |
 | `CORS_ORIGIN` | Allowed CORS origin (URL or `*` for all) | `*` |
 
 **Note on CORS:** Default is `*` (allow all origins). This disables credentials (cookies, authorization headers). For production, specify exact origins.

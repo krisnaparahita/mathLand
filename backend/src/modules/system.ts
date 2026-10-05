@@ -36,7 +36,7 @@ systemRouter.get('/health/ready', async (_req: Request, res: Response) => {
     status: 'ready',
     timestamp: new Date().toISOString(),
     checks: {
-      database: 'TCB managed (frontend SDK)',
+      database: 'postgres',
     },
   })
 })

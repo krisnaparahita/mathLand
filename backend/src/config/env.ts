@@ -15,7 +15,7 @@ const envSchema = z.object({
   RATE_LIMIT_WINDOW_MS: z.string().transform(Number).default('900000'),
   RATE_LIMIT_MAX_REQUESTS: z.string().transform(Number).default('100'),
 
-  DATABASE_URL: z.string().default('postgres://postgres:Tencent2025@localhost:5432/mathland'),
+  DATABASE_URL: z.string().default('postgres://postgres:postgres@localhost:5432/mathland'),
 })
 
 const parseEnv = () => {

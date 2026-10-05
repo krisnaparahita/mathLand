@@ -32,3 +32,6 @@ Thumbs.db
 # Local sandbox tooling
 .codebuddy/
 .cloudstudio/
+
+# Vercel
+.vercel
