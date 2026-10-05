@@ -5,9 +5,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AnimatedRoutes } from "@/components/AnimatedRoutes";
 import { PageTransition } from "@/components/PageTransition";
 import { AppHeader } from "@/components/AppHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { ProfileSetupDialog } from "@/components/ProfileSetupDialog";
 import { ProfileProvider } from "@/context/ProfileContext";
 import Index from "./pages/Index";
+import AboutPage from "./pages/AboutPage";
 import GradePage from "./pages/GradePage";
 import StudyPage from "./pages/StudyPage";
 import LevelsPage from "./pages/LevelsPage";
@@ -58,9 +60,11 @@ function App() {
               <Route path="/result/:resultId" data-genie-title="Level Result" data-genie-key="Result" element={<PageTransition transition="scale"><ResultPage /></PageTransition>} />
               <Route path="/history" data-genie-title="Result History" data-genie-key="History" element={<PageTransition transition="slide-up"><HistoryPage /></PageTransition>} />
               <Route path="/profile" data-genie-title="My Profile" data-genie-key="Profile" element={<PageTransition transition="slide-up"><ProfilePage /></PageTransition>} />
+              <Route path="/about" data-genie-title="About" data-genie-key="About" element={<PageTransition transition="slide-up"><AboutPage /></PageTransition>} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" data-genie-key="NotFound" data-genie-title="Not Found" element={<PageTransition transition="fade"><NotFound /></PageTransition>} />
             </AnimatedRoutes>
+            <SiteFooter />
             <ProfileSetupDialog />
           </ProfileProvider>
         </BrowserRouter>

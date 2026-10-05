@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { ChevronDown, GraduationCap, History, Home, UserRound } from 'lucide-react'
+import { ChevronDown, GraduationCap, History, Home, Info, UserRound } from 'lucide-react'
 import { AvatarBubble } from './AvatarBubble'
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ const NAV = [
   { to: '/', label: 'Home', Icon: Home },
   { to: '/history', label: 'History', Icon: History },
   { to: '/profile', label: 'My Profile', Icon: UserRound },
+  { to: '/about', label: 'About', Icon: Info },
 ]
 
 export function AppHeader() {
