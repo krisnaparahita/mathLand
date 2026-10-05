@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4338CA"/>
+      <stop offset="1" stop-color="#9333EA"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#1E1B4B" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1100" cy="60" r="220" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="80" cy="640" r="260" fill="#ffffff" fill-opacity="0.06"/>
+
+  <!-- Logo tile -->
+  <rect x="80" y="86" width="84" height="84" rx="22" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="122" y="147" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="58" font-weight="800" fill="#4338CA">M</text>
+  <text x="188" y="146" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="40" font-weight="700" fill="#ffffff" fill-opacity="0.9">MathLand</text>
+
+  <!-- Headline -->
+  <text x="80" y="300" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="84" font-weight="800" fill="#ffffff">Learn math</text>
+  <text x="80" y="396" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="84" font-weight="800" fill="#FDE047">step by step</text>
+  <text x="80" y="470" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="500" fill="#ffffff" fill-opacity="0.92">Free practice for primary grades 1–6</text>
+
+  <!-- Chips -->
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" font-weight="700">
+    <rect x="80" y="514" width="190" height="52" rx="26" fill="#ffffff" fill-opacity="0.2"/>
+    <text x="175" y="549" text-anchor="middle" fill="#ffffff">36 topics</text>
+    <rect x="286" y="514" width="200" height="52" rx="26" fill="#ffffff" fill-opacity="0.2"/>
+    <text x="386" y="549" text-anchor="middle" fill="#ffffff">180 levels</text>
+    <rect x="502" y="514" width="306" height="52" rx="26" fill="#ffffff" fill-opacity="0.2"/>
+    <text x="655" y="549" text-anchor="middle" fill="#ffffff">Free and open source</text>
+  </g>
+
+  <!-- Operator tiles -->
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="800" font-size="104" text-anchor="middle" fill="#ffffff" filter="url(#shadow)">
+    <rect x="800" y="90" width="150" height="150" rx="36" fill="#F97316"/>
+    <text x="875" y="196">+</text>
+    <rect x="980" y="130" width="150" height="150" rx="36" fill="#22C55E"/>
+    <text x="1055" y="236">−</text>
+    <rect x="800" y="270" width="150" height="150" rx="36" fill="#EC4899"/>
+    <text x="875" y="376">×</text>
+    <rect x="980" y="310" width="150" height="150" rx="36" fill="#0EA5E9"/>
+    <text x="1055" y="416">÷</text>
+  </g>
+
+  <text x="1120" y="548" text-anchor="end" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff">mathland.my.id</text>
+</svg>
