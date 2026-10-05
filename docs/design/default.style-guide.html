@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -10,48 +10,48 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
   <style>
-    /* ==================== CSS Variables - 从 index.css 编译生成 ==================== */
+    /* ==================== CSS Variables - compiled from index.css ==================== */
     :root {
-      /* === 圆角基准值 === */
+      /* === Base radius values === */
       --radius: 1.25rem;
 
-      /* === 背景颜色 === */
+      /* === Background color === */
       --background: oklch(0.962 0.018 272.314);
       --foreground: oklch(0.257 0.09 281.288);
 
-      /* === 卡片 === */
+      /* === Card === */
       --card: oklch(1 0 0);
       --card-foreground: oklch(0.257 0.09 281.288);
 
-      /* === 弹出层 === */
+      /* === Popover === */
       --popover: oklch(1 0 0);
       --popover-foreground: oklch(0.257 0.09 281.288);
 
-      /* === 主色调 === */
+      /* === Primary color === */
       --primary: oklch(0.511 0.262 276.966);
       --primary-foreground: oklch(0.985 0 0);
 
-      /* === 次要色 === */
+      /* === Secondary color === */
       --secondary: oklch(0.704 0.157 279.164);
       --secondary-foreground: oklch(0.985 0 0);
 
-      /* === 柔和色 === */
+      /* === Muted colors === */
       --muted: oklch(0.945 0.021 272.314);
       --muted-foreground: oklch(0.523 0.062 281.288);
 
-      /* === 强调色 === */
+      /* === Accent color === */
       --accent: oklch(0.646 0.222 41.116);
       --accent-foreground: oklch(0.985 0 0);
 
-      /* === 危险/错误色 === */
+      /* === Destructive / error color === */
       --destructive: oklch(0.586 0.224 22.5);
 
-      /* === 边框和输入框 === */
+      /* === Borders and inputs === */
       --border: oklch(0.878 0.036 272.314);
       --input: oklch(0.878 0.036 272.314);
       --ring: oklch(0.511 0.262 276.966);
 
-      /* === 功能颜色 === */
+      /* === Functional colors === */
       --success: oklch(0.723 0.219 149.579);
       --success-foreground: oklch(0.985 0 0);
       --warning: oklch(0.828 0.189 84.429);
@@ -59,20 +59,20 @@
       --info: oklch(0.623 0.214 259.815);
       --info-foreground: oklch(0.985 0 0);
 
-      /* === 主题特色颜色 === */
+      /* === Theme accent colors === */
       --theme-red: oklch(0.627 0.229 22.5);
       --theme-green: oklch(0.723 0.219 149.579);
       --theme-gold: oklch(0.828 0.189 84.429);
       --theme-blue: oklch(0.623 0.214 259.815);
 
-      /* === 图表颜色 === */
+      /* === Chart colors === */
       --chart-1: oklch(0.511 0.262 276.966);
       --chart-2: oklch(0.646 0.222 41.116);
       --chart-3: oklch(0.723 0.219 149.579);
       --chart-4: oklch(0.828 0.189 84.429);
       --chart-5: oklch(0.645 0.246 16.439);
 
-      /* === 侧边栏 === */
+      /* === Sidebar === */
       --sidebar: oklch(1 0 0);
       --sidebar-foreground: oklch(0.257 0.09 281.288);
       --sidebar-primary: oklch(0.511 0.262 276.966);
@@ -82,11 +82,11 @@
       --sidebar-border: oklch(0.878 0.036 272.314);
       --sidebar-ring: oklch(0.511 0.262 276.966);
 
-      /* === Hero 区域 === */
+      /* === Hero section === */
       --hero: oklch(0.511 0.262 276.966);
       --hero-foreground: oklch(0.985 0 0);
 
-      /* === 其他变量 === */
+      /* === Other variables === */
       --font-family: "Baloo 2", "Comic Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
       --font-size-display: 3rem;
       --font-size-headline: 2.125rem;
@@ -136,43 +136,43 @@
 
     /* ==================== Dark Mode === */
     .dark {
-      /* === 背景颜色 === */
+      /* === Background color === */
       --background: oklch(0.145 0 0);
       --foreground: oklch(0.985 0 0);
 
-      /* === 卡片 === */
+      /* === Card === */
       --card: oklch(0.205 0 0);
       --card-foreground: oklch(0.985 0 0);
 
-      /* === 弹出层 === */
+      /* === Popover === */
       --popover: oklch(0.205 0 0);
       --popover-foreground: oklch(0.985 0 0);
 
-      /* === 主色调 === */
+      /* === Primary color === */
       --primary: oklch(0.922 0 0);
       --primary-foreground: oklch(0.205 0 0);
 
-      /* === 次要色 === */
+      /* === Secondary color === */
       --secondary: oklch(0.269 0 0);
       --secondary-foreground: oklch(0.985 0 0);
 
-      /* === 柔和色 === */
+      /* === Muted colors === */
       --muted: oklch(0.269 0 0);
       --muted-foreground: oklch(0.708 0 0);
 
-      /* === 强调色 === */
+      /* === Accent color === */
       --accent: oklch(0.269 0 0);
       --accent-foreground: oklch(0.985 0 0);
 
-      /* === 危险/错误色 === */
+      /* === Destructive / error color === */
       --destructive: oklch(0.704 0.191 22.216);
 
-      /* === 边框和输入框 === */
+      /* === Borders and inputs === */
       --border: oklch(1 0 0 / 10%);
       --input: oklch(1 0 0 / 15%);
       --ring: oklch(0.556 0 0);
 
-      /* === 功能颜色 === */
+      /* === Functional colors === */
       --success: oklch(0.648 0.15 163.225);
       --success-foreground: oklch(0.145 0 0);
       --warning: oklch(0.8 0.165 55.934);
@@ -180,20 +180,20 @@
       --info: oklch(0.623 0.214 259.815);
       --info-foreground: oklch(0.145 0 0);
 
-      /* === 主题特色颜色 === */
+      /* === Theme accent colors === */
       --theme-red: oklch(0.704 0.191 22.216);
       --theme-green: oklch(0.648 0.15 163.225);
       --theme-gold: oklch(0.8 0.165 55.934);
       --theme-blue: oklch(0.623 0.214 259.815);
 
-      /* === 图表颜色 === */
+      /* === Chart colors === */
       --chart-1: oklch(0.488 0.243 264.376);
       --chart-2: oklch(0.696 0.17 162.48);
       --chart-3: oklch(0.769 0.188 70.08);
       --chart-4: oklch(0.627 0.265 303.9);
       --chart-5: oklch(0.645 0.246 16.439);
 
-      /* === 侧边栏 === */
+      /* === Sidebar === */
       --sidebar: oklch(0.205 0 0);
       --sidebar-foreground: oklch(0.985 0 0);
       --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -203,11 +203,11 @@
       --sidebar-border: oklch(1 0 0 / 10%);
       --sidebar-ring: oklch(0.556 0 0);
 
-      /* === Hero 区域 === */
+      /* === Hero section === */
       --hero: oklch(0.269 0 0);
       --hero-foreground: oklch(0.985 0 0);
 
-      /* === 其他变量 === */
+      /* === Other variables === */
       --ds-shadow-sm: 0 1px 3px oklch(0 0 0 / 0.2);
       --ds-shadow-md: 0 4px 12px oklch(0 0 0 / 0.3), 0 2px 4px oklch(0 0 0 / 0.2);
       --ds-shadow-lg: 0 8px 24px oklch(0 0 0 / 0.4), 0 4px 8px oklch(0 0 0 / 0.3);
@@ -219,9 +219,9 @@
 
     }
 
-    /* ==================== 扩展变量 (style-guide 专用) ==================== */
+    /* ==================== Extended variables (style guide only) ==================== */
     :root {
-      /* === 字体 === */
+      /* === Fonts === */
       --font-family: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
       --font-size-display: 56px;
       --font-size-headline: 32px;
@@ -234,7 +234,7 @@
       --font-weight-normal: 400;
       --line-height: 1.5;
 
-      /* === 间距 === */
+      /* === Spacing === */
       --spacing-xs: 8px;
       --spacing-sm: 12px;
       --spacing-md: 16px;
@@ -242,51 +242,51 @@
       --spacing-xl: 32px;
       --spacing-2xl: 48px;
 
-      /* === 圆角扩展 (基于 --radius 计算) === */
+      /* === Extended radius (calculated from --radius) === */
       --radius-sm: calc(var(--radius) - 4px);
       --radius-md: calc(var(--radius) - 2px);
       --radius-lg: var(--radius);
       --radius-xl: calc(var(--radius) + 4px);
       --radius-full: 9999px;
 
-      /* === 阴影 === */
+      /* === Shadows === */
       --shadow-sm: 0 1px 3px oklch(0.205 0 0 / 0.08);
       --shadow-md: 0 4px 12px oklch(0.205 0 0 / 0.10), 0 2px 4px oklch(0.205 0 0 / 0.06);
       --shadow-lg: 0 8px 24px oklch(0.205 0 0 / 0.12), 0 4px 8px oklch(0.205 0 0 / 0.08);
 
-      /* === 边框宽度 === */
+      /* === Border widths === */
       --border-width: 1px;
 
-      /* === Hero 渐变 === */
+      /* === Hero gradient === */
       --hero-gradient: linear-gradient(135deg, var(--primary) 0%, oklch(0.145 0 0) 100%);
 
       /* === Hero Badge === */
       --hero-badge-bg: oklch(1 0 0 / 0.2);
       --hero-badge-border: oklch(1 0 0 / 0.3);
 
-      /* === 卡片图片渐变 === */
+      /* === Card image gradient === */
       --card-gradient: linear-gradient(135deg, var(--primary) 0%, var(--theme-green) 100%);
 
-      /* === 动画延迟 === */
+      /* === Animation delays === */
       --animation-delay-1: 0.5s;
       --animation-delay-2: 1s;
 
-      /* === Hero 内容样式 === */
+      /* === Hero content styles === */
       --hero-subtitle-size: 18px;
       --hero-subtitle-opacity: 0.95;
       --hero-icon-size-lg: 32px;
       --hero-icon-size-md: 28px;
       --hero-icon-size-sm: 24px;
 
-      /* === 卡片尺寸 === */
+      /* === Card sizes === */
       --card-image-height: 180px;
 
-      /* === 色块尺寸 === */
+      /* === Swatch sizes === */
       --color-swatch-size: 64px;
       --color-preview-size: 32px;
       --func-swatch-size: 48px;
 
-      /* === 图标尺寸 === */
+      /* === Icon sizes === */
       --icon-wrapper-size: 40px;
       --icon-size: 24px;
       --icon-button-size: 48px;
@@ -295,24 +295,24 @@
       /* === Hero Border Radius === */
       --hero-radius: 24px;
 
-      /* === 色块圆角 === */
+      /* === Swatch radius === */
       --color-preview-radius: 6px;
     }
 
     .dark {
-      /* === 阴影 (深色模式) === */
+      /* === Shadows (dark mode) === */
       --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.2);
       --shadow-md: 0 4px 12px oklch(0 0 0 / 0.3), 0 2px 4px oklch(0 0 0 / 0.2);
       --shadow-lg: 0 8px 24px oklch(0 0 0 / 0.4), 0 4px 8px oklch(0 0 0 / 0.3);
 
-      /* === Hero 渐变 (深色模式) === */
+      /* === Hero gradient (dark mode) === */
       --hero-gradient: linear-gradient(135deg, var(--hero) 0%, oklch(0.205 0 0) 100%);
 
-      /* === 卡片图片渐变 (深色模式) === */
+      /* === Card image gradient (dark mode) === */
       --card-gradient: linear-gradient(135deg, var(--theme-blue) 0%, var(--theme-green) 100%);
     }
 
-    /* ==================== 基础样式 ==================== */
+    /* ==================== Base styles ==================== */
     * {
       margin: 0;
       padding: 0;
@@ -327,7 +327,7 @@
       padding: var(--spacing-xl);
     }
 
-    /* ==================== 布局容器 ==================== */
+    /* ==================== Layout containers ==================== */
     .page-header {
       background: var(--card);
       padding: var(--spacing-md) var(--spacing-lg);
@@ -410,7 +410,7 @@
       margin-bottom: var(--spacing-md);
     }
 
-    /* ==================== Style Keywords 样式 ==================== */
+    /* ==================== Style Keywords styles ==================== */
     .keyword-grid {
       display: flex;
       flex-wrap: wrap;
@@ -426,7 +426,7 @@
       font-weight: var(--font-weight-medium);
     }
 
-    /* ==================== Text 样式示例 ==================== */
+    /* ==================== Text style examples ==================== */
     .text-samples {
       display: flex;
       flex-direction: column;
@@ -478,7 +478,7 @@
       line-height: var(--line-height);
     }
 
-    /* ==================== Colors 颜色样式 ==================== */
+    /* ==================== Colors styles ==================== */
     .color-row {
       display: flex;
       gap: var(--spacing-sm);
@@ -584,7 +584,7 @@
       background: var(--info);
     }
 
-    /* ==================== Icons 图标样式 ==================== */
+    /* ==================== Icons styles ==================== */
     .icon-row {
       display: flex;
       gap: var(--spacing-md);
@@ -608,7 +608,7 @@
       transform: scale(1.1);
     }
 
-    /* ==================== Component Showcases 组件展示 ==================== */
+    /* ==================== Component Showcases ==================== */
     .component-group {
       margin-bottom: var(--spacing-lg);
     }
@@ -854,7 +854,7 @@
       animation-delay: var(--animation-delay-2);
     }
 
-    /* === Hero 内容样式 === */
+    /* === Hero content styles === */
     .hero-subtitle {
       font-size: var(--hero-subtitle-size);
       opacity: var(--hero-subtitle-opacity);
@@ -882,12 +882,12 @@
       color: var(--theme-gold);
     }
 
-    /* === Section 间距 === */
+    /* === Section spacing === */
     .section-mt {
       margin-top: var(--spacing-lg);
     }
 
-    /* === 主题图标颜色 === */
+    /* === Theme icon colors === */
     .icon-theme-red {
       color: var(--theme-red);
     }
@@ -910,19 +910,19 @@
       color: var(--primary-foreground);
     }
 
-    /* === Color Label 间距 === */
+    /* === Color label spacing === */
     .color-label-mt {
       margin-top: var(--spacing-md);
     }
 
-    /* ==================== 响应式布局 ==================== */
+    /* ==================== Responsive layout ==================== */
     @media (max-width: 1024px) {
       .content-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    /* ==================== 深色模式切换按钮 ==================== */
+    /* ==================== Dark mode toggle button ==================== */
     .theme-toggle {
       position: fixed;
       top: var(--spacing-lg);
@@ -1085,8 +1085,8 @@
       <div class="component-group">
         <div class="component-label">Buttons</div>
         <div class="button-row">
-          <button class="btn-primary">立即开始</button>
-          <button class="btn-secondary">了解更多</button>
+          <button class="btn-primary">Get started</button>
+          <button class="btn-secondary">Learn more</button>
           <button class="btn-icon">
             <iconify-icon icon="lucide:plus" class="btn-icon-inner"></iconify-icon>
           </button>
@@ -1097,9 +1097,9 @@
       <div class="component-group">
         <div class="component-label">Tags & Labels</div>
         <div class="tag-row">
-          <span class="tag tag-active">已选中</span>
-          <span class="tag tag-featured">热门推荐</span>
-          <span class="tag tag-success">成功</span>
+          <span class="tag tag-active">Selected</span>
+          <span class="tag tag-featured">Featured</span>
+          <span class="tag tag-success">Success</span>
         </div>
       </div>
 
@@ -1107,7 +1107,7 @@
       <div class="component-group">
         <div class="component-label">Form Elements</div>
         <div class="form-group">
-          <input type="text" class="form-input" placeholder="请输入您的姓名..." />
+          <input type="text" class="form-input" placeholder="Enter your name..." />
         </div>
       </div>
 
@@ -1117,8 +1117,8 @@
         <div class="card">
           <div class="card-image"></div>
           <div class="card-content">
-            <div class="card-title">产品设计流程</div>
-            <div class="card-description">三步轻松完成你的专属设计方案...</div>
+            <div class="card-title">Product design process</div>
+            <div class="card-description">Finish your own design plan in three easy steps...</div>
           </div>
         </div>
       </div>

@@ -6,14 +6,14 @@ interface AnimatedRoutesProps {
 }
 
 /**
- * AnimatedRoutes - 页面切换动画容器
+ * AnimatedRoutes - page transition container
  *
- * 使用 mode="popLayout" 而非 "wait"：
- * - "wait" 会等待退出动画完成才开始进入动画（总延迟 ~0.6s）
- * - "popLayout" 允许新页面立即进入，旧页面同时退出（更流畅）
+ * Uses mode="popLayout" instead of "wait":
+ * - "wait" waits for the exit animation to finish before the enter animation starts (~0.6s total delay)
+ * - "popLayout" lets the new page enter immediately while the old page exits (smoother)
  *
- * ⚠️ 重要：Navbar/Header/Sidebar 必须放在 AnimatedRoutes 外部，
- * 否则每次页面切换都会重新创建并参与动画。
+ * ⚠️ Important: Navbar/Header/Sidebar must live outside AnimatedRoutes,
+ * otherwise they are re-created and animated on every page change.
  */
 export function AnimatedRoutes({ children }: AnimatedRoutesProps) {
   const location = useLocation();

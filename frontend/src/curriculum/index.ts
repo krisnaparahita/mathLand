@@ -11,13 +11,13 @@ export * from './core'
 
 export interface GradeInfo {
   grade: number
-  /** 展示名称，如「一年级」 */
+  /** Display name, such as "Grade 1" */
   name: string
-  /** 年级标语 */
+  /** Grade tagline */
   tagline: string
-  /** 年级简介 */
+  /** Grade description */
   description: string
-  /** 主色 key */
+  /** Primary color key */
   color: string
   topics: Topic[]
 }
@@ -25,49 +25,49 @@ export interface GradeInfo {
 export const GRADES: GradeInfo[] = [
   {
     grade: 1,
-    name: '一年级',
-    tagline: '数数与加减法启蒙',
-    description: '从数数开始，认识 100 以内的数，学会 20 以内的加减法，认识基本图形。',
+    name: 'Grade 1',
+    tagline: 'Counting and first addition and subtraction',
+    description: 'Start by counting, learn the numbers up to 100, add and subtract within 20, and meet basic shapes.',
     color: 'indigo',
     topics: grade1Topics,
   },
   {
     grade: 2,
-    name: '二年级',
-    tagline: '进位退位与乘法入门',
-    description: '掌握 100 以内进位加与退位减，初步认识乘法，学会认时间、量长度、用人民币。',
+    name: 'Grade 2',
+    tagline: 'Regrouping and first multiplication',
+    description: 'Master addition with carrying and subtraction with borrowing within 100, meet multiplication, and learn to tell time, measure length and use money.',
     color: 'orange',
     topics: grade2Topics,
   },
   {
     grade: 3,
-    name: '三年级',
-    tagline: '乘除法与分数初步',
-    description: '熟记乘法口诀，学会表内除法与两步混合运算，认识分数和周长。',
+    name: 'Grade 3',
+    tagline: 'Multiplication, division and first fractions',
+    description: 'Memorize the multiplication tables, learn division facts and two-step mixed operations, and meet fractions and perimeter.',
     color: 'green',
     topics: grade3Topics,
   },
   {
     grade: 4,
-    name: '四年级',
-    tagline: '大数与小数',
-    description: '认识万以上的大数，掌握三位数乘两位数与两位数除法，学习分数加减和小数。',
+    name: 'Grade 4',
+    tagline: 'Large numbers and decimals',
+    description: 'Work with numbers beyond ten thousand, multiply three-digit by two-digit numbers, divide by two-digit numbers, and learn fraction addition and subtraction and decimals.',
     color: 'pink',
     topics: grade4Topics,
   },
   {
     grade: 5,
-    name: '五年级',
-    tagline: '分数小数与方程',
-    description: '学习小数乘除法、分数乘除法、面积体积、百分数和简易方程。',
+    name: 'Grade 5',
+    tagline: 'Fractions, decimals and equations',
+    description: 'Learn decimal and fraction multiplication and division, area and volume, percentages and simple equations.',
     color: 'purple',
     topics: grade5Topics,
   },
   {
     grade: 6,
-    name: '六年级',
-    tagline: '比比例与圆',
-    description: '掌握分数混合运算、比与比例、百分数应用、圆、负数和代数式方程。',
+    name: 'Grade 6',
+    tagline: 'Ratios, proportions and circles',
+    description: 'Master mixed fraction operations, ratios and proportions, percentage applications, circles, negative numbers and algebraic equations.',
     color: 'teal',
     topics: grade6Topics,
   },
@@ -81,7 +81,7 @@ export const getGrade = (grade: number): GradeInfo | undefined =>
 export const getTopic = (grade: number, topicId: string): Topic | undefined =>
   getGrade(grade)?.topics.find((t) => t.id === topicId)
 
-/** 专题配色映射：key → CSS 变量名 */
+/** Topic color map: key → CSS variable name */
 export const COLOR_VAR: Record<string, string> = {
   indigo: 'var(--theme-indigo)',
   orange: 'var(--accent)',
@@ -95,7 +95,7 @@ export const COLOR_VAR: Record<string, string> = {
   red: 'var(--theme-red)',
 }
 
-/** 专题淡色背景映射：key → 半透明底色 */
+/** Topic soft background map: key → translucent tint */
 export const COLOR_SOFT: Record<string, string> = {
   indigo: 'oklch(0.511 0.262 276.966 / 0.12)',
   orange: 'oklch(0.646 0.222 41.116 / 0.14)',

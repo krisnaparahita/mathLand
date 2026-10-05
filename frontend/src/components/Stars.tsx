@@ -8,7 +8,7 @@ interface StarsProps {
 
 export function Stars({ value, max = 3, size = 18 }: StarsProps) {
   return (
-    <span className="inline-flex items-center" style={{ gap: 'var(--spacing-xs)' }} aria-label={`${value} 星`}>
+    <span className="inline-flex items-center" style={{ gap: 'var(--spacing-xs)' }} aria-label={`${value} stars`}>
       {Array.from({ length: max }, (_, i) => {
         const filled = i < value
         return (

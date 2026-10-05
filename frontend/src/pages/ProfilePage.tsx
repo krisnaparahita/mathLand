@@ -77,25 +77,25 @@ export default function ProfilePage() {
     <main className="container" style={{ maxWidth: 900, paddingBottom: 'var(--spacing-3xl)' }}>
       <FadeIn>
         <header style={{ marginTop: 'var(--spacing-xl)' }}>
-          <h1 className="font-bold text-display">我的档案</h1>
+          <h1 className="font-bold text-display">My Profile</h1>
           <p style={{ color: 'var(--muted-foreground)', marginTop: 'var(--spacing-xs)' }}>
-            管理昵称、头像和年级，也可以为家里不同的小朋友各建一个档案。
+            Manage the nickname, avatar and grade. You can also create a separate profile for each child at home.
           </p>
         </header>
       </FadeIn>
 
       {loading ? (
-        <p style={{ marginTop: 'var(--spacing-lg)', color: 'var(--muted-foreground)' }}>正在加载档案…</p>
+        <p style={{ marginTop: 'var(--spacing-lg)', color: 'var(--muted-foreground)' }}>Loading profile…</p>
       ) : !profile ? (
         <div className="clay" style={{ marginTop: 'var(--spacing-lg)', padding: 'var(--spacing-xl)', textAlign: 'center' }}>
-          <p className="font-bold">还没有学习档案</p>
+          <p className="font-bold">No learning profile yet</p>
           <p style={{ color: 'var(--muted-foreground)', marginTop: 4, fontSize: 'var(--font-size-small)' }}>
-            创建一个档案后，成绩和星星都会保存在这个档案里。
+            Once you create a profile, your results and stars are saved in it.
           </p>
         </div>
       ) : (
         <>
-          {/* ── 当前档案 ── */}
+          {/* ── Current profile ── */}
           <FadeIn>
             <section
               className="clay"
@@ -133,7 +133,7 @@ export default function ProfilePage() {
                     fontSize: 'var(--font-size-label)',
                   }}
                 >
-                  {editing ? '取消编辑' : <><Pencil size={15} /> 编辑档案</>}
+                  {editing ? 'Cancel editing' : <><Pencil size={15} /> Edit profile</>}
                 </button>
               </div>
 
@@ -146,10 +146,10 @@ export default function ProfilePage() {
                     marginTop: 'var(--spacing-md)',
                   }}
                 >
-                  <MiniStat icon={<Trophy size={15} />} label="闯关次数" value={String(stats.totalGames)} tone="var(--theme-gold)" />
-                  <MiniStat icon={<Sparkles size={15} />} label="星星总数" value={String(stats.totalStars)} tone="var(--theme-gold)" />
-                  <MiniStat icon={<Target size={15} />} label="总正确率" value={`${stats.accuracy}%`} tone="var(--theme-green)" />
-                  <MiniStat icon={<UserRound size={15} />} label="连续练习" value={`${stats.streakDays} 天`} tone="var(--accent)" />
+                  <MiniStat icon={<Trophy size={15} />} label="Levels played" value={String(stats.totalGames)} tone="var(--theme-gold)" />
+                  <MiniStat icon={<Sparkles size={15} />} label="Total stars" value={String(stats.totalStars)} tone="var(--theme-gold)" />
+                  <MiniStat icon={<Target size={15} />} label="Overall accuracy" value={`${stats.accuracy}%`} tone="var(--theme-green)" />
+                  <MiniStat icon={<UserRound size={15} />} label="Practice streak" value={`${stats.streakDays} ${stats.streakDays === 1 ? 'day' : 'days'}`} tone="var(--accent)" />
                 </div>
               )}
 
@@ -177,18 +177,18 @@ export default function ProfilePage() {
                       color: form.name.trim() ? 'var(--primary-foreground)' : 'var(--muted-foreground)',
                     }}
                   >
-                    <Check size={16} /> {saving ? '保存中…' : '保存修改'}
+                    <Check size={16} /> {saving ? 'Saving…' : 'Save changes'}
                   </button>
                 </div>
               )}
             </section>
           </FadeIn>
 
-          {/* ── 各年级闯关情况 ── */}
+          {/* ── Progress by grade ── */}
           {stats && stats.gradeCounts.length > 0 && (
             <FadeIn>
               <section className="clay" style={{ marginTop: 'var(--spacing-md)', padding: 'var(--spacing-lg)' }}>
-                <h2 className="font-bold text-title">各年级闯关次数</h2>
+                <h2 className="font-bold text-title">Levels played by grade</h2>
                 <div className="flex flex-wrap" style={{ gap: 'var(--spacing-sm)', marginTop: 'var(--spacing-md)' }}>
                   {GRADES.map((g) => {
                     const count = stats.gradeCounts.find((c) => c.grade === g.grade)?.games ?? 0
@@ -219,11 +219,11 @@ export default function ProfilePage() {
         </>
       )}
 
-      {/* ── 档案列表 ── */}
+      {/* ── Profile list ── */}
       <FadeIn>
         <section className="clay" style={{ marginTop: 'var(--spacing-md)', padding: 'var(--spacing-lg)' }}>
           <div className="flex items-center justify-between flex-wrap" style={{ gap: 'var(--spacing-sm)' }}>
-            <h2 className="font-bold text-title">全部档案（{profiles.length}）</h2>
+            <h2 className="font-bold text-title">All profiles ({profiles.length})</h2>
             <button
               type="button"
               onClick={() => setCreating((v) => !v)}
@@ -237,7 +237,7 @@ export default function ProfilePage() {
                 color: 'var(--accent)',
               }}
             >
-              <Plus size={16} /> 新建档案
+              <Plus size={16} /> New profile
             </button>
           </div>
 
@@ -266,7 +266,7 @@ export default function ProfilePage() {
                   color: 'var(--accent-foreground)',
                 }}
               >
-                <Plus size={16} /> {saving ? '创建中…' : '创建并切换'}
+                <Plus size={16} /> {saving ? 'Creating…' : 'Create and switch'}
               </button>
             </div>
           )}
@@ -293,7 +293,7 @@ export default function ProfilePage() {
                         {p.name}
                       </div>
                       <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
-                        {getGrade(p.grade)?.name ?? `${p.grade} 年级`}
+                        {getGrade(p.grade)?.name ?? `Grade ${p.grade}`}
                       </div>
                     </div>
 
@@ -306,7 +306,7 @@ export default function ProfilePage() {
                           paddingInline: 'var(--spacing-sm)',
                         }}
                       >
-                        当前使用中
+                        In use
                       </span>
                     ) : (
                       <button
@@ -322,15 +322,15 @@ export default function ProfilePage() {
                           color: 'var(--card)',
                         }}
                       >
-                        切换到这个档案
+                        Switch to this profile
                       </button>
                     )}
 
                     <button
                       type="button"
-                      title="删除档案"
+                      title="Delete profile"
                       onClick={() => {
-                        if (window.confirm(`确定删除「${p.name}」的档案吗？该档案的闯关成绩也会一起删除。`)) {
+                        if (window.confirm(`Delete the profile "${p.name}"? Its level results will be deleted too.`)) {
                           void deleteProfile(p.id)
                         }
                       }}
@@ -360,7 +360,7 @@ export default function ProfilePage() {
   )
 }
 
-/* ────────────── 表单字段（编辑 / 新建共用） ────────────── */
+/* ────────────── Form fields (shared by edit / create) ────────────── */
 
 function ProfileFields({
   form,
@@ -373,13 +373,13 @@ function ProfileFields({
     <div className="flex flex-col" style={{ gap: 'var(--spacing-md)' }}>
       <div>
         <div className="font-semibold" style={{ fontSize: 'var(--font-size-label)', marginBottom: 'var(--spacing-xs)' }}>
-          昵称
+          Nickname
         </div>
         <input
           value={form.name}
           maxLength={20}
           onChange={(e) => onChange({ ...form, name: e.target.value })}
-          placeholder="比如：小明"
+          placeholder="For example: Alex"
           className="clay-inset w-full"
           style={{
             paddingInline: 'var(--spacing-md)',
@@ -394,7 +394,7 @@ function ProfileFields({
 
       <div>
         <div className="font-semibold" style={{ fontSize: 'var(--font-size-label)', marginBottom: 'var(--spacing-xs)' }}>
-          头像
+          Avatar
         </div>
         <div className="flex flex-wrap" style={{ gap: 'var(--spacing-xs)' }}>
           {AVATAR_OPTIONS.map((option) => (
@@ -417,7 +417,7 @@ function ProfileFields({
 
       <div>
         <div className="font-semibold" style={{ fontSize: 'var(--font-size-label)', marginBottom: 'var(--spacing-xs)' }}>
-          颜色
+          Color
         </div>
         <div className="flex flex-wrap" style={{ gap: 'var(--spacing-xs)' }}>
           {COLOR_OPTIONS.map((option) => (
@@ -440,7 +440,7 @@ function ProfileFields({
 
       <div>
         <div className="font-semibold" style={{ fontSize: 'var(--font-size-label)', marginBottom: 'var(--spacing-xs)' }}>
-          年级
+          Grade
         </div>
         <div className="flex flex-wrap" style={{ gap: 'var(--spacing-xs)' }}>
           {GRADES.map((g) => {

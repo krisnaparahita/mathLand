@@ -10,147 +10,150 @@ import {
 } from './core'
 import type { Question, Topic } from './types'
 
+/** Format a number with thousands separators for display, such as 1,234,567 */
+const withCommas = (n: number): string => n.toLocaleString('en-US')
+
 /* ══════════════════════════════════════════════
-   1. 大数的认识
+   1. Large numbers
    ══════════════════════════════════════════════ */
 
 const bigNumber: Topic = {
   id: 'g4-bignum',
   grade: 4,
-  name: '大数的认识',
+  name: 'Large Numbers',
   color: 'indigo',
   icon: 'Hash',
-  summary: '认识万以上的数，会读会写，掌握改写与四舍五入求近似数。',
+  summary: 'Work with numbers beyond ten thousand: read and write them, rewrite them in thousands and millions, and round them.',
   explanation: [
     {
-      title: '数位顺序表',
-      body: '每相邻两个计数单位之间的进率都是 10。数位从右往左依次是个位、十位、百位、千位、万位、十万位、百万位、千万位、亿位……',
-      example: '12345678 → 1 个千万、2 个百万、3 个十万、4 个万、5 个千、6 个百、7 个十、8 个一',
+      title: 'The place value chart',
+      body: 'Each place is worth 10 times the place to its right. From right to left the places are ones, tens, hundreds, thousands, ten thousands, hundred thousands, millions, ten millions, hundred millions, billions…',
+      example: '12,345,678 → 1 ten million, 2 millions, 3 hundred thousands, 4 ten thousands, 5 thousands, 6 hundreds, 7 tens, 8 ones',
     },
     {
-      title: '数的读法',
-      body: '读数时从高位读起，一级一级地读。每级末尾的 0 都不读，其他数位连续几个 0 都只读一个零。',
-      example: '40080030 读作「四千零八万零三十」',
+      title: 'Reading numbers',
+      body: 'Split the digits into groups of three from the right, and read each group from the left followed by its name (thousand, million…). Do not read a group that is all zeros.',
+      example: '40,080,030 is read "forty million, eighty thousand, thirty"',
     },
     {
-      title: '改写与近似数',
-      body: '改写整万（整亿）的数时，去掉末尾的 4 个（8 个）0，加上「万」（「亿」）字。求近似数用四舍五入法：看要省略的尾数最高位，小于 5 就舍去，大于等于 5 就进 1。',
-      example: '384400 ≈ 38 万（千位是 4，舍去）',
+      title: 'Rewriting and rounding',
+      body: 'To rewrite a number in thousands, drop the last 3 zeros and say "thousand"; in millions, drop the last 6 zeros and say "million". To round, look at the digit just after the place you are rounding to: if it is less than 5, round down, and if it is 5 or more, round up.',
+      example: '384,400 rounded to the nearest thousand is 384,000 (the hundreds digit is 4, so round down)',
     },
   ],
   smartMethods: [
     {
-      name: '四位分级法',
-      when: '读、写大数时',
-      steps: ['从右往左每四位分一级', '先读万级再读个级', '每级末尾的 0 不读'],
-      example: '38|4400 → 三十八万四千四百',
+      name: 'Group in threes',
+      when: 'Reading and writing large numbers',
+      steps: ['Split the digits into groups of three from the right', 'Read the millions group first, then thousands, then ones', 'Skip any group that is all zeros'],
+      example: '384|400 → three hundred eighty-four thousand, four hundred',
     },
     {
-      name: '四舍五入看一位',
-      when: '求近似数时',
-      steps: ['确定要省略到哪一位', '看它的下一位数字', '小于 5 舍去，大于等于 5 进 1'],
-      example: '384400 省略万位后面的尾数：看千位 4，舍去 → 38 万',
+      name: 'Look at one digit to round',
+      when: 'Rounding a number',
+      steps: ['Decide which place you are rounding to', 'Look at the digit just after it', 'Less than 5 rounds down, 5 or more rounds up'],
+      example: '384,400 to the nearest thousand: the hundreds digit is 4, so round down → 384,000',
     },
     {
-      name: '去零加万字',
-      when: '整万数改写成用「万」作单位时',
-      steps: ['数一数末尾有几个 0', '去掉 4 个 0', '在后面写上「万」字'],
-      example: '560000 → 56 万',
+      name: 'Drop the zeros, add the word',
+      when: 'Rewriting a round number in thousands or millions',
+      steps: ['Count the zeros at the end', 'Drop 3 zeros for thousands (6 for millions)', 'Write the word "thousand" (or "million") after it'],
+      example: '560,000 → 560 thousand',
     },
   ],
   levels: buildLevels(4, [
-    '认识数位与计数单位',
-    '大数的读法与写法',
-    '整万数的改写',
-    '四舍五入求近似数',
-    '大数综合应用',
+    'Place value and counting units',
+    'Reading and writing large numbers',
+    'Rewriting numbers in thousands and millions',
+    'Rounding large numbers',
+    'Large number word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
 
     makers.push(() => {
       const base = level >= 3 ? 10000 : 1000
-      const unitName = level >= 3 ? '万' : '千'
-      const answerName = level >= 3 ? '十万' : '万'
+      const baseName = level >= 3 ? 'ten thousand' : 'one thousand'
+      const answerName = level >= 3 ? 'one hundred thousand' : 'ten thousand'
       return makeFill({
-        prompt: `10 个一${unitName}是多少？请填数字。`,
+        prompt: `What is 10 times ${baseName}? Enter the number.`,
         answer: base * 10,
-        explanation: `相邻计数单位之间的进率是 10，10 × ${base} = ${base * 10}，也就是十${unitName === '万' ? '万' : '个千'}是 ${answerName}。`,
-        smartTip: '四位分级法',
+        explanation: `Each place is worth 10 times the place to its right, so 10 × ${withCommas(base)} = ${withCommas(base * 10)}, which is ${answerName}.`,
+        smartTip: 'Group in threes',
       })
     })
 
     makers.push(() => {
-      const wan = rng.int(1, [9, 99, 999, 9999, 9999][level - 1])
+      const k = rng.int(1, [9, 99, 999, 9999, 9999][level - 1])
       return makeFill({
-        prompt: `${wan} 万 = （  ）？请填完整数字。`,
-        answer: wan * 10000,
-        explanation: `1 万 = 10000，${wan} × 10000 = ${wan * 10000}。`,
-        smartTip: '去零加万字',
+        prompt: `${withCommas(k)} thousand = (  )? Enter the full number.`,
+        answer: k * 1000,
+        explanation: `1 thousand = 1,000, so ${withCommas(k)} × 1,000 = ${withCommas(k * 1000)}.`,
+        smartTip: 'Drop the zeros, add the word',
       })
     })
 
     makers.push(() => {
-      const value = rng.int(1, [9, 99, 999, 9999, 9999][level - 1]) * 10000
+      const value = rng.int(1, [9, 99, 999, 9999, 9999][level - 1]) * 1000
       return makeFill({
-        prompt: `${value} 改写成用「万」作单位的数是多少万？`,
-        answer: value / 10000,
-        unit: '万',
-        explanation: `去掉末尾 4 个 0 加上「万」字：${value} = ${value / 10000} 万。`,
-        smartTip: '去零加万字',
+        prompt: `Write ${withCommas(value)} in thousands. How many thousand is it?`,
+        answer: value / 1000,
+        unit: 'thousand',
+        explanation: `Drop the last 3 zeros and add the word "thousand": ${withCommas(value)} = ${withCommas(value / 1000)} thousand.`,
+        smartTip: 'Drop the zeros, add the word',
       })
     })
 
     makers.push(() => {
-      const wan = rng.int(1, [9, 99, 999, 9999, 9999][level - 1])
-      const rest = rng.int(1, 9999)
+      const k = rng.int(1, [9, 99, 999, 9999, 9999][level - 1])
+      const rest = rng.int(1, 999)
       return makeFill({
-        prompt: `一个数由 ${wan} 个万和 ${rest} 个一组成，这个数是多少？`,
-        answer: wan * 10000 + rest,
-        explanation: `${wan} 个万是 ${wan * 10000}，加上 ${rest} 个一，合起来是 ${wan * 10000 + rest}。`,
-        smartTip: '四位分级法',
+        prompt: `A number is made of ${withCommas(k)} thousands and ${rest} ones. What is the number?`,
+        answer: k * 1000 + rest,
+        explanation: `${withCommas(k)} thousands is ${withCommas(k * 1000)}. Add ${rest} ones and the number is ${withCommas(k * 1000 + rest)}.`,
+        smartTip: 'Group in threes',
       })
     })
 
     if (level >= 2) {
       makers.push(() => {
-        const value = rng.int(1, 9999) * 10000 + rng.int(0, 9999)
+        const value = rng.int(1, 9999) * 1000 + rng.int(0, 999)
         return makeFill({
-          prompt: `${value} 改写成用「万」作单位的数是多少万？`,
-          answer: value / 10000,
-          unit: '万',
-          explanation: `把小数点向左移动 4 位：${value} → ${value / 10000} 万。`,
-          smartTip: '去零加万字',
+          prompt: `Write ${withCommas(value)} in thousands. How many thousand is it?`,
+          answer: value / 1000,
+          unit: 'thousand',
+          explanation: `Move the decimal point 3 places to the left: ${withCommas(value)} → ${value / 1000} thousand.`,
+          smartTip: 'Drop the zeros, add the word',
         })
       })
     }
 
     if (level >= 2) {
       makers.push(() => {
-        const wan = rng.int(12, 98)
-        const rest = rng.int(1, 9999)
-        const value = wan * 10000 + rest
-        const thousandDigit = Math.floor(rest / 1000)
-        const rounded = thousandDigit >= 5 ? wan + 1 : wan
+        const k = rng.int(12, 98)
+        const rest = rng.int(1, 999)
+        const value = k * 1000 + rest
+        const hundredsDigit = Math.floor(rest / 100)
+        const rounded = hundredsDigit >= 5 ? k + 1 : k
         return makeFill({
-          prompt: `${value} 省略「万」后面的尾数，约是多少万？`,
-          answer: rounded,
-          unit: '万',
-          explanation: `看千位数字 ${thousandDigit}，${thousandDigit >= 5 ? '满 5 进 1' : '小于 5 舍去'}，所以约是 ${rounded} 万。`,
-          smartTip: '四舍五入看一位',
+          prompt: `Round ${withCommas(value)} to the nearest thousand.`,
+          answer: rounded * 1000,
+          explanation: `Look at the hundreds digit, ${hundredsDigit}. ${hundredsDigit >= 5 ? '5 or more rounds up' : 'Less than 5 rounds down'}, so the answer is ${withCommas(rounded * 1000)}.`,
+          smartTip: 'Look at one digit to round',
         })
       })
     }
 
     if (level >= 3) {
       makers.push(() => {
-        const value = rng.int(100, 999) * 10000
+        const m = rng.int(1, 99)
+        const value = m * 1000000
         return makeFill({
-          prompt: `${value} 改写成用「万」作单位的数是多少万？`,
-          answer: value / 10000,
-          unit: '万',
-          explanation: `去掉末尾 4 个 0，加上「万」字：${value} = ${value / 10000} 万。`,
-          smartTip: '去零加万字',
+          prompt: `Write ${withCommas(value)} in millions. How many million is it?`,
+          answer: m,
+          unit: 'million',
+          explanation: `Drop the last 6 zeros and add the word "million": ${withCommas(value)} = ${m} million.`,
+          smartTip: 'Drop the zeros, add the word',
         })
       })
     }
@@ -158,15 +161,15 @@ const bigNumber: Topic = {
     if (level >= 4) {
       makers.push(() => {
         const digit = rng.int(0, 9)
-        const base = rng.int(10, 99) * 10000
-        const value = base + digit * 1000 + rng.int(0, 999)
-        const rounded = digit >= 5 ? base / 10000 + 1 : base / 10000
+        const base = rng.int(10, 99) * 1000
+        const value = base + digit * 100 + rng.int(0, 99)
+        const rounded = digit >= 5 ? base / 1000 + 1 : base / 1000
         return makeChoice({
-          prompt: `${value} ≈ （  ）万`,
-          answer: `${rounded} 万`,
-          wrong: [`${rounded + 1} 万`, `${base / 10000} 万`, `${rounded - 1} 万`],
-          explanation: `千位是 ${digit}，${digit >= 5 ? '大于等于 5 要进 1' : '小于 5 直接舍去'}，所以约是 ${rounded} 万。`,
-          smartTip: '四舍五入看一位',
+          prompt: `${withCommas(value)} ≈ (  ) thousand`,
+          answer: `${rounded} thousand`,
+          wrong: [`${rounded + 1} thousand`, `${base / 1000} thousand`, `${rounded - 1} thousand`],
+          explanation: `The hundreds digit is ${digit}. ${digit >= 5 ? '5 or more rounds up' : 'Less than 5 rounds down'}, so it is about ${rounded} thousand.`,
+          smartTip: 'Look at one digit to round',
         })
       })
     }
@@ -174,18 +177,18 @@ const bigNumber: Topic = {
     if (level >= 5) {
       makers.push(() => {
         const cases: Array<[string, string, string[]]> = [
-          ['一个数的最高位是百万位，这个数是几位数？', '七位数', ['六位数', '八位数', '五位数']],
-          ['10 个十万是多少？', '一百万', ['十万', '一千万', '一亿']],
-          ['一亿里面有多少个万？', '10000 个', ['1000 个', '100 个', '100000 个']],
-          ['比最大的八位数多 1 的数是？', '100000000', ['99999999', '10000001', '9999999']],
+          ['The highest digit of a number is in the millions place. How many digits does the number have?', '7 digits', ['6 digits', '8 digits', '5 digits']],
+          ['What is 10 × 100,000?', '1,000,000', ['100,000', '10,000,000', '1,000,000,000']],
+          ['How many thousands are in one million?', '1,000', ['100', '10', '10,000']],
+          ['What number is 1 more than the largest eight-digit number?', '100,000,000', ['99,999,999', '10,000,001', '9,999,999']],
         ]
         const [prompt, answer, wrong] = rng.pick(cases)
         return makeChoice({
           prompt,
           answer,
           wrong,
-          explanation: `正确答案是${answer}。记住数位顺序：个、十、百、千、万、十万、百万、千万、亿。`,
-          smartTip: '四位分级法',
+          explanation: `The correct answer is ${answer}. Remember the order of the places: ones, tens, hundreds, thousands, ten thousands, hundred thousands, millions, ten millions, hundred millions.`,
+          smartTip: 'Group in threes',
         })
       })
     }
@@ -195,59 +198,59 @@ const bigNumber: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   2. 三位数乘两位数
+   2. Multiplying by two-digit numbers
    ══════════════════════════════════════════════ */
 
 const multiDigit: Topic = {
   id: 'g4-multidigit',
   grade: 4,
-  name: '多位数乘法',
+  name: 'Multi-Digit Multiplication',
   color: 'orange',
   icon: 'X',
-  summary: '掌握三位数乘两位数的笔算，理解积的变化规律与估算。',
+  summary: 'Master written multiplication of three-digit by two-digit numbers, and understand how the product changes and how to estimate.',
   explanation: [
     {
-      title: '笔算乘法',
-      body: '先用两位数个位上的数去乘三位数，再用两位数十位上的数去乘三位数（得数末位要和十位对齐），最后把两次的积相加。',
-      example: '145 × 12 = 145 × 2 + 145 × 10 = 290 + 1450 = 1740',
+      title: 'Written multiplication',
+      body: 'First multiply the three-digit number by the ones digit of the two-digit number. Then multiply it by the tens digit (line up the last digit of this result with the tens place). Finally add the two products.',
+      example: '145 × 12 = 145 × 2 + 145 × 10 = 290 + 1,450 = 1,740',
     },
     {
-      title: '积的变化规律',
-      body: '一个乘数不变，另一个乘数乘（除以）几，积也乘（除以）几。',
-      example: '6 × 20 = 120，那么 6 × 40 = 240',
+      title: 'How the product changes',
+      body: 'If one factor stays the same and the other factor is multiplied (or divided) by some number, the product is multiplied (or divided) by the same number.',
+      example: '6 × 20 = 120, so 6 × 40 = 240',
     },
     {
-      title: '乘法估算',
-      body: '估算时把两个乘数分别看成接近的整十、整百数，再相乘。估算结果用「≈」连接。',
-      example: '298 × 31 ≈ 300 × 30 = 9000',
+      title: 'Estimating products',
+      body: 'To estimate, round each factor to a nearby ten or hundred, then multiply. Use "≈" to show an estimate.',
+      example: '298 × 31 ≈ 300 × 30 = 9,000',
     },
   ],
   smartMethods: [
     {
-      name: '分步相乘再相加',
-      when: '笔算三位数乘两位数时',
-      steps: ['用个位去乘，得到第一个积', '用十位去乘，末位对齐十位', '把两个积相加'],
-      example: '145 × 12 → 290 + 1450 = 1740',
+      name: 'Multiply in steps, then add',
+      when: 'Doing written three-digit by two-digit multiplication',
+      steps: ['Multiply by the ones digit to get the first product', 'Multiply by the tens digit, lining up its last digit with the tens place', 'Add the two products'],
+      example: '145 × 12 → 290 + 1,450 = 1,740',
     },
     {
-      name: '积的变化规律',
-      when: '已知一个乘积求另一个时',
-      steps: ['找出乘数扩大（缩小）了几倍', '把积也扩大（缩小）相同的倍数', '不需要重新算一遍'],
-      example: '已知 25 × 4 = 100，那么 25 × 12 = 300',
+      name: 'How the product changes',
+      when: 'You know one product and need another',
+      steps: ['Find how many times bigger (or smaller) a factor became', 'Make the product the same number of times bigger (or smaller)', 'No need to work it out again from scratch'],
+      example: 'Given 25 × 4 = 100, then 25 × 12 = 300',
     },
     {
-      name: '四舍五入估整',
-      when: '只需要大致结果时',
-      steps: ['把两个乘数都看成整十或整百数', '用近似数相乘', '结果写约等号'],
-      example: '412 × 19 ≈ 400 × 20 = 8000',
+      name: 'Round to estimate',
+      when: 'You only need a rough result',
+      steps: ['Round both factors to a nearby ten or hundred', 'Multiply the rounded numbers', 'Write the result with the approximately-equal sign'],
+      example: '412 × 19 ≈ 400 × 20 = 8,000',
     },
   ],
   levels: buildLevels(4, [
-    '两位数乘整十、整百数',
-    '三位数乘两位数笔算',
-    '积的变化规律',
-    '乘法估算',
-    '乘法综合应用',
+    'Multiply two-digit numbers by multiples of ten and a hundred',
+    'Written three-digit by two-digit multiplication',
+    'How the product changes',
+    'Estimating products',
+    'Multiplication word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -256,10 +259,10 @@ const multiDigit: Topic = {
       const a = rng.int(11, 99)
       const b = rng.pick([10, 20, 30, 40, 50, 100, 200, 300])
       return makeFill({
-        prompt: `${a} × ${b} = ？`,
+        prompt: `${a} × ${b} = ?`,
         answer: a * b,
-        explanation: `先算 ${a} × ${b / 10} = ${a * (b / 10)}，再在末尾添 1 个 0（或添相应个数的 0），得 ${a * b}。`,
-        smartTip: '分步相乘再相加',
+        explanation: `First work out ${a} × ${b / 10} = ${a * (b / 10)}, then add a 0 on the end (or the matching number of zeros) to get ${a * b}.`,
+        smartTip: 'Multiply in steps, then add',
       })
     })
 
@@ -267,10 +270,10 @@ const multiDigit: Topic = {
       const a = rng.int(101, [399, 599, 799, 999, 999][level - 1])
       const b = rng.int(11, [29, 49, 69, 89, 99][level - 1])
       return makeFill({
-        prompt: `${a} × ${b} = ？`,
+        prompt: `${a} × ${b} = ?`,
         answer: a * b,
-        explanation: `拆开算：${a} × ${b % 10} = ${a * (b % 10)}，${a} × ${Math.floor(b / 10) * 10} = ${a * Math.floor(b / 10) * 10}，相加得 ${a * b}。`,
-        smartTip: '分步相乘再相加',
+        explanation: `Split it up: ${a} × ${b % 10} = ${a * (b % 10)} and ${a} × ${Math.floor(b / 10) * 10} = ${a * Math.floor(b / 10) * 10}. Adding them gives ${a * b}.`,
+        smartTip: 'Multiply in steps, then add',
       })
     })
 
@@ -280,11 +283,11 @@ const multiDigit: Topic = {
         const b = rng.int(11, 99)
         const product = a * b
         return makeChoice({
-          prompt: `${a} × ${b} = ？`,
+          prompt: `${a} × ${b} = ?`,
           answer: String(product),
           wrong: [String(product + a), String(product - a), String(product + 10)],
-          explanation: `${a} × ${b} = ${product}。可以拆成 ${a} × ${b % 10} + ${a} × ${Math.floor(b / 10) * 10} = ${a * (b % 10)} + ${a * Math.floor(b / 10) * 10} = ${product}。`,
-          smartTip: '分步相乘再相加',
+          explanation: `${a} × ${b} = ${product}. You can split it as ${a} × ${b % 10} + ${a} × ${Math.floor(b / 10) * 10} = ${a * (b % 10)} + ${a * Math.floor(b / 10) * 10} = ${product}.`,
+          smartTip: 'Multiply in steps, then add',
         })
       })
     }
@@ -295,10 +298,10 @@ const multiDigit: Topic = {
         const b = rng.int(3, 9)
         const factor = rng.pick([2, 3, 4, 5])
         return makeFill({
-          prompt: `已知 ${a} × ${b} = ${a * b}，那么 ${a} × ${b * factor} = ？`,
+          prompt: `Given ${a} × ${b} = ${a * b}, what is ${a} × ${b * factor}?`,
           answer: a * b * factor,
-          explanation: `一个乘数 ${a} 不变，另一个乘数扩大 ${factor} 倍，积也扩大 ${factor} 倍：${a * b} × ${factor} = ${a * b * factor}。`,
-          smartTip: '积的变化规律',
+          explanation: `One factor, ${a}, stays the same and the other factor becomes ${factor} times bigger, so the product becomes ${factor} times bigger: ${a * b} × ${factor} = ${a * b * factor}.`,
+          smartTip: 'How the product changes',
         })
       })
     }
@@ -310,15 +313,15 @@ const multiDigit: Topic = {
         const approxA = Math.round(a / 100) * 100
         const approxB = Math.round(b / 10) * 10
         return makeChoice({
-          prompt: `${a} × ${b} 估算的结果大约是？`,
+          prompt: `About how much is ${a} × ${b}? Pick the best estimate.`,
           answer: String(approxA * approxB),
           wrong: [
             String(Math.round(approxA / 100) * 100 * b),
             String(a * approxB),
             String((approxA + 100) * approxB),
           ],
-          explanation: `把 ${a} 看成 ${approxA}，${b} 看成 ${approxB}，${approxA} × ${approxB} = ${approxA * approxB}。`,
-          smartTip: '四舍五入估整',
+          explanation: `Round ${a} to ${approxA} and ${b} to ${approxB}. ${approxA} × ${approxB} = ${approxA * approxB}.`,
+          smartTip: 'Round to estimate',
         })
       })
     }
@@ -328,11 +331,11 @@ const multiDigit: Topic = {
         const price = rng.int(101, 499)
         const count = rng.int(11, 49)
         return makeFill({
-          prompt: `一台电风扇 ${price} 元，学校买了 ${count} 台，一共花了多少元？`,
+          prompt: `An electric fan costs ${price} dollars. A school buys ${count} fans. How many dollars does it spend in all?`,
           answer: price * count,
-          unit: '元',
-          explanation: `单价 × 数量 = 总价：${price} × ${count} = ${price * count} 元。`,
-          smartTip: '分步相乘再相加',
+          unit: 'dollars',
+          explanation: `Unit price × quantity = total price: ${price} × ${count} = ${price * count} dollars.`,
+          smartTip: 'Multiply in steps, then add',
         })
       })
     }
@@ -342,10 +345,10 @@ const multiDigit: Topic = {
         const speed = rng.int(60, 95)
         const hours = rng.int(11, 29)
         return makeJudge({
-          prompt: `判断：一辆汽车每小时行 ${speed} 千米，${hours} 小时可以行 ${speed * hours + speed} 千米。—— 对吗？`,
+          prompt: `True or false: A car travels ${speed} km every hour. In ${hours} hours it travels ${speed * hours + speed} km.`,
           correct: false,
-          explanation: `路程 = 速度 × 时间 = ${speed} × ${hours} = ${speed * hours} 千米，不是 ${speed * hours + speed} 千米。`,
-          smartTip: '积的变化规律',
+          explanation: `Distance = speed × time = ${speed} × ${hours} = ${speed * hours} km, not ${speed * hours + speed} km.`,
+          smartTip: 'How the product changes',
         })
       })
     }
@@ -355,59 +358,59 @@ const multiDigit: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   3. 除数是两位数的除法
+   3. Dividing by two-digit numbers
    ══════════════════════════════════════════════ */
 
 const division2: Topic = {
   id: 'g4-division2',
   grade: 4,
-  name: '两位数除法',
+  name: 'Two-Digit Division',
   color: 'green',
   icon: 'Divide',
-  summary: '掌握两位数除法的试商方法，理解商不变规律与有余数除法。',
+  summary: 'Master estimating quotients when dividing by two-digit numbers, and understand how the quotient stays the same and division with a remainder.',
   explanation: [
     {
-      title: '从高位除起',
-      body: '除数是两位数时，先看被除数的前两位；前两位不够除就看前三位。除到哪一位，商就写在哪一位上面。',
-      example: '576 ÷ 18：前两位 57 够除，商的最高位在十位',
+      title: 'Start from the highest place',
+      body: 'When the divisor is a two-digit number, look at the first two digits of the dividend. If they are too small to divide, look at the first three digits. Write each quotient digit above the last digit you used.',
+      example: '576 ÷ 18: the first two digits, 57, are enough, so the first digit of the quotient is in the tens place',
     },
     {
-      title: '试商方法',
-      body: '把除数看成接近的整十数来试商。「四舍」法把除数看小，商容易偏大要调小；「五入」法把除数看大，商容易偏小要调大。',
-      example: '576 ÷ 18：把 18 看成 20 试商，商 2 余 21 说明偏小，调成 3',
+      title: 'Trial quotients',
+      body: 'Round the divisor to a nearby ten to try a quotient. If you round the divisor down, the trial quotient tends to be too big and needs lowering. If you round it up, the trial quotient tends to be too small and needs raising.',
+      example: '576 ÷ 18: treat 18 as 20 and try 2 with 21 left over, which is too small, so raise it to 3',
     },
     {
-      title: '商不变规律',
-      body: '被除数和除数同时乘或除以相同的数（0 除外），商不变，但余数会跟着变。',
+      title: 'The quotient stays the same',
+      body: 'If you multiply or divide both the dividend and the divisor by the same number (not 0), the quotient stays the same, but the remainder changes with it.',
       example: '80 ÷ 20 = 8 ÷ 2 = 4',
     },
   ],
   smartMethods: [
     {
-      name: '四舍五入试商',
-      when: '除数是两位数不好直接商时',
-      steps: ['把除数看成接近的整十数', '用整十数估一个商', '算一算，商大了就调小，商小了就调大'],
-      example: '把 18 看成 20，把 43 看成 40',
+      name: 'Round the divisor to try a quotient',
+      when: 'The divisor is two digits and a quotient is hard to see',
+      steps: ['Round the divisor to a nearby ten', 'Use that ten to guess a quotient', 'Work it out; if the quotient is too big lower it, and if too small raise it'],
+      example: 'Treat 18 as 20, and 43 as 40',
     },
     {
-      name: '同缩同扩',
-      when: '被除数和除数末尾都有 0 时',
-      steps: ['被除数和除数同时去掉相同个数的 0', '商不变', '如果有余数，余数要添回相同个数的 0'],
+      name: 'Shrink or grow both together',
+      when: 'The dividend and divisor both end in zeros',
+      steps: ['Drop the same number of zeros from the dividend and the divisor', 'The quotient stays the same', 'If there is a remainder, put the same number of zeros back on it'],
       example: '800 ÷ 20 = 80 ÷ 2 = 40',
     },
     {
-      name: '商 × 除数 + 余数验算',
-      when: '算完有余数除法时',
-      steps: ['用商乘除数', '再加上余数', '看是否等于被除数'],
-      example: '商 12 余 5，除数 20 → 12 × 20 + 5 = 245',
+      name: 'Check: quotient × divisor + remainder',
+      when: 'After finishing a division with a remainder',
+      steps: ['Multiply the quotient by the divisor', 'Add the remainder', 'See whether it equals the dividend'],
+      example: 'Quotient 12 remainder 5, divisor 20 → 12 × 20 + 5 = 245',
     },
   ],
   levels: buildLevels(4, [
-    '整十数除两位数、三位数',
-    '两位数除法（首位够除）',
-    '两位数除法（调商）',
-    '商不变规律',
-    '除法综合应用',
+    'Divide two- and three-digit numbers by multiples of ten',
+    'Two-digit division (first digits big enough)',
+    'Two-digit division (adjusting the quotient)',
+    'The quotient stays the same',
+    'Division word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -417,10 +420,10 @@ const division2: Topic = {
       const quotient = rng.int(2, [9, 9, 12, 15, 20][level - 1])
       const dividend = divisor * quotient
       return makeFill({
-        prompt: `${dividend} ÷ ${divisor} = ？`,
+        prompt: `${dividend} ÷ ${divisor} = ?`,
         answer: quotient,
-        explanation: `想乘算除：${divisor} × ${quotient} = ${dividend}，所以商是 ${quotient}。`,
-        smartTip: '同缩同扩',
+        explanation: `Think multiplication: ${divisor} × ${quotient} = ${dividend}, so the quotient is ${quotient}.`,
+        smartTip: 'Shrink or grow both together',
       })
     })
 
@@ -429,10 +432,10 @@ const division2: Topic = {
       const quotient = rng.int(2, [9, 12, 15, 20, 25][level - 1])
       const dividend = divisor * quotient
       return makeFill({
-        prompt: `${dividend} ÷ ${divisor} = ？`,
+        prompt: `${dividend} ÷ ${divisor} = ?`,
         answer: quotient,
-        explanation: `试商：把 ${divisor} 看成 ${Math.round(divisor / 10) * 10}，${divisor} × ${quotient} = ${dividend}，商是 ${quotient}。`,
-        smartTip: '四舍五入试商',
+        explanation: `Try a quotient: treat ${divisor} as ${Math.round(divisor / 10) * 10}. ${divisor} × ${quotient} = ${dividend}, so the quotient is ${quotient}.`,
+        smartTip: 'Round the divisor to try a quotient',
       })
     })
 
@@ -443,10 +446,10 @@ const division2: Topic = {
         const remainder = rng.int(1, divisor - 1)
         const dividend = divisor * quotient + remainder
         return makeFill({
-          prompt: `${dividend} ÷ ${divisor} 的商是多少？（只填商）`,
+          prompt: `What is the quotient of ${dividend} ÷ ${divisor}? (Enter only the quotient.)`,
           answer: quotient,
-          explanation: `${divisor} × ${quotient} = ${divisor * quotient}，${dividend} − ${divisor * quotient} = ${remainder}（余数 ${remainder} < ${divisor}），所以商是 ${quotient}。`,
-          smartTip: '商 × 除数 + 余数验算',
+          explanation: `${divisor} × ${quotient} = ${divisor * quotient} and ${dividend} − ${divisor * quotient} = ${remainder} (the remainder ${remainder} < ${divisor}), so the quotient is ${quotient}.`,
+          smartTip: 'Check: quotient × divisor + remainder',
         })
       })
     }
@@ -458,10 +461,10 @@ const division2: Topic = {
         const remainder = rng.int(1, divisor - 1)
         const dividend = divisor * quotient + remainder
         return makeFill({
-          prompt: `${dividend} ÷ ${divisor} 的余数是多少？`,
+          prompt: `What is the remainder of ${dividend} ÷ ${divisor}?`,
           answer: remainder,
-          explanation: `${divisor} × ${quotient} = ${divisor * quotient}，${dividend} − ${divisor * quotient} = ${remainder}，余数是 ${remainder}。`,
-          smartTip: '商 × 除数 + 余数验算',
+          explanation: `${divisor} × ${quotient} = ${divisor * quotient} and ${dividend} − ${divisor * quotient} = ${remainder}, so the remainder is ${remainder}.`,
+          smartTip: 'Check: quotient × divisor + remainder',
         })
       })
     }
@@ -472,11 +475,11 @@ const division2: Topic = {
         const quotient = rng.int(4, 18)
         const dividend = divisor * quotient
         return makeChoice({
-          prompt: `${dividend} ÷ ${divisor} = ？`,
+          prompt: `${dividend} ÷ ${divisor} = ?`,
           answer: String(quotient),
           wrong: [String(quotient + 1), String(quotient - 1), String(quotient + 2)],
-          explanation: `试商后验算：${divisor} × ${quotient} = ${dividend}，正好除尽，商是 ${quotient}。`,
-          smartTip: '四舍五入试商',
+          explanation: `Try a quotient and check: ${divisor} × ${quotient} = ${dividend}, so it divides exactly and the quotient is ${quotient}.`,
+          smartTip: 'Round the divisor to try a quotient',
         })
       })
     }
@@ -487,10 +490,10 @@ const division2: Topic = {
         const b = rng.int(2, 9)
         const factor = rng.pick([10, 100])
         return makeFill({
-          prompt: `已知 ${a * b} ÷ ${b} = ${a}，那么 ${a * b * factor} ÷ ${b * factor} = ？`,
+          prompt: `Given ${a * b} ÷ ${b} = ${a}, what is ${a * b * factor} ÷ ${b * factor}?`,
           answer: a,
-          explanation: `被除数和除数同时乘 ${factor}，商不变，还是 ${a}。`,
-          smartTip: '同缩同扩',
+          explanation: `The dividend and the divisor are both multiplied by ${factor}, so the quotient stays the same at ${a}.`,
+          smartTip: 'Shrink or grow both together',
         })
       })
     }
@@ -502,11 +505,11 @@ const division2: Topic = {
         const boxes = Math.floor(total / perBox)
         const remainder = total % perBox
         return makeFill({
-          prompt: `有 ${total} 个鸡蛋，每 ${perBox} 个装一箱，可以装满多少箱？`,
+          prompt: `There are ${total} eggs and each box holds ${perBox} eggs. How many full boxes can be packed?`,
           answer: boxes,
-          unit: '箱',
-          explanation: `${total} ÷ ${perBox} = ${boxes} …… ${remainder}，剩下的 ${remainder} 个不够装一箱，所以能装满 ${boxes} 箱。`,
-          smartTip: '商 × 除数 + 余数验算',
+          unit: 'boxes',
+          explanation: `${total} ÷ ${perBox} = ${boxes} R ${remainder}. The ${remainder} left over are not enough for another box, so ${boxes} full boxes can be packed.`,
+          smartTip: 'Check: quotient × divisor + remainder',
         })
       })
     }
@@ -516,11 +519,11 @@ const division2: Topic = {
         const speed = rng.int(45, 85)
         const distance = speed * rng.int(3, 9)
         return makeFill({
-          prompt: `两地相距 ${distance} 千米，汽车每小时行 ${speed} 千米，需要几小时到达？`,
+          prompt: `Two cities are ${distance} km apart. A car travels ${speed} km every hour. How many hours does it take to get there?`,
           answer: distance / speed,
-          unit: '小时',
-          explanation: `时间 = 路程 ÷ 速度 = ${distance} ÷ ${speed} = ${distance / speed} 小时。`,
-          smartTip: '同缩同扩',
+          unit: 'hours',
+          explanation: `Time = distance ÷ speed = ${distance} ÷ ${speed} = ${distance / speed} hours.`,
+          smartTip: 'Shrink or grow both together',
         })
       })
     }
@@ -530,59 +533,59 @@ const division2: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   4. 分数的加减法
+   4. Adding and subtracting fractions
    ══════════════════════════════════════════════ */
 
 const fractionOps: Topic = {
   id: 'g4-fraction-ops',
   grade: 4,
-  name: '分数加减法',
+  name: 'Adding and Subtracting Fractions',
   color: 'pink',
   icon: 'PieChart',
-  summary: '掌握约分、通分与异分母分数加减法，会比较分数大小。',
+  summary: 'Master simplifying, finding common denominators, adding and subtracting fractions with different denominators, and comparing fractions.',
   explanation: [
     {
-      title: '约分与最简分数',
-      body: '把一个分数的分子和分母同时除以它们的公因数，分数大小不变，这叫约分。分子和分母只有公因数 1 时，就是最简分数。',
-      example: '6/8 = 3/4（分子分母同时除以 2）',
+      title: 'Simplifying and simplest form',
+      body: 'Dividing the numerator and the denominator of a fraction by a common factor does not change its value. This is called simplifying. When the only common factor is 1, the fraction is in simplest form.',
+      example: '6/8 = 3/4 (divide the numerator and denominator by 2)',
     },
     {
-      title: '通分',
-      body: '把异分母分数化成和原来相等的同分母分数，叫通分。通常用两个分母的最小公倍数作公分母。',
-      example: '1/2 和 1/3 → 3/6 和 2/6',
+      title: 'Common denominators',
+      body: 'Changing fractions with different denominators into equal fractions with the same denominator is called finding a common denominator. We usually use the least common multiple of the two denominators.',
+      example: '1/2 and 1/3 → 3/6 and 2/6',
     },
     {
-      title: '异分母分数加减法',
-      body: '先通分，化成同分母分数，再按同分母分数加减法计算，最后结果要约成最简分数。',
+      title: 'Adding and subtracting with different denominators',
+      body: 'First find a common denominator so the fractions have the same denominator, then add or subtract as you do with the same denominator. Finally simplify the answer.',
       example: '1/2 + 1/3 = 3/6 + 2/6 = 5/6',
     },
   ],
   smartMethods: [
     {
-      name: '短除法约分',
-      when: '需要把分数化到最简时',
-      steps: ['找出分子分母的公因数', '同时除以这个公因数', '一直除到只有公因数 1'],
-      example: '12/18 → 除以 6 → 2/3',
+      name: 'Divide out common factors',
+      when: 'You need a fraction in simplest form',
+      steps: ['Find a common factor of the numerator and denominator', 'Divide both by it', 'Keep going until the only common factor is 1'],
+      example: '12/18 → divide by 6 → 2/3',
     },
     {
-      name: '最小公倍数通分',
-      when: '异分母分数相加减时',
-      steps: ['找出两个分母的最小公倍数', '把每个分数化成分母是最小公倍数的分数', '分子相加减，分母不变'],
+      name: 'Least common multiple',
+      when: 'Adding or subtracting fractions with different denominators',
+      steps: ['Find the least common multiple of the two denominators', 'Change each fraction to one with that denominator', 'Add or subtract the numerators and keep the denominator'],
       example: '2/3 + 1/4 → 8/12 + 3/12 = 11/12',
     },
     {
-      name: '交叉相乘比大小',
-      when: '比较两个异分母分数时',
-      steps: ['把第一个分子乘第二个分母', '把第二个分子乘第一个分母', '比较两个乘积，大的那边分数更大'],
-      example: '2/3 和 3/5：2 × 5 = 10，3 × 3 = 9，所以 2/3 > 3/5',
+      name: 'Cross-multiply to compare',
+      when: 'Comparing two fractions with different denominators',
+      steps: ['Multiply the first numerator by the second denominator', 'Multiply the second numerator by the first denominator', 'Compare the two products; the fraction on the side with the bigger product is bigger'],
+      example: '2/3 and 3/5: 2 × 5 = 10 and 3 × 3 = 9, so 2/3 > 3/5',
     },
   ],
   levels: buildLevels(4, [
-    '约分与最简分数',
-    '同分母分数加减',
-    '异分母分数加减',
-    '比较分数大小',
-    '分数综合应用',
+    'Simplifying and simplest form',
+    'Add and subtract with the same denominator',
+    'Add and subtract with different denominators',
+    'Comparing fractions',
+    'Fraction word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -594,10 +597,10 @@ const fractionOps: Topic = {
       const n = simpN * factor
       const d = simpD * factor
       return makeFill({
-        prompt: `把 ${n}/${d} 约成最简分数，请写成「分子/分母」形式。`,
+        prompt: `Simplify ${n}/${d} to its simplest form. Write it as numerator/denominator.`,
         answer: fracStr(n, d),
-        explanation: `分子分母同时除以 ${factor}：${n} ÷ ${factor} = ${n / factor}，${d} ÷ ${factor} = ${d / factor}，得到 ${fracStr(n, d)}。`,
-        smartTip: '短除法约分',
+        explanation: `Divide the numerator and denominator by ${factor}: ${n} ÷ ${factor} = ${n / factor} and ${d} ÷ ${factor} = ${d / factor}, giving ${fracStr(n, d)}.`,
+        smartTip: 'Divide out common factors',
       })
     })
 
@@ -607,10 +610,10 @@ const fractionOps: Topic = {
         const a = rng.int(1, d - 2)
         const b = rng.int(1, Math.max(1, d - a - 1))
         return makeFill({
-          prompt: `${a}/${d} + ${b}/${d} = ？请写成最简的「分子/分母」形式（整数就直接写整数）。`,
+          prompt: `${a}/${d} + ${b}/${d} = ? Write it in simplest form as numerator/denominator (write a whole number as just the number).`,
           answer: fracStr(a + b, d),
-          explanation: `同分母分数相加，分子相加分母不变：${a} + ${b} = ${a + b}，得 ${a + b}/${d}，约分后是 ${fracStr(a + b, d)}。`,
-          smartTip: '最小公倍数通分',
+          explanation: `Add fractions with the same denominator by adding the numerators and keeping the denominator: ${a} + ${b} = ${a + b}, giving ${a + b}/${d}, which simplifies to ${fracStr(a + b, d)}.`,
+          smartTip: 'Least common multiple',
         })
       })
     }
@@ -623,10 +626,10 @@ const fractionOps: Topic = {
         const a = rng.int(1, d1 - 1)
         const b = rng.int(1, d2 - 1)
         return makeFill({
-          prompt: `${a}/${d1} + ${b}/${d2} = ？请写成最简的「分子/分母」形式。`,
+          prompt: `${a}/${d1} + ${b}/${d2} = ? Write it in simplest form as numerator/denominator.`,
           answer: fracStr(a * (lcm / d1) + b * (lcm / d2), lcm),
-          explanation: `先通分成 ${lcm} 作分母：${a}/${d1} = ${a * (lcm / d1)}/${lcm}，${b}/${d2} = ${b * (lcm / d2)}/${lcm}，相加得 ${a * (lcm / d1) + b * (lcm / d2)}/${lcm}，约分后是 ${fracStr(a * (lcm / d1) + b * (lcm / d2), lcm)}。`,
-          smartTip: '最小公倍数通分',
+          explanation: `First use ${lcm} as the common denominator: ${a}/${d1} = ${a * (lcm / d1)}/${lcm} and ${b}/${d2} = ${b * (lcm / d2)}/${lcm}. Adding gives ${a * (lcm / d1) + b * (lcm / d2)}/${lcm}, which simplifies to ${fracStr(a * (lcm / d1) + b * (lcm / d2), lcm)}.`,
+          smartTip: 'Least common multiple',
         })
       })
     }
@@ -637,10 +640,10 @@ const fractionOps: Topic = {
         const a = rng.int(3, d - 1)
         const b = rng.int(1, a - 1)
         return makeFill({
-          prompt: `${a}/${d} − ${b}/${d} = ？请写成最简的「分子/分母」形式。`,
+          prompt: `${a}/${d} − ${b}/${d} = ? Write it in simplest form as numerator/denominator.`,
           answer: fracStr(a - b, d),
-          explanation: `同分母分数相减，分子相减分母不变：${a} − ${b} = ${a - b}，得 ${a - b}/${d}，约分后是 ${fracStr(a - b, d)}。`,
-          smartTip: '最小公倍数通分',
+          explanation: `Subtract fractions with the same denominator by subtracting the numerators and keeping the denominator: ${a} − ${b} = ${a - b}, giving ${a - b}/${d}, which simplifies to ${fracStr(a - b, d)}.`,
+          smartTip: 'Least common multiple',
         })
       })
     }
@@ -656,11 +659,11 @@ const fractionOps: Topic = {
         const right = b * d1
         const symbol = left > right ? '>' : left < right ? '<' : '='
         return makeChoice({
-          prompt: `${a}/${d1} ○ ${b}/${d2}，○ 里应填什么？`,
+          prompt: `${a}/${d1} ○ ${b}/${d2}. What goes in the circle?`,
           answer: symbol,
           wrong: [symbol === '>' ? '<' : symbol === '<' ? '>' : '>', '=', '≠'],
-          explanation: `交叉相乘：${a} × ${d2} = ${left}，${b} × ${d1} = ${right}，${left > right ? `${left} > ${right}` : left < right ? `${left} < ${right}` : '两者相等'}，所以填 ${symbol}。`,
-          smartTip: '交叉相乘比大小',
+          explanation: `Cross-multiply: ${a} × ${d2} = ${left} and ${b} × ${d1} = ${right}. ${left > right ? `${left} > ${right}` : left < right ? `${left} < ${right}` : 'They are equal'}, so write ${symbol}.`,
+          smartTip: 'Cross-multiply to compare',
         })
       })
     }
@@ -671,10 +674,10 @@ const fractionOps: Topic = {
         const a = rng.int(1, d - 2)
         const b = rng.int(1, Math.max(1, d - a - 1))
         return makeFill({
-          prompt: `一块地，上午耕了 ${a}/${d}，下午耕了 ${b}/${d}，还剩这块地的几分之几没耕？请写成最简的「分子/分母」形式（没有剩余就写 0）。`,
+          prompt: `A farmer plowed ${a}/${d} of a field in the morning and ${b}/${d} in the afternoon. What fraction of the field is still not plowed? Write it in simplest form as numerator/denominator (write 0 if nothing is left).`,
           answer: fracStr(d - a - b, d),
-          explanation: `把整块地看成 1 = ${d}/${d}，已耕 ${a + b}/${d}，还剩 ${d}/${d} − ${a + b}/${d} = ${d - a - b}/${d}，约分后是 ${fracStr(d - a - b, d)}。`,
-          smartTip: '最小公倍数通分',
+          explanation: `Think of the whole field as 1 = ${d}/${d}. ${a + b}/${d} is plowed, so ${d}/${d} − ${a + b}/${d} = ${d - a - b}/${d} is left, which simplifies to ${fracStr(d - a - b, d)}.`,
+          smartTip: 'Least common multiple',
         })
       })
     }
@@ -687,10 +690,10 @@ const fractionOps: Topic = {
         const b = rng.int(1, d2 - 1)
         const lcm = d2
         return makeJudge({
-          prompt: `判断：${a}/${d1} + ${b}/${d2} = ${a + b}/${d1 + d2} —— 对吗？`,
+          prompt: `True or false: ${a}/${d1} + ${b}/${d2} = ${a + b}/${d1 + d2}`,
           correct: false,
-          explanation: `异分母分数不能直接把分子分母分别相加，要先通分：${a}/${d1} = ${a * (lcm / d1)}/${lcm}，加上 ${b}/${d2} 得 ${fracStr(a * (lcm / d1) + b, lcm)}。`,
-          smartTip: '最小公倍数通分',
+          explanation: `With different denominators you cannot just add the numerators and the denominators separately. Find a common denominator first: ${a}/${d1} = ${a * (lcm / d1)}/${lcm}, and adding ${b}/${d2} gives ${fracStr(a * (lcm / d1) + b, lcm)}.`,
+          smartTip: 'Least common multiple',
         })
       })
     }
@@ -700,59 +703,59 @@ const fractionOps: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   5. 小数的意义和加减法
+   5. Introduction to decimals
    ══════════════════════════════════════════════ */
 
 const decimal: Topic = {
   id: 'g4-decimal',
   grade: 4,
-  name: '小数初步',
+  name: 'Introduction to Decimals',
   color: 'purple',
   icon: 'Percent',
-  summary: '理解小数的意义与性质，会比较小数大小、做小数加减法。',
+  summary: 'Understand the meaning and properties of decimals, compare decimals, and add and subtract them.',
   explanation: [
     {
-      title: '小数的意义',
-      body: '分母是 10、100、1000 …… 的分数可以用小数表示。小数点右边第一位是十分位，第二位是百分位，第三位是千分位。',
-      example: '3/10 = 0.3，27/100 = 0.27',
+      title: 'What decimals mean',
+      body: 'Fractions with a denominator of 10, 100, 1,000 … can be written as decimals. The first digit after the decimal point is the tenths place, the second is the hundredths place and the third is the thousandths place.',
+      example: '3/10 = 0.3, 27/100 = 0.27',
     },
     {
-      title: '小数的性质',
-      body: '在小数的末尾添上 0 或去掉 0，小数的大小不变。利用这个性质可以化简小数。',
-      example: '0.50 = 0.5，2.300 = 2.3',
+      title: 'A property of decimals',
+      body: 'Adding zeros to the end of a decimal, or removing them, does not change its value. You can use this to simplify a decimal.',
+      example: '0.50 = 0.5, 2.300 = 2.3',
     },
     {
-      title: '小数加减法',
-      body: '小数加减法要把小数点对齐（也就是相同数位对齐），再按整数加减法计算，最后在得数里点上小数点。',
+      title: 'Adding and subtracting decimals',
+      body: 'To add or subtract decimals, line up the decimal points (so matching place values line up), calculate as with whole numbers, and put the decimal point in the answer.',
       example: '3.25 + 1.7 = 3.25 + 1.70 = 4.95',
     },
   ],
   smartMethods: [
     {
-      name: '数位对齐法',
-      when: '做小数加减法时',
-      steps: ['先把小数点对齐', '位数不够就在末尾补 0', '按整数加减法算出结果'],
+      name: 'Line up the place values',
+      when: 'Adding or subtracting decimals',
+      steps: ['First line up the decimal points', 'Add zeros at the end if the numbers have different lengths', 'Calculate as with whole numbers'],
       example: '3.25 + 1.7 → 3.25 + 1.70 = 4.95',
     },
     {
-      name: '去零化简',
-      when: '小数末尾有 0 时',
-      steps: ['看小数点末尾有没有 0', '把末尾的 0 全部去掉', '小数的大小不变'],
+      name: 'Drop the extra zeros',
+      when: 'A decimal has zeros at the end',
+      steps: ['Check for zeros at the end of the decimal', 'Remove all the zeros at the end', 'The value does not change'],
       example: '2.300 = 2.3',
     },
     {
-      name: '从左往右比',
-      when: '比较小数大小时',
-      steps: ['先比较整数部分', '整数部分相同再比十分位', '一位一位往下比'],
-      example: '3.25 和 3.3：整数部分相同，十分位 2 < 3，所以 3.25 < 3.3',
+      name: 'Compare from the left',
+      when: 'Comparing decimals',
+      steps: ['Compare the whole number parts first', 'If they are the same, compare the tenths', 'Keep comparing one place at a time'],
+      example: '3.25 and 3.3: the whole parts match, tenths 2 < 3, so 3.25 < 3.3',
     },
   ],
   levels: buildLevels(4, [
-    '小数的意义与读写',
-    '小数的性质与化简',
-    '比较小数大小',
-    '小数加减法',
-    '小数综合应用',
+    'Meaning of decimals, reading and writing',
+    'Properties of decimals and simplifying',
+    'Comparing decimals',
+    'Adding and subtracting decimals',
+    'Decimal word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -761,10 +764,10 @@ const decimal: Topic = {
       const n = rng.int(1, 99)
       const denom = rng.pick([10, 100])
       return makeFill({
-        prompt: `${n}/${denom} 写成小数是多少？`,
+        prompt: `Write ${n}/${denom} as a decimal.`,
         answer: n / denom,
-        explanation: `分母是 ${denom}，写成小数要${denom === 10 ? '一位' : '两位'}小数：${n}/${denom} = ${n / denom}。`,
-        smartTip: '去零化简',
+        explanation: `The denominator is ${denom}, so the decimal has ${denom === 10 ? 'one decimal place' : 'two decimal places'}: ${n}/${denom} = ${n / denom}.`,
+        smartTip: 'Drop the extra zeros',
       })
     })
 
@@ -773,10 +776,10 @@ const decimal: Topic = {
         const whole = rng.int(1, 9)
         const frac = rng.pick([10, 20, 30, 50, 60, 70, 80, 90, 40])
         return makeFill({
-          prompt: `把 ${whole}.${frac} 化简成最简小数是多少？`,
+          prompt: `Write ${whole}.${frac} as a decimal in simplest form.`,
           answer: whole + frac / 100,
-          explanation: `去掉小数末尾的 0，大小不变：${whole}.${frac} = ${whole + frac / 100}。`,
-          smartTip: '去零化简',
+          explanation: `Remove the zeros at the end of the decimal and the value stays the same: ${whole}.${frac} = ${whole + frac / 100}.`,
+          smartTip: 'Drop the extra zeros',
         })
       })
     }
@@ -786,10 +789,10 @@ const decimal: Topic = {
         const whole = rng.int(0, 9)
         const tenths = rng.int(1, 9)
         return makeJudge({
-          prompt: `判断：${whole}.${tenths}0 = ${whole}.${tenths} —— 对吗？`,
+          prompt: `True or false: ${whole}.${tenths}0 = ${whole}.${tenths}`,
           correct: true,
-          explanation: `小数的末尾添上 0 或去掉 0，小数的大小不变，所以 ${whole}.${tenths}0 = ${whole}.${tenths}。`,
-          smartTip: '去零化简',
+          explanation: `Adding or removing a zero at the end of a decimal does not change its value, so ${whole}.${tenths}0 = ${whole}.${tenths}.`,
+          smartTip: 'Drop the extra zeros',
         })
       })
     }
@@ -804,11 +807,11 @@ const decimal: Topic = {
         const right = whole + b / 10
         const symbol = left > right ? '>' : '<'
         return makeChoice({
-          prompt: `${left} ○ ${right}，○ 里应填什么？`,
+          prompt: `${left} ○ ${right}. What goes in the circle?`,
           answer: symbol,
           wrong: [symbol === '>' ? '<' : '>', '=', '≠'],
-          explanation: `整数部分都是 ${whole}，比十分位：${Math.max(a, b)} > ${Math.min(a, b)}，所以填 ${symbol}。`,
-          smartTip: '从左往右比',
+          explanation: `The whole number part is ${whole} for both. Compare the tenths: ${Math.max(a, b)} > ${Math.min(a, b)}, so write ${symbol}.`,
+          smartTip: 'Compare from the left',
         })
       })
     }
@@ -819,10 +822,10 @@ const decimal: Topic = {
         const b = Math.round((rng.int(1, 50) + rng.int(0, 99) / 100) * 100) / 100
         const sum = Math.round((a + b) * 100) / 100
         return makeFill({
-          prompt: `${a} + ${b} = ？`,
+          prompt: `${a} + ${b} = ?`,
           answer: sum,
-          explanation: `小数点对齐后相加：${a} + ${b} = ${sum}。`,
-          smartTip: '数位对齐法',
+          explanation: `Line up the decimal points and add: ${a} + ${b} = ${sum}.`,
+          smartTip: 'Line up the place values',
         })
       })
     }
@@ -833,10 +836,10 @@ const decimal: Topic = {
         const b = Math.round((rng.int(1, Math.floor(a) - 1) + rng.int(0, 99) / 100) * 100) / 100
         const diff = Math.round((a - b) * 100) / 100
         return makeFill({
-          prompt: `${a} − ${b} = ？`,
+          prompt: `${a} − ${b} = ?`,
           answer: diff,
-          explanation: `小数点对齐后相减：${a} − ${b} = ${diff}。`,
-          smartTip: '数位对齐法',
+          explanation: `Line up the decimal points and subtract: ${a} − ${b} = ${diff}.`,
+          smartTip: 'Line up the place values',
         })
       })
     }
@@ -848,11 +851,11 @@ const decimal: Topic = {
         const total = Math.round((priceA + priceB) * 10) / 10
         const paid = Math.ceil(total) + rng.int(0, 5)
         return makeFill({
-          prompt: `买一支笔 ${priceA} 元和一个本子 ${priceB} 元，付 ${paid} 元，应找回多少元？`,
+          prompt: `A pen costs ${priceA} dollars and a notebook costs ${priceB} dollars. You pay ${paid} dollars. How many dollars do you get back in change?`,
           answer: Math.round((paid - total) * 10) / 10,
-          unit: '元',
-          explanation: `先算总价：${priceA} + ${priceB} = ${total} 元，再算找零：${paid} − ${total} = ${Math.round((paid - total) * 10) / 10} 元。`,
-          smartTip: '数位对齐法',
+          unit: 'dollars',
+          explanation: `First the total price: ${priceA} + ${priceB} = ${total} dollars. Then the change: ${paid} − ${total} = ${Math.round((paid - total) * 10) / 10} dollars.`,
+          smartTip: 'Line up the place values',
         })
       })
     }
@@ -862,123 +865,123 @@ const decimal: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   6. 角与线
+   6. Angles and lines
    ══════════════════════════════════════════════ */
 
 const geometry: Topic = {
   id: 'g4-geometry',
   grade: 4,
-  name: '角与线',
+  name: 'Angles and Lines',
   color: 'teal',
   icon: 'Compass',
-  summary: '认识线段、射线、直线，会量角和画角，理解平行与垂直。',
+  summary: 'Learn line segments, rays and lines, measure and draw angles, and understand parallel and perpendicular lines.',
   explanation: [
     {
-      title: '线段、射线、直线',
-      body: '线段有两个端点，可以量出长度；射线只有一个端点，向一端无限延伸；直线没有端点，向两端无限延伸。',
-      example: '线段 AB 记作 AB，射线记作射线 AB，直线记作直线 AB',
+      title: 'Line segments, rays and lines',
+      body: 'A line segment has two endpoints and a length you can measure. A ray has one endpoint and goes on forever in one direction. A line has no endpoints and goes on forever in both directions.',
+      example: 'Segment AB is written AB, ray AB is written "ray AB", and line AB is written "line AB"',
     },
     {
-      title: '角的度量',
-      body: '量角要用量角器：把量角器的中心对准角的顶点，0 刻度线对准角的一条边，看另一条边指着的刻度。角的大小与边的长短无关，只与两边张开的大小有关。',
-      example: '1 直角 = 90°，1 平角 = 180°，1 周角 = 360°',
+      title: 'Measuring angles',
+      body: 'Use a protractor to measure an angle: put the center of the protractor on the vertex of the angle, line up the 0 line with one side of the angle, and read the mark where the other side points. The size of an angle does not depend on how long its sides are, only on how wide they open.',
+      example: '1 right angle = 90°, 1 straight angle = 180°, 1 full turn = 360°',
     },
     {
-      title: '平行与垂直',
-      body: '在同一平面内不相交的两条直线互相平行；两条直线相交成直角时，这两条直线互相垂直。',
-      example: '黑板的上下两条边互相平行，相邻两条边互相垂直',
+      title: 'Parallel and perpendicular',
+      body: 'Two lines in the same plane that never meet are parallel. When two lines cross at a right angle, they are perpendicular.',
+      example: 'The top and bottom edges of a whiteboard are parallel, and two neighboring edges are perpendicular',
     },
   ],
   smartMethods: [
     {
-      name: '量角器三步骤',
-      when: '量一个角是多少度时',
-      steps: ['中心对准顶点', '0 刻度线对准一条边', '读另一条边所指的刻度（注意读内圈还是外圈）'],
-      example: '开口向右就读内圈，开口向左就读外圈',
+      name: 'Three steps with a protractor',
+      when: 'Measuring an angle in degrees',
+      steps: ['Put the center on the vertex', 'Line up the 0 line with one side', 'Read the mark where the other side points (check whether to read the inner or outer scale)'],
+      example: 'If the angle opens to the right, read the inner scale; if it opens to the left, read the outer scale',
     },
     {
-      name: '直角基准法',
-      when: '快速判断角的类型时',
-      steps: ['想一想直角是 90°', '比直角小的是锐角', '比直角大比平角小的是钝角'],
-      example: '120° > 90° → 钝角',
+      name: 'Compare with a right angle',
+      when: 'Quickly deciding what type of angle it is',
+      steps: ['Remember a right angle is 90°', 'Smaller than a right angle is acute', 'Bigger than a right angle but smaller than a straight angle is obtuse'],
+      example: '120° > 90° → obtuse angle',
     },
     {
-      name: '三角板画垂线',
-      when: '要画垂线或检验垂直时',
-      steps: ['用三角板的一条直角边贴住已知直线', '沿另一条直角边画线', '标出直角符号'],
-      example: '过直线外一点画垂线也是同样的方法',
+      name: 'Draw a perpendicular with a set square',
+      when: 'Drawing a perpendicular line or checking for one',
+      steps: ['Put one short side of the set square against the given line', 'Draw along the other short side', 'Mark the right angle symbol'],
+      example: 'Drawing a perpendicular from a point outside the line uses the same method',
     },
   ],
   levels: buildLevels(4, [
-    '认识线段、射线、直线',
-    '角的度量与分类',
-    '画角与角的计算',
-    '平行与垂直',
-    '几何综合应用',
+    'Learn line segments, rays and lines',
+    'Measuring and classifying angles',
+    'Drawing angles and angle calculations',
+    'Parallel and perpendicular lines',
+    'Geometry word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
 
     makers.push(() => {
       const cases: Array<[string, string, string[]]> = [
-        ['手电筒射出的光可以近似看成什么？', '射线', ['线段', '直线', '曲线']],
-        ['一根拉紧的绳子可以近似看成什么？', '线段', ['射线', '直线', '折线']],
-        ['一条笔直的公路向两端无限延伸，可以看成什么？', '直线', ['线段', '射线', '曲线']],
-        ['线段有几个端点？', '2 个', ['1 个', '0 个', '3 个']],
+        ['The light from a flashlight is closest to which figure?', 'ray', ['line segment', 'line', 'curve']],
+        ['A tight piece of string is closest to which figure?', 'line segment', ['ray', 'line', 'broken line']],
+        ['A straight road goes on forever in both directions. Which figure is it closest to?', 'line', ['line segment', 'ray', 'curve']],
+        ['How many endpoints does a line segment have?', '2', ['1', '0', '3']],
       ]
       const [prompt, answer, wrong] = rng.pick(cases)
       return makeChoice({
         prompt,
         answer,
         wrong,
-        explanation: `正确答案是${answer}。线段有 2 个端点可量长度，射线 1 个端点，直线没有端点。`,
-        smartTip: '量角器三步骤',
+        explanation: `The correct answer is ${answer}. A line segment has 2 endpoints and a length you can measure, a ray has 1 endpoint, and a line has no endpoints.`,
+        smartTip: 'Three steps with a protractor',
       })
     })
 
     makers.push(() => {
       const cases: Array<[string, number, string]> = [
-        ['一个角有几个顶点？', 1, '个'],
-        ['一个角有几条边？', 2, '条'],
+        ['How many vertices does an angle have?', 1, 'vertex'],
+        ['How many sides does an angle have?', 2, 'sides'],
       ]
       const [prompt, answer, unit] = rng.pick(cases)
       return makeFill({
         prompt,
         answer,
         unit,
-        explanation: `角是从一点引出两条射线所组成的图形，所以有 1 个顶点、2 条边。答案是 ${answer} ${unit}。`,
-        smartTip: '量角器三步骤',
+        explanation: `An angle is formed by two rays that start at the same point, so it has 1 vertex and 2 sides. The answer is ${answer} ${unit}.`,
+        smartTip: 'Three steps with a protractor',
       })
     })
 
     makers.push(() => {
       const angle = rng.pick([30, 45, 60, 75, 100, 120, 135, 150])
-      const type = angle < 90 ? '锐角' : angle === 90 ? '直角' : angle < 180 ? '钝角' : '平角'
+      const type = angle < 90 ? 'acute' : angle === 90 ? 'right' : angle < 180 ? 'obtuse' : 'straight'
       return makeChoice({
-        prompt: `一个角是 ${angle}°，它是什么角？`,
+        prompt: `An angle is ${angle}°. What type of angle is it?`,
         answer: type,
-        wrong: (['锐角', '直角', '钝角', '平角'] as const).filter((t) => t !== type),
-        explanation: `${angle}° ${angle < 90 ? '小于 90°' : angle === 90 ? '等于 90°' : '大于 90° 小于 180°'}，所以是${type}。`,
-        smartTip: '直角基准法',
+        wrong: (['acute', 'right', 'obtuse', 'straight'] as const).filter((t) => t !== type),
+        explanation: `${angle}° is ${angle < 90 ? 'less than 90°' : angle === 90 ? 'equal to 90°' : 'more than 90° and less than 180°'}, so it is ${type === 'acute' || type === 'obtuse' ? 'an' : 'a'} ${type} angle.`,
+        smartTip: 'Compare with a right angle',
       })
     })
 
     if (level >= 2) {
       makers.push(() => {
         const cases: Array<[string, number, string]> = [
-          ['1 个直角是多少度？', 90, '度'],
-          ['1 个平角是多少度？', 180, '度'],
-          ['1 个周角是多少度？', 360, '度'],
-          ['1 个周角等于几个直角？', 4, '个'],
-          ['1 个平角等于几个直角？', 2, '个'],
+          ['How many degrees are in 1 right angle?', 90, 'degrees'],
+          ['How many degrees are in 1 straight angle?', 180, 'degrees'],
+          ['How many degrees are in 1 full turn?', 360, 'degrees'],
+          ['How many right angles make 1 full turn?', 4, 'right angles'],
+          ['How many right angles make 1 straight angle?', 2, 'right angles'],
         ]
         const [prompt, answer, unit] = rng.pick(cases)
         return makeFill({
           prompt,
           answer,
           unit,
-          explanation: `正确答案是 ${answer} ${unit}。直角 90°、平角 180°、周角 360°。`,
-          smartTip: '直角基准法',
+          explanation: `The correct answer is ${answer} ${unit}. A right angle is 90°, a straight angle is 180° and a full turn is 360°.`,
+          smartTip: 'Compare with a right angle',
         })
       })
     }
@@ -988,11 +991,11 @@ const geometry: Topic = {
         const a = rng.pick([30, 45, 60, 90, 120])
         const b = 180 - a
         return makeFill({
-          prompt: `一个角是 ${a}°，它与另一个角组成一个平角，另一个角是多少度？`,
+          prompt: `One angle is ${a}°. Together with another angle it makes a straight angle. How many degrees is the other angle?`,
           answer: b,
-          unit: '度',
-          explanation: `平角是 180°，180 − ${a} = ${b}°。`,
-          smartTip: '量角器三步骤',
+          unit: 'degrees',
+          explanation: `A straight angle is 180°, so 180 − ${a} = ${b}°.`,
+          smartTip: 'Three steps with a protractor',
         })
       })
     }
@@ -1002,11 +1005,11 @@ const geometry: Topic = {
         const a = rng.pick([30, 45, 60])
         const b = 90 - a
         return makeFill({
-          prompt: `把一个直角分成两个角，其中一个角是 ${a}°，另一个角是多少度？`,
+          prompt: `A right angle is split into two angles. One of them is ${a}°. How many degrees is the other?`,
           answer: b,
-          unit: '度',
-          explanation: `直角是 90°，90 − ${a} = ${b}°。`,
-          smartTip: '直角基准法',
+          unit: 'degrees',
+          explanation: `A right angle is 90°, so 90 − ${a} = ${b}°.`,
+          smartTip: 'Compare with a right angle',
         })
       })
     }
@@ -1014,18 +1017,18 @@ const geometry: Topic = {
     if (level >= 4) {
       makers.push(() => {
         const cases: Array<[string, string, string[]]> = [
-          ['同一平面内永不相交的两条直线叫什么？', '互相平行', ['互相垂直', '相交', '重合']],
-          ['两条直线相交成直角时，这两条直线的关系是？', '互相垂直', ['互相平行', '重合', '无法确定']],
-          ['长方形的对边之间是什么关系？', '互相平行', ['互相垂直', '相交但不垂直', '没有关系']],
-          ['长方形的相邻两条边之间是什么关系？', '互相垂直', ['互相平行', '无法确定', '没有关系']],
+          ['What do we call two lines in the same plane that never meet?', 'parallel', ['perpendicular', 'intersecting', 'overlapping']],
+          ['Two lines cross at a right angle. What is their relationship?', 'perpendicular', ['parallel', 'overlapping', 'cannot tell']],
+          ['What is the relationship between opposite sides of a rectangle?', 'parallel', ['perpendicular', 'intersecting but not perpendicular', 'no relationship']],
+          ['What is the relationship between neighboring sides of a rectangle?', 'perpendicular', ['parallel', 'cannot tell', 'no relationship']],
         ]
         const [prompt, answer, wrong] = rng.pick(cases)
         return makeChoice({
           prompt,
           answer,
           wrong,
-          explanation: `正确答案是${answer}。平行是永不相交，垂直是相交成 90°。`,
-          smartTip: '三角板画垂线',
+          explanation: `The correct answer is ${answer}. Parallel lines never meet, and perpendicular lines meet at 90°.`,
+          smartTip: 'Draw a perpendicular with a set square',
         })
       })
     }
@@ -1035,11 +1038,11 @@ const geometry: Topic = {
         const parts = rng.int(3, 8)
         const each = 360 / parts
         return makeFill({
-          prompt: `一个周角平均分成 ${parts} 份，每份是多少度？`,
+          prompt: `A full turn is divided equally into ${parts} parts. How many degrees is each part?`,
           answer: each,
-          unit: '度',
-          explanation: `周角是 360°，360 ÷ ${parts} = ${each}°。`,
-          smartTip: '量角器三步骤',
+          unit: 'degrees',
+          explanation: `A full turn is 360°, so 360 ÷ ${parts} = ${each}°.`,
+          smartTip: 'Three steps with a protractor',
         })
       })
     }
@@ -1047,17 +1050,17 @@ const geometry: Topic = {
     if (level >= 5) {
       makers.push(() => {
         const cases: Array<[string, number, string]> = [
-          ['钟面上 3 时整，时针和分针成多少度的角？', 90, '度'],
-          ['钟面上 6 时整，时针和分针成多少度的角？', 180, '度'],
-          ['钟面上 12 时整，时针和分针成多少度的角？', 0, '度'],
+          ['At exactly 3 o\'clock, what angle do the hour hand and minute hand make?', 90, 'degrees'],
+          ['At exactly 6 o\'clock, what angle do the hour hand and minute hand make?', 180, 'degrees'],
+          ['At exactly 12 o\'clock, what angle do the hour hand and minute hand make?', 0, 'degrees'],
         ]
         const [prompt, answer, unit] = rng.pick(cases)
         return makeFill({
           prompt,
           answer,
           unit,
-          explanation: `钟面一大格是 30°，答案是 ${answer}°。`,
-          smartTip: '直角基准法',
+          explanation: `Each big mark on a clock face is 30°, so the answer is ${answer}°.`,
+          smartTip: 'Compare with a right angle',
         })
       })
     }

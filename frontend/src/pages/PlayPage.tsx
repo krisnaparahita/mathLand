@@ -45,10 +45,10 @@ export default function PlayPage() {
   const { profile } = useProfile()
   const navigate = useNavigate()
 
-  /** relax=1 时关闭计时，适合刚开始学习的孩子 */
+  /** With relax=1 the timer is off, which suits kids who are just starting out */
   const timed = search.get('mode') !== 'relax'
 
-  /* ── 题目生成：每次进入 / 再来一轮都重新随机，并尽量避开最近做过的题 ── */
+  /* ── Question generation: re-randomized on every entry / new round, avoiding recently answered questions where possible ── */
   const [round, setRound] = useState(0)
   const historyKey = `mathland.recent.${gradeNumber}.${topicId}.${levelNumber}`
   const questions = useMemo<Question[]>(() => {
@@ -65,7 +65,7 @@ export default function PlayPage() {
       const merged = [...generated.map((q) => q.prompt), ...recent].slice(0, 80)
       localStorage.setItem(historyKey, JSON.stringify(merged))
     } catch {
-      /* 隐私模式下忽略存储失败 */
+      /* Ignore storage failures in private mode */
     }
     return generated
   }, [topic, meta, round, historyKey])
@@ -83,7 +83,7 @@ export default function PlayPage() {
   const [remaining, setRemaining] = useState(totalSeconds)
   const finishedRef = useRef(false)
 
-  /* 新一轮开始时重置所有状态 */
+  /* Reset all state when a new round starts */
   useEffect(() => {
     setIndex(0)
     setRecords({})
@@ -126,33 +126,33 @@ export default function PlayPage() {
       const saved = await saveMutation.mutateAsync()
       navigate(`/result/${saved.id}`)
     } catch {
-      // 保存失败时退回关卡页并提示，本轮成绩不会丢失进度（题目可随时重来）
-      toast.error('成绩保存失败，请检查网络后重试')
+      // On save failure, go back to the level page and show a notice; progress is not lost (the level can be replayed at any time)
+      toast.error('Could not save your result. Check your connection and try again.')
       navigate(`/levels/${gradeNumber}/${topic!.id}`)
     }
   }, [profile, gradeNumber, topic, meta, questions.length, startedAt, navigate, saveMutation])
 
-  /* finish 的引用桥：避免每次渲染重建定时器/自动跳题计时器 */
+  /* Ref bridge for finish: avoids re-creating the timer / auto-advance timer on every render */
   const finishRef = useRef<() => void>(() => {})
   useEffect(() => {
     finishRef.current = () => void finish()
   }, [finish])
 
-  /* ── 关卡计时器 ── */
+  /* ── Level timer ── */
   useEffect(() => {
     if (phase !== 'playing' || !timed) return
     const id = setInterval(() => setRemaining((r) => Math.max(0, r - 1)), 1000)
     return () => clearInterval(id)
   }, [phase, timed])
 
-  /* 时间归零 → 自动交卷 */
+  /* Time runs out → submit automatically */
   useEffect(() => {
     if (phase === 'playing' && timed && remaining === 0) finishRef.current()
   }, [phase, timed, remaining])
 
   const current = questions[index]
 
-  /* 答对后自动进入下一题；答错则停下来看解析 */
+  /* Advance automatically after a correct answer; stop on a wrong answer to show the explanation */
   useEffect(() => {
     if (!answered || !current || phase !== 'playing') return
     if (!lastCorrect) return
@@ -203,7 +203,7 @@ export default function PlayPage() {
     setPhase('playing')
   }
 
-  /* ── 准备界面 ── */
+  /* ── Ready screen ── */
   if (phase === 'ready') {
     return (
       <main className="container" style={{ maxWidth: 720, paddingBottom: 'var(--spacing-3xl)' }}>
@@ -214,7 +214,7 @@ export default function PlayPage() {
               {gradeInfo.name} · {topic.name}
             </div>
             <h1 className="font-bold text-title" style={{ color, marginTop: 4 }}>
-              第 {meta.level} 关 · {meta.name}
+              Level {meta.level} · {meta.name}
             </h1>
             <p style={{ color: 'var(--muted-foreground)', marginTop: 'var(--spacing-sm)', fontSize: 'var(--font-size-body)' }}>
               {meta.goal}
@@ -224,13 +224,13 @@ export default function PlayPage() {
               className="flex justify-center flex-wrap"
               style={{ gap: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}
             >
-              <InfoPill icon={<Sparkles size={16} />} label="题目数量" value={`${meta.questionCount} 题`} />
+              <InfoPill icon={<Sparkles size={16} />} label="Questions" value={`${meta.questionCount}`} />
               <InfoPill
                 icon={timed ? <TimerIcon size={16} /> : <Clock size={16} />}
-                label={timed ? '本关限时' : '模式'}
-                value={timed ? `${formatClock(totalSeconds)}（每题 ${meta.secondsPerQuestion} 秒）` : '不限时练习'}
+                label={timed ? 'Time limit' : 'Mode'}
+                value={timed ? `${formatClock(totalSeconds)} (${meta.secondsPerQuestion} sec per question)` : 'Untimed practice'}
               />
-              <InfoPill icon={<Lightbulb size={16} />} label="答错时" value="立刻看解析" />
+              <InfoPill icon={<Lightbulb size={16} />} label="On a wrong answer" value="See the explanation right away" />
             </div>
 
             <div className="flex flex-col items-center" style={{ gap: 'var(--spacing-sm)', marginTop: 'var(--spacing-xl)' }}>
@@ -247,7 +247,7 @@ export default function PlayPage() {
                   fontSize: 'var(--font-size-body)',
                 }}
               >
-                开始闯关
+                Start level
               </button>
               <button
                 type="button"
@@ -255,7 +255,7 @@ export default function PlayPage() {
                 className="cursor-pointer font-semibold"
                 style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}
               >
-                先去看看讲解和巧算方法
+                Review the concepts and smart tricks first
               </button>
               <button
                 type="button"
@@ -263,7 +263,7 @@ export default function PlayPage() {
                 className="cursor-pointer font-semibold inline-flex items-center"
                 style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', gap: 4 }}
               >
-                <Shuffle size={13} /> 换一批题目（第 {round + 1} 轮）
+                <Shuffle size={13} /> New questions (round {round + 1})
               </button>
               <button
                 type="button"
@@ -271,7 +271,7 @@ export default function PlayPage() {
                 className="cursor-pointer font-semibold inline-flex items-center"
                 style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', gap: 4 }}
               >
-                <ArrowLeft size={14} /> 返回关卡
+                <ArrowLeft size={14} /> Back to levels
               </button>
             </div>
           </div>
@@ -284,7 +284,7 @@ export default function PlayPage() {
 
   return (
     <main className="container" style={{ maxWidth: 780, paddingBottom: 'var(--spacing-3xl)' }}>
-      {/* ── 顶部状态条 ── */}
+      {/* ── Top status bar ── */}
       <div
         className="clay flex items-center flex-wrap"
         style={{
@@ -298,10 +298,10 @@ export default function PlayPage() {
           <TopicIcon icon={topic.icon} color={topic.color} size={38} />
           <div>
             <div className="font-bold" style={{ fontSize: 'var(--font-size-body)', color }}>
-              第 {meta.level} 关 · {meta.name}
+              Level {meta.level} · {meta.name}
             </div>
             <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
-              第 {index + 1} / {questions.length} 题
+              Question {index + 1} / {questions.length}
             </div>
           </div>
         </div>
@@ -326,8 +326,8 @@ export default function PlayPage() {
             className="flex justify-between"
             style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 4 }}
           >
-            <span>答对 {correctCount}</span>
-            <span>已答 {answeredCount} / {questions.length}</span>
+            <span>Correct {correctCount}</span>
+            <span>Answered {answeredCount} / {questions.length}</span>
           </div>
         </div>
 
@@ -352,13 +352,13 @@ export default function PlayPage() {
           ) : (
             <>
               <Clock size={16} />
-              不限时
+              Untimed
             </>
           )}
         </div>
       </div>
 
-      {/* ── 题目卡片 ── */}
+      {/* ── Question card ── */}
       <FadeIn key={current.id}>
         <div className="clay" style={{ marginTop: 'var(--spacing-lg)', padding: 'var(--spacing-xl)' }}>
           <div
@@ -373,7 +373,7 @@ export default function PlayPage() {
               borderRadius: 999,
             }}
           >
-            {current.kind === 'choice' ? '选择题' : current.kind === 'fill' ? '填空题' : '判断题'}
+            {current.kind === 'choice' ? 'Multiple choice' : current.kind === 'fill' ? 'Fill in the blank' : 'True or false'}
           </div>
 
           <h2
@@ -429,8 +429,8 @@ export default function PlayPage() {
           {current.kind === 'judge' && (
             <div className="flex" style={{ gap: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}>
               {[
-                { label: '对 ✓', value: 'true', good: true },
-                { label: '错 ✗', value: 'false', good: false },
+                { label: 'True ✓', value: 'true', good: true },
+                { label: 'False ✗', value: 'false', good: false },
               ].map((opt) => {
                 const isAnswer = current.answer === opt.value
                 const picked = answered && records[current.id]?.input === opt.value
@@ -485,8 +485,8 @@ export default function PlayPage() {
                 onChange={(e) => setInput(e.target.value)}
                 disabled={answered}
                 inputMode="decimal"
-                placeholder="输入答案"
-                aria-label="答案输入框"
+                placeholder="Type your answer"
+                aria-label="Answer input"
                 className="clay-inset"
                 style={{
                   flex: 1,
@@ -517,13 +517,13 @@ export default function PlayPage() {
                     fontSize: 'var(--font-size-body)',
                   }}
                 >
-                  确定
+                  Submit
                 </button>
               )}
             </form>
           )}
 
-          {/* ── 即时反馈 ── */}
+          {/* ── Instant feedback ── */}
           {answered && (
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -540,8 +540,8 @@ export default function PlayPage() {
               <div className="flex items-center font-bold" style={{ gap: 8, fontSize: 'var(--font-size-body)' }}>
                 {lastCorrect ? <Check size={18} /> : <X size={18} />}
                 {lastCorrect
-                  ? '答对了！'
-                  : `正确答案是：${current.kind === 'judge' ? (current.answer === 'true' ? '对 ✓' : '错 ✗') : current.answer}${current.unit ?? ''}`}
+                  ? 'Correct!'
+                  : `The correct answer is: ${current.kind === 'judge' ? (current.answer === 'true' ? 'True ✓' : 'False ✗') : current.answer}${current.unit ? ` ${current.unit}` : ''}`}
               </div>
               <div style={{ marginTop: 6, fontSize: 'var(--font-size-small)', lineHeight: 1.6 }}>
                 {current.explanation}
@@ -559,7 +559,7 @@ export default function PlayPage() {
                     fontSize: 'var(--font-size-small)',
                   }}
                 >
-                  <Lightbulb size={13} /> 巧算方法：{current.smartTip}
+                  <Lightbulb size={13} /> Smart trick: {current.smartTip}
                 </div>
               )}
             </motion.div>
@@ -581,14 +581,14 @@ export default function PlayPage() {
                   fontSize: 'var(--font-size-body)',
                 }}
               >
-                {index + 1 >= questions.length ? '看看成绩' : '下一题'} <ChevronRight size={16} />
+                {index + 1 >= questions.length ? 'See results' : 'Next question'} <ChevronRight size={16} />
               </button>
             )}
           </div>
         </div>
       </FadeIn>
 
-      {/* ── 底部：题目进度点 + 放弃本轮 ── */}
+      {/* ── Bottom: question progress dots + quit round ── */}
       <div
         className="flex items-center flex-wrap justify-between"
         style={{ gap: 'var(--spacing-sm)', marginTop: 'var(--spacing-md)' }}
@@ -599,7 +599,7 @@ export default function PlayPage() {
             return (
               <span
                 key={q.id}
-                title={`第 ${i + 1} 题`}
+                title={`Question ${i + 1}`}
                 style={{
                   width: 12,
                   height: 12,
@@ -622,21 +622,21 @@ export default function PlayPage() {
             className="cursor-pointer font-semibold inline-flex items-center"
             style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', gap: 4 }}
           >
-            <ArrowLeft size={14} /> 退出本轮
+            <ArrowLeft size={14} /> Quit round
           </button>
         </div>
       </div>
 
       {phase === 'saving' && (
         <div style={{ marginTop: 'var(--spacing-md)', textAlign: 'center', color: 'var(--muted-foreground)' }}>
-          正在保存成绩…
+          Saving your result…
         </div>
       )}
     </main>
   )
 }
 
-/* ────────────── 小组件 & 计分 ────────────── */
+/* ────────────── Small components & scoring ────────────── */
 
 function InfoPill({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (

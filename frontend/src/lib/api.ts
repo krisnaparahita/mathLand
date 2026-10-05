@@ -1,6 +1,6 @@
 import apiClient from './api-client'
 
-/* ────────────── 类型 ────────────── */
+/* ────────────── Types ────────────── */
 
 export interface Profile {
   id: number
@@ -73,7 +73,7 @@ export interface CreateResultInput {
   timed: boolean
 }
 
-/* ────────────── 请求封装 ────────────── */
+/* ────────────── Request helpers ────────────── */
 
 const unwrap = <T>(payload: unknown): T => {
   const data = (payload as { data?: T })?.data

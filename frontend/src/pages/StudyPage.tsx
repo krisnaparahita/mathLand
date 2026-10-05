@@ -26,7 +26,7 @@ export default function StudyPage() {
           fontSize: 'var(--font-size-label)',
         }}
       >
-        <ArrowLeft size={16} /> 返回{gradeInfo.name}
+        <ArrowLeft size={16} /> Back to {gradeInfo.name}
       </Link>
 
       <FadeIn>
@@ -70,7 +70,7 @@ export default function StudyPage() {
               style={{ borderRadius: 'var(--radius)', fontSize: 'var(--font-size-label)' }}
             >
               <span className="inline-flex items-center" style={{ gap: 'var(--spacing-xs)' }}>
-                <ScrollText size={15} /> 知识讲解
+                <ScrollText size={15} /> Concepts
               </span>
             </TabsTrigger>
             <TabsTrigger
@@ -79,7 +79,7 @@ export default function StudyPage() {
               style={{ borderRadius: 'var(--radius)', fontSize: 'var(--font-size-label)' }}
             >
               <span className="inline-flex items-center" style={{ gap: 'var(--spacing-xs)' }}>
-                <Lightbulb size={15} /> 巧算方法
+                <Lightbulb size={15} /> Smart tricks
               </span>
             </TabsTrigger>
           </TabsList>
@@ -126,7 +126,7 @@ export default function StudyPage() {
                           fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
                         }}
                       >
-                        <span style={{ color: 'var(--muted-foreground)' }}>例：</span>
+                        <span style={{ color: 'var(--muted-foreground)' }}>Example: </span>
                         {block.example}
                       </div>
                     )}
@@ -150,7 +150,7 @@ export default function StudyPage() {
                     <div className="flex items-center" style={{ gap: 'var(--spacing-sm)' }}>
                       <Sparkles size={18} color={topicColor(topic.color)} />
                       <h2 className="font-bold" style={{ fontSize: 'var(--font-size-body)' }}>
-                        巧算方法 {index + 1}：{method.name}
+                        Smart trick {index + 1}: {method.name}
                       </h2>
                     </div>
 
@@ -162,7 +162,7 @@ export default function StudyPage() {
                       }}
                     >
                       <span className="font-semibold" style={{ color: 'var(--foreground)' }}>
-                        什么时候用：
+                        When to use it:
                       </span>
                       {method.when}
                     </div>
@@ -194,7 +194,7 @@ export default function StudyPage() {
                         fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
                       }}
                     >
-                      <span style={{ color: 'var(--muted-foreground)' }}>示例：</span>
+                      <span style={{ color: 'var(--muted-foreground)' }}>Example: </span>
                       {method.example}
                     </div>
                   </article>
@@ -217,10 +217,10 @@ export default function StudyPage() {
         >
           <div>
             <div className="font-bold" style={{ fontSize: 'var(--font-size-body)' }}>
-              学会了吗？去关卡里试试身手！
+              Ready? Try it out in the levels!
             </div>
             <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
-              共 {topic.levels.length} 个关卡，难度逐级上升，题目每次都会变。
+              {topic.levels.length} levels with rising difficulty, and the questions change every time.
             </div>
           </div>
           <Link
@@ -236,7 +236,7 @@ export default function StudyPage() {
               fontSize: 'var(--font-size-body)',
             }}
           >
-            <Play size={18} /> 去闯关 <ArrowRight size={16} />
+            <Play size={18} /> Play levels <ArrowRight size={16} />
           </Link>
         </section>
       </FadeIn>

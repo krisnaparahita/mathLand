@@ -31,15 +31,15 @@ interface PageTransitionProps {
 }
 
 /**
- * PageTransition - 页面进入/退出动画包装器
+ * PageTransition - wrapper for page enter/exit animations
  *
- * 优化说明：
- * - 动画时长缩短至 0.2s（从 0.3s），配合 popLayout 模式更流畅
- * - 位移距离减小（y: 16 而非 24），避免大幅度跳动
- * - 使用 layout 属性确保布局变化时也有平滑过渡
+ * Tuning notes:
+ * - Animation duration shortened to 0.2s (from 0.3s) to feel smoother with popLayout mode
+ * - Smaller offset (y: 16 instead of 24) to avoid large jumps
+ * - The layout prop keeps layout changes smooth as well
  *
- * ⚠️ 重要：此组件只包裹页面内容区域，
- * Navbar/Header/Sidebar 必须在 AnimatedRoutes 外部，不要包在 PageTransition 里。
+ * ⚠️ Important: this component only wraps the page content area.
+ * Navbar/Header/Sidebar must stay outside AnimatedRoutes, not inside PageTransition.
  */
 export function PageTransition({ children, transition = "fade" }: PageTransitionProps) {
   const v = variants[transition];

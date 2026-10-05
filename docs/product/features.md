@@ -1,68 +1,68 @@
-# 数学乐园 MathLand — 小学 1–6 年级数学闯关练习网站
+# MathLand: A Math Level-Up Practice Site for Primary Grades 1–6
 
-## 1. 产品概述
+## 1. Product overview
 
-面向小学 1–6 年级学生的数学在线练习平台。每个年级按**专题**分类，每个专题提供**讲解 + 巧算方法**供孩子先学后练，再进入 **5 个渐进关卡** 的闯关练习。题目由生成器**随机轮换**（每次进入关卡题目都不同），**计时器时长随关卡等级变化**，完成后记录**成绩历史**并沉淀到**个人档案**。
+MathLand is an online math practice platform for primary school students in grades 1–6. Each grade is organized into **topics**. Every topic offers a **concept guide plus smart tricks** so kids learn first, then practice through **5 levels of rising difficulty**. Questions are **rotated at random** by generators (a level never shows the same questions twice), the **timer length changes with the level**, and every result is saved to a **result history** and rolled up into a **personal profile**.
 
-- 目标用户：小学 1–6 年级学生（6–12 岁），以及家长/老师查看学习记录
-- 核心体验：先学（讲解 + 巧算） → 后练（闯关） → 复盘（成绩历史 + 档案统计）
-- 视觉风格：Claymorphism（黏土拟态），明亮活泼、圆角厚重、强反馈动效
+- Target users: primary school students in grades 1–6 (ages 6–12), plus parents and teachers who want to see learning records
+- Core experience: learn (concepts + smart tricks) → practice (levels) → review (result history + profile stats)
+- Visual style: Claymorphism, bright and playful, with thick rounded corners and strong feedback animations
 
-## 2. 核心功能
+## 2. Core features
 
-### 2.1 年级与专题体系（Grade × Topic）
-- 6 个年级，每年级 6 个专题，共 **36 个专题**
-- 每个专题包含：
+### 2.1 Grade and topic system (Grade × Topic)
+- 6 grades with 6 topics each, for **36 topics** in total
+- Each topic contains:
   - `name` / `icon` / `summary`
-  - `explanation`：知识点讲解（分段落 + 示例）
-  - `smartMethods`：**巧算方法** 3 条（名称 + 思路 + 示例算式）
-  - `levels`：5 个关卡（入门 / 进阶 / 熟练 / 挑战 / 大师）
-- 关卡递进：数值范围扩大、运算步数增加、题型从选择过渡到填空、干扰项变强
+  - `explanation`: concept explanations (sections with examples)
+  - `smartMethods`: **3 smart tricks** (name + idea + worked example)
+  - `levels`: 5 levels (Starter / Intermediate / Skilled / Challenge / Master)
+- Level progression: wider number ranges, more calculation steps, a shift from multiple choice to fill-in-the-blank, and stronger distractors
 
-### 2.2 题目轮换（Task Rotation）
-- 每个关卡的 `generator` 是**参数化随机生成器**，每次进入按随机种子出题
-- 同一轮内去重（同题不重复出现）
-- 选择题选项顺序随机打乱；填空题题干数值随机
-- 支持题型：`choice`（四选一）、`fill`（填数字）、`judge`（判断对错）
+### 2.2 Question rotation (Task Rotation)
+- Each level's `generator` is a **parameterized random generator** that builds questions from a random seed every time the level is entered
+- No repeats within one round (the same question never appears twice)
+- Multiple-choice options are shuffled, and the numbers in fill-in-the-blank prompts are random
+- Supported question kinds: `choice` (pick one of four), `fill` (type a number), `judge` (true or false)
 
-### 2.3 计时器（随关卡变化）
-- 每个关卡定义 `questionCount` 与 `secondsPerQuestion`
-- 总时长 = `questionCount × secondsPerQuestion`，等级越高单题时间越紧（更刺激）
-- 支持「放松模式」开关：关闭计时，专注学习（家长可为低年级开启）
-- 剩余时间 < 20% 时进度条变红 + 轻微脉冲提示
+### 2.3 Timer (changes with the level)
+- Each level defines `questionCount` and `secondsPerQuestion`
+- Total time = `questionCount × secondsPerQuestion`. Higher levels give less time per question, which raises the excitement
+- A "relax mode" switch turns the timer off so kids can focus on learning (parents can turn it on for younger kids)
+- When less than 20% of the time remains, the progress bar turns red and pulses gently
 
-### 2.4 讲解与巧算方法（Study Section）
-- 专题详情页分两个 Tab：**知识讲解** / **巧算方法**
-- 巧算方法卡片含：方法名、适用情形、步骤拆解、示例
-- 答题结束后，每道题的错误解析里会**回链**到对应巧算方法
+### 2.4 Concepts and smart tricks (Study Section)
+- The topic detail page has two tabs: **Concepts** and **Smart tricks**
+- Each smart trick card has the method name, when to use it, the step-by-step breakdown, and an example
+- After a level ends, each wrong-answer explanation **links back** to the matching smart trick
 
-### 2.5 成绩历史（Result History）
-- 每次闯关生成一条记录：年级、专题、关卡、得分、正确数、用时、正确率、星级、日期
-- 历史页支持按年级/专题筛选、按时间倒序、查看最近 N 次成绩曲线
-- 同一专题可看到历史最佳与进步趋势
+### 2.5 Result history (Result History)
+- Every level played creates a record: grade, topic, level, score, number correct, time taken, accuracy, star rating and date
+- The history page can filter by grade and topic, sorts newest first, and shows a trend of the most recent N results
+- For each topic you can see your personal best and your progress trend
 
-### 2.6 用户档案（User Profile）
-- 多档案切换（一个浏览器可建多个孩子档案），无密码，友好安全
-- 档案字段：昵称、头像（动物 emoji/图标 + 颜色）、当前年级
-- 统计：总闯关次数、总答题数、平均正确率、总星星、连续练习天数
-- 成就徽章：首次通关、连续答对 10 题、某专题全关卡三星、练习满 100 题等
+### 2.6 User profile (User Profile)
+- Switch between multiple profiles (one browser can hold several children's profiles). There are no passwords, which keeps it friendly and safe
+- Profile fields: nickname, avatar (animal emoji or icon + color) and current grade
+- Stats: total levels played, total questions answered, average accuracy, total stars and practice streak in days
+- Achievement badges: first level cleared, 10 correct answers in a row, three stars on every level of a topic, 100 questions practiced, and so on
 
-## 3. 页面结构
+## 3. Page structure
 
-| 路由 | 页面 | 说明 |
+| Route | Page | Description |
 |---|---|---|
-| `/` | 首页 Home | Hero、年级选择卡片、明星专题、如何玩 |
-| `/grades/:grade` | 年级页 | 该年级 6 个专题卡片 + 进度概览 |
-| `/study/:grade/:topicId` | 学习页 | 知识讲解 / 巧算方法 双 Tab |
-| `/levels/:grade/:topicId` | 关卡地图 | 5 个关卡卡片，显示星级与最佳成绩、锁关逻辑 |
-| `/play/:grade/:topicId/:level` | 答题页 | 计时器、进度条、题目卡、即时反馈 |
-| `/result/:sessionId` | 结果页 | 星级、得分、逐题回顾与解析 |
-| `/history` | 成绩历史 | 列表 + 筛选 + 趋势图 |
-| `/profile` | 个人中心 | 档案编辑、统计、徽章、档案切换 |
+| `/` | Home | Hero, grade picker cards, featured topics, how to play |
+| `/grades/:grade` | Grade page | The 6 topic cards for that grade plus a progress overview |
+| `/study/:grade/:topicId` | Study page | Concepts / Smart tricks tabs |
+| `/levels/:grade/:topicId` | Level map | 5 level cards showing stars and best score, with level-locking logic |
+| `/play/:grade/:topicId/:level` | Play page | Timer, progress bar, question card and instant feedback |
+| `/result/:sessionId` | Result page | Stars, score, and a question-by-question review with explanations |
+| `/history` | Result history | List + filters + trend chart |
+| `/profile` | My profile | Profile editing, stats, badges and profile switching |
 
-## 4. 数据模型
+## 4. Data model
 
-### 4.1 Postgres 表
+### 4.1 Postgres tables
 
 ```sql
 CREATE TABLE users (
@@ -92,44 +92,44 @@ CREATE INDEX idx_results_user ON game_results(user_id, created_at DESC);
 CREATE INDEX idx_results_topic ON game_results(user_id, topic_id);
 ```
 
-### 4.2 前端本地结构（localStorage）
-- `mathland.profileId`：当前选中的档案 id
-- 当前闯关会话（Session）保存在内存（TanStack Query / React state）
+### 4.2 Frontend local state (localStorage)
+- `mathland.profileId`: the id of the currently selected profile
+- The current level session is kept in memory (TanStack Query / React state)
 
-## 5. API 端点（JSON 协议，全部 POST + JSON body）
+## 5. API endpoints (JSON protocol, all POST with a JSON body)
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |---|---|---|
-| GET | `/api/health` | 健康检查 |
-| POST | `/api/profiles/list` | 列出所有档案 |
-| POST | `/api/profiles/create` | 创建档案 `{name, avatar, color, grade}` |
-| POST | `/api/profiles/get` | 获取单个档案 `{id}` |
-| POST | `/api/profiles/update` | 更新档案 `{id, ...}` |
-| POST | `/api/profiles/delete` | 删除档案 `{id}` |
-| POST | `/api/results/create` | 保存一次闯关成绩 |
-| POST | `/api/results/get` | 单条成绩详情 `{id}` |
-| POST | `/api/results/list` | 成绩历史 `{userId, grade?, topicId?, limit}` |
-| POST | `/api/results/stats` | 档案统计 `{userId}`：总数、正确率、星星、连续天数、专题进度 |
-| POST | `/api/results/topic-progress` | 各专题最佳星级 `{userId, grade}` |
-| POST | `/api/results/level-progress` | 各专题各关卡最佳星级 `{userId, grade}`（用于解锁判断） |
-| POST | `/api/results/delete` | 删除一条成绩 `{id}` |
+| GET | `/api/health` | Health check |
+| POST | `/api/profiles/list` | List all profiles |
+| POST | `/api/profiles/create` | Create a profile `{name, avatar, color, grade}` |
+| POST | `/api/profiles/get` | Get one profile `{id}` |
+| POST | `/api/profiles/update` | Update a profile `{id, ...}` |
+| POST | `/api/profiles/delete` | Delete a profile `{id}` |
+| POST | `/api/results/create` | Save the result of one level |
+| POST | `/api/results/get` | Details of one result `{id}` |
+| POST | `/api/results/list` | Result history `{userId, grade?, topicId?, limit}` |
+| POST | `/api/results/stats` | Profile stats `{userId}`: totals, accuracy, stars, streak days and topic progress |
+| POST | `/api/results/topic-progress` | Best star rating for each topic `{userId, grade}` |
+| POST | `/api/results/level-progress` | Best star rating for each level of each topic `{userId, grade}` (used to decide unlocking) |
+| POST | `/api/results/delete` | Delete one result `{id}` |
 
-## 6. 用户故事
+## 6. User stories
 
-1. 作为一年级学生，我想先看懂"凑十法"再做题，这样不会乱猜。
-2. 作为三年级学生，我希望每次点开关卡题目都不一样，可以反复练。
-3. 作为家长，我想看到孩子最近 10 次练习的正确率变化。
-4. 作为学生，我想要星星和徽章，让我有动力继续闯关。
-5. 作为低年级学生，我希望可以关掉计时，慢慢想。
+1. As a grade 1 student, I want to understand "make a ten" before I practice, so I do not have to guess.
+2. As a grade 3 student, I want the questions to be different every time I open a level, so I can practice again and again.
+3. As a parent, I want to see how my child's accuracy changed over the last 10 practice sessions.
+4. As a student, I want stars and badges so I feel motivated to keep playing levels.
+5. As a younger student, I want to turn off the timer so I can think slowly.
 
-## 7. 关卡与计时参数表
+## 7. Level and timer parameters
 
-| 关卡 | 名称 | 题量 | 单题时间(秒) | 难度系数 |
+| Level | Name | Questions | Seconds per question | Difficulty factor |
 |---|---|---|---|---|
-| L1 | 入门 | 8 | 20 | 1 |
-| L2 | 进阶 | 10 | 18 | 2 |
-| L3 | 熟练 | 12 | 15 | 3 |
-| L4 | 挑战 | 14 | 13 | 4 |
-| L5 | 大师 | 16 | 12 | 5 |
+| L1 | Starter | 8 | 20 | 1 |
+| L2 | Intermediate | 10 | 18 | 2 |
+| L3 | Skilled | 12 | 15 | 3 |
+| L4 | Challenge | 14 | 13 | 4 |
+| L5 | Master | 16 | 12 | 5 |
 
-低年级（1–2）题量 -2 且单题时间 +5 秒；高年级（5–6）题量 +0 且单题时间 -2 秒。
+For lower grades (1–2), the question count is 2 lower and each question gets 5 more seconds. For upper grades (5–6), the question count is unchanged and each question gets 2 fewer seconds.

@@ -2,27 +2,27 @@ import { Bird, Bug, Cat, Dog, Fish, PawPrint, Rabbit, Snail, Squirrel, Turtle } 
 import { topicColor } from '@/curriculum'
 
 export const AVATAR_OPTIONS = [
-  { key: 'cat', label: '小猫', Icon: Cat },
-  { key: 'dog', label: '小狗', Icon: Dog },
-  { key: 'rabbit', label: '兔子', Icon: Rabbit },
-  { key: 'bird', label: '小鸟', Icon: Bird },
-  { key: 'fish', label: '小鱼', Icon: Fish },
-  { key: 'turtle', label: '乌龟', Icon: Turtle },
-  { key: 'squirrel', label: '松鼠', Icon: Squirrel },
-  { key: 'bug', label: '瓢虫', Icon: Bug },
-  { key: 'snail', label: '蜗牛', Icon: Snail },
-  { key: 'paw', label: '爪印', Icon: PawPrint },
+  { key: 'cat', label: 'Cat', Icon: Cat },
+  { key: 'dog', label: 'Dog', Icon: Dog },
+  { key: 'rabbit', label: 'Rabbit', Icon: Rabbit },
+  { key: 'bird', label: 'Bird', Icon: Bird },
+  { key: 'fish', label: 'Fish', Icon: Fish },
+  { key: 'turtle', label: 'Turtle', Icon: Turtle },
+  { key: 'squirrel', label: 'Squirrel', Icon: Squirrel },
+  { key: 'bug', label: 'Ladybug', Icon: Bug },
+  { key: 'snail', label: 'Snail', Icon: Snail },
+  { key: 'paw', label: 'Paw print', Icon: PawPrint },
 ] as const
 
 export const COLOR_OPTIONS = [
-  { key: 'indigo', label: '靛蓝' },
-  { key: 'orange', label: '橙色' },
-  { key: 'green', label: '绿色' },
-  { key: 'pink', label: '粉色' },
-  { key: 'blue', label: '蓝色' },
-  { key: 'purple', label: '紫色' },
-  { key: 'yellow', label: '金黄' },
-  { key: 'teal', label: '青绿' },
+  { key: 'indigo', label: 'Indigo' },
+  { key: 'orange', label: 'Orange' },
+  { key: 'green', label: 'Green' },
+  { key: 'pink', label: 'Pink' },
+  { key: 'blue', label: 'Blue' },
+  { key: 'purple', label: 'Purple' },
+  { key: 'yellow', label: 'Gold' },
+  { key: 'teal', label: 'Teal' },
 ] as const
 
 interface AvatarBubbleProps {

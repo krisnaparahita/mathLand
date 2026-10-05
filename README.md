@@ -1,75 +1,75 @@
-# 数学乐园 MathLand
+# MathLand
 
-面向小学 **1–6 年级** 的数学闯关学习网站。每个年级按知识点分成专题，每个专题有 **5 个渐进关卡**，每关题目随机轮换、按关卡难度计时，答错即时讲解，成绩与星星全部记录在档案里。
+A math level-up learning site for primary school **grades 1–6**. Each grade is split into topics, and each topic has **5 levels of rising difficulty**. Questions rotate at random on every visit, timing follows the level's difficulty, wrong answers get an instant explanation, and every score and star is saved in the player's profile.
 
-## 功能
+## Features
 
-| 功能 | 说明 |
+| Feature | Description |
 | --- | --- |
-| 分年级分专题 | 6 个年级 × 6 个专题 = **36 个专题**（一年级 20 以内加减法，六年级分数百分数、比例、圆柱圆锥…） |
-| 渐进关卡 | 每个专题 5 关，题量与速度随关卡递增；上一关拿到 ≥1 星才解锁下一关 |
-| 题目轮换 | 每次进入关卡重新生成题目，并避开最近做过的题干，不会刷到同一套题 |
-| 先学后练 | 每个专题都有「知识讲解」与「巧算方法」两个板块；答题答错时直接弹出对应解析和巧算提示 |
-| 关卡计时 | L1 = 8 题 × 20 秒 → L5 = 16 题 × 12 秒；一二年级题量 −2、每题 +5 秒，五六年级每题 −2 秒；倒计时归零自动交卷。另有「不限时练习」模式 |
-| 成绩历史 | 每轮记录分数、正确率、用时、星级；历史页有统计卡片、专题掌握度、按年级/专题筛选、删除记录 |
-| 用户档案 | 支持多个孩子档案（昵称 / 头像 / 主题色 / 年级），随时切换、编辑、删除；档案页展示各年级闯关分布与连续练习天数 |
+| Grades and topics | 6 grades × 6 topics = **36 topics** (counting and addition within 20 in grade 1, up to fractions, percentages, ratios, circles and algebra in grade 6) |
+| Rising levels | 5 levels per topic, with more questions and a faster pace as levels go up. Earn at least 1 star on a level to unlock the next one |
+| Question rotation | Questions are regenerated every time you enter a level, and recently answered prompts are avoided, so you never get the same set twice |
+| Learn, then practice | Every topic has a "Concepts" section and a "Smart tricks" section. A wrong answer shows the matching explanation and trick right away |
+| Level timer | L1 = 8 questions × 20 sec → L5 = 16 questions × 12 sec. Grades 1–2 get 2 fewer questions and 5 extra seconds per question, and grades 5–6 get 2 fewer seconds per question. The level is submitted automatically when the clock runs out. There is also an "Untimed practice" mode |
+| Result history | Each round records score, accuracy, time and stars. The history page has stat cards, topic mastery, grade and topic filters, and result deletion |
+| User profiles | Several kids' profiles are supported (nickname / avatar / color / grade). Switch, edit or delete them at any time. The profile page shows progress by grade and the practice streak |
 
-## 技术栈
+## Tech stack
 
-- **前端**：React 19 + TypeScript + Vite + Tailwind CSS v4 + TanStack Query，Claymorphism 童趣设计（Baloo 2 字体、圆润卡片、柔和阴影）
-- **后端**：Node.js + Express + TypeScript（zod 校验）+ PostgreSQL（pg）
-- **出题引擎**：`frontend/src/curriculum/` 下 36 个参数化随机出题器，产出 `choice` / `fill` / `judge` 三类题型
+- **Frontend**: React 19 + TypeScript + Vite + Tailwind CSS v4 + TanStack Query, with a playful Claymorphism design (Baloo 2 font, rounded cards, soft shadows)
+- **Backend**: Node.js + Express + TypeScript (zod validation) + PostgreSQL (pg)
+- **Question engine**: 36 parameterized random generators in `frontend/src/curriculum/`, producing `choice`, `fill` and `judge` questions
 
-## 本地运行
+## Run locally
 
-前置：Node.js 20+、pnpm、PostgreSQL。
+Prerequisites: Node.js 20+, pnpm, PostgreSQL.
 
 ```bash
-# 1. 启动数据库并建库
+# 1. Start the database and create it
 docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres
 docker exec postgres psql -U postgres -c "CREATE DATABASE mathland;"
 
-# 2. 后端
+# 2. Backend
 cd backend
 pnpm install
-cp .env.example .env        # 按需修改 DATABASE_URL
+cp .env.example .env        # adjust DATABASE_URL if needed
 pnpm dev                    # http://localhost:3000
 
-# 3. 前端（新开终端）
+# 3. Frontend (in a new terminal)
 cd frontend
 pnpm install
 pnpm dev                    # http://localhost:5173
 ```
 
-首次打开会引导创建档案，之后即可选年级 → 看讲解/巧算 → 闯关。
+On first launch you are guided to create a profile. After that, pick a grade → read the concepts and smart tricks → play the levels.
 
-> 数据库表（`users`、`game_results`）在后端启动时自动创建，无需手动迁移。
+> The database tables (`users`, `game_results`) are created automatically when the backend starts, so no manual migration is needed.
 
-## 项目结构
+## Project structure
 
 ```
 backend/src
-  config/       环境变量与数据库连接池
-  modules/      profiles / results / system 路由
-  types/        zod 校验schema
+  config/       Environment variables and the database connection pool
+  modules/      profiles / results / system routes
+  types/        zod validation schemas
 frontend/src
-  curriculum/   36 个专题的讲解、巧算方法与出题器
-  pages/        首页、年级页、学习方法页、关卡页、闯关页、成绩页、历史页、档案页
-  components/   顶栏、星星、头像、MotionPrimitives
-  context/      档案状态
+  curriculum/   Concepts, smart tricks and question generators for the 36 topics
+  pages/        Home, grade, study guide, level map, play, result, history and profile pages
+  components/   Header, stars, avatars, MotionPrimitives
+  context/      Profile state
 docs/
-  product/features.md   产品需求文档
+  product/features.md   Product requirements document
 ```
 
-## 主要接口
+## Main endpoints
 
-所有接口均为 `POST` + JSON：
+All endpoints are `POST` with a JSON body:
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 | --- | --- | --- |
-| POST | `/api/profiles/list` `/create` `/get` `/update` `/delete` | 档案 CRUD |
-| POST | `/api/results/create` | 保存一轮成绩 |
-| POST | `/api/results/get` `/list` `/delete` | 成绩详情 / 历史 / 删除 |
-| POST | `/api/results/stats` | 档案统计：总场次、正确率、星星、连续天数、专题进度 |
-| POST | `/api/results/topic-progress` `/level-progress` | 专题最佳星级 / 关卡最佳成绩 |
-| GET | `/api/health/ready` | 健康检查（含数据库连通性） |
+| POST | `/api/profiles/list` `/create` `/get` `/update` `/delete` | Profile CRUD |
+| POST | `/api/results/create` | Save the result of one round |
+| POST | `/api/results/get` `/list` `/delete` | Result details / history / delete |
+| POST | `/api/results/stats` | Profile stats: total rounds, accuracy, stars, streak days and topic progress |
+| POST | `/api/results/topic-progress` `/level-progress` | Best star rating per topic / best result per level |
+| GET | `/api/health/ready` | Health check (includes database connectivity) |

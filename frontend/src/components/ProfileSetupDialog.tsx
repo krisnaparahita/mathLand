@@ -41,18 +41,18 @@ export function ProfileSetupDialog() {
           <DialogTitle style={{ fontSize: 'var(--font-size-title)' }}>
             <span className="flex items-center" style={{ gap: 'var(--spacing-xs)' }}>
               <Sparkles size={20} color="var(--accent)" />
-              欢迎来到数学乐园！
+              Welcome to MathLand!
             </span>
           </DialogTitle>
           <DialogDescription>
-            先创建一个学习档案，这样就可以记录你的闯关成绩啦。
+            Create a learning profile first so your level results can be saved.
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col" style={{ gap: 'var(--spacing-md)' }}>
           <div>
             <div className="font-semibold" style={{ fontSize: 'var(--font-size-label)', marginBottom: 'var(--spacing-xs)' }}>
-              你的昵称
+              Your nickname
             </div>
             <input
               value={name}
@@ -61,7 +61,7 @@ export function ProfileSetupDialog() {
               onKeyDown={(e) => {
                 if (e.key === 'Enter') void submit()
               }}
-              placeholder="比如：小明"
+              placeholder="For example: Alex"
               className="clay-inset w-full"
               style={{
                 paddingInline: 'var(--spacing-md)',
@@ -76,7 +76,7 @@ export function ProfileSetupDialog() {
 
           <div>
             <div className="font-semibold" style={{ fontSize: 'var(--font-size-label)', marginBottom: 'var(--spacing-xs)' }}>
-              选一个头像
+              Pick an avatar
             </div>
             <div className="flex flex-wrap" style={{ gap: 'var(--spacing-xs)' }}>
               {AVATAR_OPTIONS.map((option) => {
@@ -103,7 +103,7 @@ export function ProfileSetupDialog() {
 
           <div>
             <div className="font-semibold" style={{ fontSize: 'var(--font-size-label)', marginBottom: 'var(--spacing-xs)' }}>
-              选一个颜色
+              Pick a color
             </div>
             <div className="flex flex-wrap" style={{ gap: 'var(--spacing-xs)' }}>
               {COLOR_OPTIONS.map((option) => {
@@ -130,7 +130,7 @@ export function ProfileSetupDialog() {
 
           <div>
             <div className="font-semibold" style={{ fontSize: 'var(--font-size-label)', marginBottom: 'var(--spacing-xs)' }}>
-              你现在读几年级？
+              What grade are you in?
             </div>
             <div className="flex flex-wrap" style={{ gap: 'var(--spacing-xs)' }}>
               {GRADES.map((g) => {
@@ -172,7 +172,7 @@ export function ProfileSetupDialog() {
               borderRadius: 'var(--radius)',
             }}
           >
-            {saving ? '创建中…' : '开始闯关'}
+            {saving ? 'Creating…' : 'Start playing'}
           </button>
         </div>
       </DialogContent>

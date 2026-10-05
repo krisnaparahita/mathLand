@@ -25,7 +25,7 @@ export const COLORS = [
 ] as const
 
 export const createProfileSchema = z.object({
-  name: z.string().trim().min(1, '昵称不能为空').max(20, '昵称最多 20 个字符'),
+  name: z.string().trim().min(1, 'Nickname is required').max(20, 'Nickname must be 20 characters or fewer'),
   avatar: z.enum(AVATARS).default('cat'),
   color: z.enum(COLORS).default('indigo'),
   grade: z.number().int().min(1).max(6).default(1),

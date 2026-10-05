@@ -10,26 +10,26 @@ import { resultsApi } from '@/lib/api'
 const FEATURES = [
   {
     Icon: Brain,
-    title: '先学后练',
-    body: '每个专题都有知识讲解和巧算方法，看懂方法再做题，不再靠猜。',
+    title: 'Learn, then practice',
+    body: 'Every topic has a concept guide and smart tricks. Understand the method first, then solve problems without guessing.',
     color: 'indigo',
   },
   {
     Icon: Wand2,
-    title: '题目轮换',
-    body: '每次进入关卡都会重新出题，同一关也能反复练习不重样。',
+    title: 'Fresh questions',
+    body: 'Questions are regenerated every time you enter a level, so you can replay the same level without repeats.',
     color: 'purple',
   },
   {
     Icon: Timer,
-    title: '随关卡计时',
-    body: '关卡越高题量越多、节奏越快，也可以切换「放松模式」慢慢想。',
+    title: 'Timed levels',
+    body: 'Higher levels have more questions and a faster pace. You can also switch to relax mode and take your time.',
     color: 'orange',
   },
   {
     Icon: Trophy,
-    title: '成绩与星级',
-    body: '每次闯关都记录得分、用时和星级，随时查看进步曲线。',
+    title: 'Scores and stars',
+    body: 'Every level records your score, time and star rating, so you can track your progress at any time.',
     color: 'green',
   },
 ]
@@ -72,13 +72,13 @@ export default function Index() {
                 fontSize: 'var(--font-size-small)',
               }}
             >
-              <Sparkles size={14} /> 小学 1–6 年级 · 36 个专题 · 180 个关卡
+              <Sparkles size={14} /> Primary grades 1–6 · 36 topics · 180 levels
             </span>
             <h1
               className="font-bold text-headline"
               style={{ color: 'var(--primary-foreground)', marginTop: 'var(--spacing-md)', lineHeight: 1.2 }}
             >
-              数学乐园 MathLand
+              MathLand
             </h1>
             <p
               style={{
@@ -88,7 +88,7 @@ export default function Index() {
                 fontSize: 'var(--font-size-body)',
               }}
             >
-              先看懂讲解和巧算方法，再进入关卡闯关。题目每次都不一样，计时随关卡升级，成绩全部记录在案。
+              Learn the concepts and smart tricks first, then take on the levels. Questions are different every time, timing gets tighter as levels rise, and every result is saved.
             </p>
             <div
               className="flex flex-wrap"
@@ -107,7 +107,7 @@ export default function Index() {
                   fontSize: 'var(--font-size-body)',
                 }}
               >
-                {profile ? `进入${profile.grade} 年级` : '创建档案'} <ArrowRight size={18} />
+                {profile ? `Go to Grade ${profile.grade}` : 'Create profile'} <ArrowRight size={18} />
               </Link>
               <Link
                 to="/history"
@@ -121,7 +121,7 @@ export default function Index() {
                   fontSize: 'var(--font-size-body)',
                 }}
               >
-                <Clock size={18} /> 查看成绩历史
+                <Clock size={18} /> View result history
               </Link>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function Index() {
                 className="font-bold"
                 style={{ fontSize: 'var(--font-size-label)', marginBottom: 'var(--spacing-sm)' }}
               >
-                最近战绩
+                Recent results
               </div>
               <div className="flex flex-col" style={{ gap: 'var(--spacing-xs)' }}>
                 {recent.slice(0, 3).map((r) => (
@@ -163,14 +163,14 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── 年级选择 ── */}
+      {/* ── Grade picker ── */}
       <section style={{ marginTop: 'var(--spacing-2xl)' }}>
         <FadeIn>
           <h2 className="font-bold text-title" style={{ letterSpacing: 'var(--letter-spacing-tight)' }}>
-            选择年级
+            Choose a grade
           </h2>
           <p style={{ color: 'var(--muted-foreground)', fontSize: 'var(--font-size-label)' }}>
-            每个年级有 6 个专题，每个专题 5 个渐进关卡。
+            Each grade has 6 topics, and each topic has 5 levels of rising difficulty.
           </p>
         </FadeIn>
 
@@ -212,7 +212,7 @@ export default function Index() {
                       fontSize: 'var(--font-size-small)',
                     }}
                   >
-                    {g.topics.length} 专题
+                    {g.topics.length} topics
                   </span>
                 </div>
                 <p
@@ -234,7 +234,7 @@ export default function Index() {
                     fontSize: 'var(--font-size-label)',
                   }}
                 >
-                  开始练习 <ArrowRight size={16} />
+                  Start practicing <ArrowRight size={16} />
                 </div>
               </Link>
             </HoverLift>
@@ -242,10 +242,10 @@ export default function Index() {
         </Stagger>
       </section>
 
-      {/* ── 特色 ── */}
+      {/* ── Features ── */}
       <section style={{ marginTop: 'var(--spacing-2xl)' }}>
         <FadeIn>
-          <h2 className="font-bold text-title">为什么孩子喜欢在这里练</h2>
+          <h2 className="font-bold text-title">Why kids love practicing here</h2>
         </FadeIn>
         <Stagger
           className="grid sm:grid-cols-2 lg:grid-cols-4"

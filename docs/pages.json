@@ -1,42 +1,42 @@
 [
   {
     "pageKey": "Home",
-    "title": "数学乐园 · 首页",
+    "title": "MathLand · Home",
     "url": "/"
   },
   {
     "pageKey": "Grade",
-    "title": "年级专题",
+    "title": "Grade Topics",
     "url": "/grades/:grade"
   },
   {
     "pageKey": "History",
-    "title": "成绩历史",
+    "title": "Result History",
     "url": "/history"
   },
   {
     "pageKey": "Levels",
-    "title": "关卡地图",
+    "title": "Level Map",
     "url": "/levels/:grade/:topicId"
   },
   {
     "pageKey": "Play",
-    "title": "闯关挑战",
+    "title": "Level Challenge",
     "url": "/play/:grade/:topicId/:level"
   },
   {
     "pageKey": "Profile",
-    "title": "我的档案",
+    "title": "My Profile",
     "url": "/profile"
   },
   {
     "pageKey": "Result",
-    "title": "闯关成绩",
+    "title": "Level Result",
     "url": "/result/:resultId"
   },
   {
     "pageKey": "Study",
-    "title": "学习方法",
+    "title": "Study Guide",
     "url": "/study/:grade/:topicId"
   }
 ]

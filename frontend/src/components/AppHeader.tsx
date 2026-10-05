@@ -13,9 +13,9 @@ import { useProfile } from '@/context/ProfileContext'
 import { getGrade } from '@/curriculum'
 
 const NAV = [
-  { to: '/', label: '首页', Icon: Home },
-  { to: '/history', label: '成绩历史', Icon: History },
-  { to: '/profile', label: '我的档案', Icon: UserRound },
+  { to: '/', label: 'Home', Icon: Home },
+  { to: '/history', label: 'History', Icon: History },
+  { to: '/profile', label: 'My Profile', Icon: UserRound },
 ]
 
 export function AppHeader() {
@@ -47,7 +47,7 @@ export function AppHeader() {
             <GraduationCap size={22} strokeWidth={2.4} />
           </span>
           <span className="font-bold" style={{ fontSize: 'var(--font-size-title)', letterSpacing: 'var(--letter-spacing-tight)' }}>
-            数学乐园
+            MathLand
           </span>
         </Link>
 
@@ -99,7 +99,7 @@ export function AppHeader() {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" style={{ borderRadius: 'var(--radius)', minWidth: 200 }}>
-                <DropdownMenuLabel>切换学习档案</DropdownMenuLabel>
+                <DropdownMenuLabel>Switch profile</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {profiles.map((p) => (
                   <DropdownMenuItem
@@ -110,13 +110,13 @@ export function AppHeader() {
                     <AvatarBubble avatar={p.avatar} color={p.color} size={24} />
                     <span>{p.name}</span>
                     <span style={{ color: 'var(--muted-foreground)', fontSize: 'var(--font-size-small)' }}>
-                      {getGrade(p.grade)?.name ?? `${p.grade} 年级`}
+                      {getGrade(p.grade)?.name ?? `Grade ${p.grade}`}
                     </span>
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link to="/profile">管理档案</Link>
+                  <Link to="/profile">Manage profiles</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -131,7 +131,7 @@ export function AppHeader() {
                 fontWeight: 600,
               }}
             >
-              创建档案
+              Create profile
             </Link>
           )}
         </div>

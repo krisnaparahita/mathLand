@@ -14,59 +14,59 @@ import type { Question, Topic } from './types'
 const round2 = (n: number): number => Math.round(n * 100) / 100
 
 /* ══════════════════════════════════════════════
-   1. 小数乘除法
+   1. Multiplying and dividing decimals
    ══════════════════════════════════════════════ */
 
 const decimalOps: Topic = {
   id: 'g5-decimal-ops',
   grade: 5,
-  name: '小数乘除法',
+  name: 'Multiplying and Dividing Decimals',
   color: 'indigo',
   icon: 'Calculator',
-  summary: '掌握小数乘除法的计算方法，会用积、商的近似值与循环小数。',
+  summary: 'Master multiplying and dividing decimals, and use rounded products and quotients.',
   explanation: [
     {
-      title: '小数乘法',
-      body: '先按整数乘法算出积，再看两个乘数一共有几位小数，就从积的右边起数出几位点上小数点。位数不够时在前面补 0。',
-      example: '0.8 × 3 = 2.4；0.25 × 0.4 = 0.1',
+      title: 'Multiplying decimals',
+      body: 'First multiply as if they were whole numbers. Then count the total number of decimal places in both factors and put the decimal point that many places from the right of the product. If there are not enough digits, add zeros at the front.',
+      example: '0.8 × 3 = 2.4; 0.25 × 0.4 = 0.1',
     },
     {
-      title: '小数除法',
-      body: '除数是小数时，先把除数变成整数（除数的小数点向右移几位，被除数也向右移几位），再按整数除法计算，商的小数点要和被除数对齐。',
+      title: 'Dividing decimals',
+      body: 'When the divisor is a decimal, first turn it into a whole number (move the decimal point of the divisor to the right, and move the decimal point of the dividend the same number of places). Then divide as with whole numbers, and keep the decimal point of the quotient lined up with the dividend.',
       example: '7.5 ÷ 0.5 = 75 ÷ 5 = 15',
     },
     {
-      title: '积与商的近似值',
-      body: '求近似值时要比需要保留的位数多算一位，再用四舍五入法取近似值。保留两位小数就要算到第三位。',
-      example: '0.67 × 3.4 = 2.278 ≈ 2.28（保留两位小数）',
+      title: 'Rounding products and quotients',
+      body: 'To round a result, work out one more digit than you need to keep, then round. To keep two decimal places, work to the third.',
+      example: '0.67 × 3.4 = 2.278 ≈ 2.28 (rounded to two decimal places)',
     },
   ],
   smartMethods: [
     {
-      name: '数小数点位数',
-      when: '做小数乘法时',
-      steps: ['先忽略小数点按整数相乘', '数一数两个乘数一共有几位小数', '从积的右边起数出几位点小数点'],
-      example: '1.2 × 0.3：12 × 3 = 36，共 2 位小数 → 0.36',
+      name: 'Count the decimal places',
+      when: 'Multiplying decimals',
+      steps: ['Ignore the decimal points and multiply as whole numbers', 'Count the total decimal places in both factors', 'Put the decimal point that many places from the right of the product'],
+      example: '1.2 × 0.3: 12 × 3 = 36, with 2 decimal places in total → 0.36',
     },
     {
-      name: '除数变整数',
-      when: '除数是小数时',
-      steps: ['把除数的小数点向右移到变成整数', '被除数的小数点也向右移相同的位数', '按整数除法计算'],
+      name: 'Make the divisor a whole number',
+      when: 'The divisor is a decimal',
+      steps: ['Move the decimal point of the divisor right until it is a whole number', 'Move the decimal point of the dividend the same number of places', 'Divide as with whole numbers'],
       example: '7.5 ÷ 0.5 → 75 ÷ 5 = 15',
     },
     {
-      name: '多算一位再四舍五入',
-      when: '要求保留几位小数时',
-      steps: ['按题目要求多算一位', '看多出的那一位', '满 5 进 1，不满 5 舍去'],
-      example: '2.278 保留两位 → 2.28',
+      name: 'Work one more digit, then round',
+      when: 'The answer must be rounded to some decimal places',
+      steps: ['Work out one more digit than the question asks for', 'Look at that extra digit', '5 or more rounds up, less than 5 rounds down'],
+      example: '2.278 to two places → 2.28',
     },
   ],
   levels: buildLevels(5, [
-    '小数乘整数',
-    '小数乘小数',
-    '小数除以整数',
-    '小数除以小数',
-    '积与商的近似值',
+    'Decimal times whole number',
+    'Decimal times decimal',
+    'Decimal divided by whole number',
+    'Decimal divided by decimal',
+    'Rounded products and quotients',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -75,10 +75,10 @@ const decimalOps: Topic = {
       const a = Math.round((rng.int(1, 9) + rng.pick([0.1, 0.2, 0.5, 0.25, 0.4])) * 100) / 100
       const b = rng.int(2, [9, 12, 20, 30, 40][level - 1])
       return makeFill({
-        prompt: `${a} × ${b} = ？`,
+        prompt: `${a} × ${b} = ?`,
         answer: round2(a * b),
-        explanation: `先按整数算，再看 ${a} 有 ${(String(a).split('.')[1] || '').length} 位小数，从积的右边数出相同的位数点上小数点，得 ${round2(a * b)}。`,
-        smartTip: '数小数点位数',
+        explanation: `First multiply as whole numbers. ${a} has ${(String(a).split('.')[1] || '').length} decimal places, so count the same number of places from the right of the product to get ${round2(a * b)}.`,
+        smartTip: 'Count the decimal places',
       })
     })
 
@@ -87,10 +87,10 @@ const decimalOps: Topic = {
         const a = rng.pick([0.2, 0.4, 0.5, 0.8, 1.2, 1.5, 2.4, 3.6])
         const b = rng.pick([0.2, 0.5, 0.4, 0.25, 1.5, 2.5, 0.8])
         return makeFill({
-          prompt: `${a} × ${b} = ？`,
+          prompt: `${a} × ${b} = ?`,
           answer: round2(a * b),
-          explanation: `两个乘数一共有 ${((String(a).split('.')[1] || '').length) + ((String(b).split('.')[1] || '').length)} 位小数，从整数积的右边起数出这么多位点上小数点，得 ${round2(a * b)}。`,
-          smartTip: '数小数点位数',
+          explanation: `The two factors have ${((String(a).split('.')[1] || '').length) + ((String(b).split('.')[1] || '').length)} decimal places in total. Count that many places from the right of the whole-number product to get ${round2(a * b)}.`,
+          smartTip: 'Count the decimal places',
         })
       })
     }
@@ -101,10 +101,10 @@ const decimalOps: Topic = {
         const quotient = rng.pick([0.5, 1.5, 2.5, 3.5, 4.5, 1.2, 2.4])
         const dividend = round2(divisor * quotient)
         return makeFill({
-          prompt: `${dividend} ÷ ${divisor} = ？`,
+          prompt: `${dividend} ÷ ${divisor} = ?`,
           answer: round2(dividend / divisor),
-          explanation: `按整数除法的方法算，商的小数点要和被除数的小数点对齐：${dividend} ÷ ${divisor} = ${round2(dividend / divisor)}。`,
-          smartTip: '除数变整数',
+          explanation: `Divide as with whole numbers, keeping the decimal point of the quotient lined up with the decimal point of the dividend: ${dividend} ÷ ${divisor} = ${round2(dividend / divisor)}.`,
+          smartTip: 'Make the divisor a whole number',
         })
       })
     }
@@ -116,10 +116,10 @@ const decimalOps: Topic = {
         const dividend = round2(divisor * quotient)
         const shift = (String(divisor).split('.')[1] || '').length
         return makeFill({
-          prompt: `${dividend} ÷ ${divisor} = ？`,
+          prompt: `${dividend} ÷ ${divisor} = ?`,
           answer: quotient,
-          explanation: `把除数 ${divisor} 的小数点向右移 ${shift} 位变成 ${divisor * 10 ** shift}，被除数也移 ${shift} 位变成 ${round2(dividend * 10 ** shift)}，${round2(dividend * 10 ** shift)} ÷ ${divisor * 10 ** shift} = ${quotient}。`,
-          smartTip: '除数变整数',
+          explanation: `Move the decimal point of the divisor ${divisor} right ${shift} ${shift === 1 ? 'place' : 'places'} to make ${divisor * 10 ** shift}, and move the dividend the same ${shift === 1 ? 'place' : 'places'} to make ${round2(dividend * 10 ** shift)}. Then ${round2(dividend * 10 ** shift)} ÷ ${divisor * 10 ** shift} = ${quotient}.`,
+          smartTip: 'Make the divisor a whole number',
         })
       })
     }
@@ -130,10 +130,10 @@ const decimalOps: Topic = {
         const b = rng.int(2, 9)
         const raw = a * b
         return makeFill({
-          prompt: `${a} × ${b} 保留一位小数是多少？`,
+          prompt: `What is ${a} × ${b} rounded to one decimal place?`,
           answer: Math.round(raw * 10) / 10,
-          explanation: `先算出 ${a} × ${b} = ${round2(raw)}，保留一位小数看第二位，四舍五入得 ${Math.round(raw * 10) / 10}。`,
-          smartTip: '多算一位再四舍五入',
+          explanation: `First ${a} × ${b} = ${round2(raw)}. To round to one decimal place, look at the second decimal digit and round to get ${Math.round(raw * 10) / 10}.`,
+          smartTip: 'Work one more digit, then round',
         })
       })
     }
@@ -143,11 +143,11 @@ const decimalOps: Topic = {
         const price = rng.pick([1.5, 2.5, 3.6, 4.8, 5.5])
         const count = rng.int(2, 9)
         return makeFill({
-          prompt: `每千克苹果 ${price} 元，买 ${count} 千克要付多少元？`,
+          prompt: `Apples cost ${price} dollars per kilogram. How many dollars do ${count} kilograms cost?`,
           answer: round2(price * count),
-          unit: '元',
-          explanation: `单价 × 数量 = 总价：${price} × ${count} = ${round2(price * count)} 元。`,
-          smartTip: '数小数点位数',
+          unit: 'dollars',
+          explanation: `Unit price × quantity = total price: ${price} × ${count} = ${round2(price * count)} dollars.`,
+          smartTip: 'Count the decimal places',
         })
       })
     }
@@ -157,59 +157,59 @@ const decimalOps: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   2. 分数乘除法
+   2. Multiplying and dividing fractions
    ══════════════════════════════════════════════ */
 
 const fractionMulDiv: Topic = {
   id: 'g5-fraction-muldiv',
   grade: 5,
-  name: '分数乘除法',
+  name: 'Multiplying and Dividing Fractions',
   color: 'orange',
   icon: 'PieChart',
-  summary: '掌握分数乘整数、分数乘分数，以及除以一个数等于乘它的倒数。',
+  summary: 'Master fraction times whole number, fraction times fraction, and dividing by a number as multiplying by its reciprocal.',
   explanation: [
     {
-      title: '分数乘整数',
-      body: '分数乘整数，用分子和整数相乘的积作分子，分母不变。能约分的先约分更简便。',
+      title: 'Fraction times a whole number',
+      body: 'To multiply a fraction by a whole number, multiply the numerator by the whole number and keep the denominator. If you can simplify, do it first to make the work easier.',
       example: '2/7 × 3 = 6/7',
     },
     {
-      title: '分数乘分数',
-      body: '分数乘分数，用分子相乘的积作分子，分母相乘的积作分母。计算前先约分，算起来更快。',
+      title: 'Fraction times a fraction',
+      body: 'To multiply two fractions, multiply the numerators to get the new numerator and multiply the denominators to get the new denominator. Simplify before you multiply to work faster.',
       example: '2/3 × 3/4 = 6/12 = 1/2',
     },
     {
-      title: '分数除法',
-      body: '除以一个不等于 0 的数，等于乘这个数的倒数。求一个数的倒数就是把这个数的分子分母调换位置。',
+      title: 'Dividing fractions',
+      body: 'Dividing by any number other than 0 is the same as multiplying by its reciprocal. To find the reciprocal of a fraction, swap the numerator and the denominator.',
       example: '3/4 ÷ 2/5 = 3/4 × 5/2 = 15/8',
     },
   ],
   smartMethods: [
     {
-      name: '先约分再乘',
-      when: '做分数乘法时',
-      steps: ['先看分子和分母有没有公因数', '交叉约分', '再分子乘分子、分母乘分母'],
-      example: '2/3 × 3/4 → 约掉 3 → 2/4 = 1/2',
+      name: 'Simplify first, then multiply',
+      when: 'Multiplying fractions',
+      steps: ['First check whether a numerator and a denominator share a factor', 'Cancel across', 'Then multiply numerators and multiply denominators'],
+      example: '2/3 × 3/4 → cancel the 3 → 2/4 = 1/2',
     },
     {
-      name: '除转乘倒数',
-      when: '看到分数除法时',
-      steps: ['把除号后面的分数倒过来（分子分母互换）', '把除号改成乘号', '按分数乘法计算'],
+      name: 'Divide by multiplying the reciprocal',
+      when: 'You see a fraction division',
+      steps: ['Flip the fraction after the division sign (swap numerator and denominator)', 'Change the division sign to a multiplication sign', 'Multiply the fractions'],
       example: '3/4 ÷ 2/5 = 3/4 × 5/2 = 15/8',
     },
     {
-      name: '整数看作分母 1',
-      when: '分数和整数相乘除时',
-      steps: ['把整数写成分母是 1 的分数', '再按分数乘除法计算', '整数 n 的倒数是 1/n'],
+      name: 'Write a whole number over 1',
+      when: 'Multiplying or dividing a fraction and a whole number',
+      steps: ['Write the whole number as a fraction with denominator 1', 'Then multiply or divide the fractions', 'The reciprocal of a whole number n is 1/n'],
       example: '6 ÷ 2/3 = 6 × 3/2 = 9',
     },
   ],
   levels: buildLevels(5, [
-    '分数乘整数',
-    '分数乘分数',
-    '分数除以整数',
-    '一个数除以分数',
-    '分数乘除混合应用',
+    'Fraction times whole number',
+    'Fraction times fraction',
+    'Fraction divided by whole number',
+    'Whole number divided by fraction',
+    'Mixed fraction multiplication and division problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -219,10 +219,10 @@ const fractionMulDiv: Topic = {
       const n = rng.int(1, d - 1)
       const k = rng.int(2, [5, 6, 8, 9, 12][level - 1])
       return makeFill({
-        prompt: `${n}/${d} × ${k} = ？请写成最简的「分子/分母」形式（整数就直接写整数）。`,
+        prompt: `${n}/${d} × ${k} = ? Write it in simplest form as numerator/denominator (write a whole number as just the number).`,
         answer: fracStr(n * k, d),
-        explanation: `分子 ${n} 与整数 ${k} 相乘得 ${n * k}，分母 ${d} 不变，得到 ${n * k}/${d}，约分后是 ${fracStr(n * k, d)}。`,
-        smartTip: '先约分再乘',
+        explanation: `Multiply the numerator ${n} by the whole number ${k} to get ${n * k}, and keep the denominator ${d}. That gives ${n * k}/${d}, which simplifies to ${fracStr(n * k, d)}.`,
+        smartTip: 'Simplify first, then multiply',
       })
     })
 
@@ -233,10 +233,10 @@ const fractionMulDiv: Topic = {
         const n1 = rng.int(1, d1 - 1)
         const n2 = rng.int(1, d2 - 1)
         return makeFill({
-          prompt: `${n1}/${d1} × ${n2}/${d2} = ？请写成最简的「分子/分母」形式。`,
+          prompt: `${n1}/${d1} × ${n2}/${d2} = ? Write it in simplest form as numerator/denominator.`,
           answer: fracStr(n1 * n2, d1 * d2),
-          explanation: `分子相乘：${n1} × ${n2} = ${n1 * n2}；分母相乘：${d1} × ${d2} = ${d1 * d2}，得 ${n1 * n2}/${d1 * d2}，约分后是 ${fracStr(n1 * n2, d1 * d2)}。`,
-          smartTip: '先约分再乘',
+          explanation: `Multiply the numerators: ${n1} × ${n2} = ${n1 * n2}. Multiply the denominators: ${d1} × ${d2} = ${d1 * d2}. That gives ${n1 * n2}/${d1 * d2}, which simplifies to ${fracStr(n1 * n2, d1 * d2)}.`,
+          smartTip: 'Simplify first, then multiply',
         })
       })
     }
@@ -247,10 +247,10 @@ const fractionMulDiv: Topic = {
         const d = rng.int(2, 9)
         const n = rng.int(1, d - 1)
         return makeFill({
-          prompt: `${n}/${d} ÷ ${k} = ？请写成最简的「分子/分母」形式。`,
+          prompt: `${n}/${d} ÷ ${k} = ? Write it in simplest form as numerator/denominator.`,
           answer: fracStr(n, d * k),
-          explanation: `除以 ${k} 等于乘 1/${k}：${n}/${d} × 1/${k} = ${n}/${d * k}，约分后是 ${fracStr(n, d * k)}。`,
-          smartTip: '除转乘倒数',
+          explanation: `Dividing by ${k} is the same as multiplying by 1/${k}: ${n}/${d} × 1/${k} = ${n}/${d * k}, which simplifies to ${fracStr(n, d * k)}.`,
+          smartTip: 'Divide by multiplying the reciprocal',
         })
       })
     }
@@ -262,10 +262,10 @@ const fractionMulDiv: Topic = {
         const d1 = rng.int(2, 6)
         const n1 = rng.int(1, d1 - 1)
         return makeFill({
-          prompt: `${n1}/${d1} ÷ ${n2}/${d2} = ？请写成最简的「分子/分母」形式。`,
+          prompt: `${n1}/${d1} ÷ ${n2}/${d2} = ? Write it in simplest form as numerator/denominator.`,
           answer: fracStr(n1 * d2, d1 * n2),
-          explanation: `除以 ${n2}/${d2} 等于乘 ${d2}/${n2}：${n1}/${d1} × ${d2}/${n2} = ${n1 * d2}/${d1 * n2}，约分后是 ${fracStr(n1 * d2, d1 * n2)}。`,
-          smartTip: '除转乘倒数',
+          explanation: `Dividing by ${n2}/${d2} is the same as multiplying by ${d2}/${n2}: ${n1}/${d1} × ${d2}/${n2} = ${n1 * d2}/${d1 * n2}, which simplifies to ${fracStr(n1 * d2, d1 * n2)}.`,
+          smartTip: 'Divide by multiplying the reciprocal',
         })
       })
     }
@@ -276,10 +276,10 @@ const fractionMulDiv: Topic = {
         const d = rng.int(2, 6)
         const n = rng.int(1, d - 1)
         return makeFill({
-          prompt: `${k} ÷ ${n}/${d} = ？请写成最简的「分子/分母」形式（整数就直接写整数）。`,
+          prompt: `${k} ÷ ${n}/${d} = ? Write it in simplest form as numerator/denominator (write a whole number as just the number).`,
           answer: fracStr(k * d, n),
-          explanation: `${k} 除以 ${n}/${d} 等于 ${k} × ${d}/${n} = ${k * d}/${n}，约分后是 ${fracStr(k * d, n)}。`,
-          smartTip: '整数看作分母 1',
+          explanation: `${k} divided by ${n}/${d} is ${k} × ${d}/${n} = ${k * d}/${n}, which simplifies to ${fracStr(k * d, n)}.`,
+          smartTip: 'Write a whole number over 1',
         })
       })
     }
@@ -291,11 +291,11 @@ const fractionMulDiv: Topic = {
         const n = rng.int(1, d - 1)
         const part = (total / d) * n
         return makeFill({
-          prompt: `一根绳子长 ${total} 米，用去了它的 ${n}/${d}，用去了多少米？`,
+          prompt: `A rope is ${total} m long and ${n}/${d} of it is used. How many meters are used?`,
           answer: round2(part),
-          unit: '米',
-          explanation: `求一个数的几分之几用乘法：${total} × ${n}/${d} = ${round2(part)} 米。`,
-          smartTip: '先约分再乘',
+          unit: 'm',
+          explanation: `To find a fraction of a number, multiply: ${total} × ${n}/${d} = ${round2(part)} m.`,
+          smartTip: 'Simplify first, then multiply',
         })
       })
     }
@@ -307,11 +307,11 @@ const fractionMulDiv: Topic = {
         const n = rng.int(1, d - 1)
         const total = (part * d) / n
         return makeFill({
-          prompt: `一堆煤用去了 ${part} 吨，正好是原来重量的 ${n}/${d}，原来有多少吨？`,
+          prompt: `${part} tons were taken from a pile of coal. That was exactly ${n}/${d} of the original weight. How many tons were there originally?`,
           answer: round2(total),
-          unit: '吨',
-          explanation: `已知一个数的 ${n}/${d} 是 ${part}，求这个数用除法：${part} ÷ ${n}/${d} = ${part} × ${d}/${n} = ${round2(total)} 吨。`,
-          smartTip: '除转乘倒数',
+          unit: 'tons',
+          explanation: `If ${n}/${d} of a number is ${part}, find the number by dividing: ${part} ÷ ${n}/${d} = ${part} × ${d}/${n} = ${round2(total)} tons.`,
+          smartTip: 'Divide by multiplying the reciprocal',
         })
       })
     }
@@ -321,59 +321,59 @@ const fractionMulDiv: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   3. 因数与倍数
+   3. Factors and multiples
    ══════════════════════════════════════════════ */
 
 const factors: Topic = {
   id: 'g5-factors',
   grade: 5,
-  name: '因数与倍数',
+  name: 'Factors and Multiples',
   color: 'green',
   icon: 'Grid3x3',
-  summary: '掌握 2、3、5 的倍数特征，会求最大公因数与最小公倍数，认识质数与合数。',
+  summary: 'Master the divisibility rules for 2, 3 and 5, find the greatest common factor and least common multiple, and meet prime and composite numbers.',
   explanation: [
     {
-      title: '倍数与因数',
-      body: '如果 a × b = c（a、b、c 都是非零自然数），那么 a 和 b 是 c 的因数，c 是 a 和 b 的倍数。一个数的因数个数有限，倍数个数无限。',
-      example: '3 × 4 = 12，3 和 4 是 12 的因数，12 是 3 和 4 的倍数',
+      title: 'Multiples and factors',
+      body: 'If a × b = c (a, b and c are all nonzero whole numbers), then a and b are factors of c, and c is a multiple of a and b. A number has a limited number of factors but unlimited multiples.',
+      example: '3 × 4 = 12, so 3 and 4 are factors of 12, and 12 is a multiple of 3 and 4',
     },
     {
-      title: '2、3、5 的倍数特征',
-      body: '个位上是 0、2、4、6、8 的数是 2 的倍数；个位上是 0 或 5 的数是 5 的倍数；各位上数字之和是 3 的倍数，这个数就是 3 的倍数。',
-      example: '123：1 + 2 + 3 = 6，6 是 3 的倍数，所以 123 是 3 的倍数',
+      title: 'Divisibility rules for 2, 3 and 5',
+      body: 'A number whose ones digit is 0, 2, 4, 6 or 8 is a multiple of 2. A number whose ones digit is 0 or 5 is a multiple of 5. If the sum of a number\'s digits is a multiple of 3, the number is a multiple of 3.',
+      example: '123: 1 + 2 + 3 = 6, and 6 is a multiple of 3, so 123 is a multiple of 3',
     },
     {
-      title: '质数与合数',
-      body: '只有 1 和它本身两个因数的数叫质数（素数）；除了 1 和它本身还有别的因数的数叫合数。1 既不是质数也不是合数。',
-      example: '2、3、5、7、11 是质数；4、6、8、9 是合数',
+      title: 'Prime and composite numbers',
+      body: 'A number with exactly two factors, 1 and itself, is called a prime number. A number with other factors besides 1 and itself is called a composite number. 1 is neither prime nor composite.',
+      example: '2, 3, 5, 7 and 11 are prime; 4, 6, 8 and 9 are composite',
     },
   ],
   smartMethods: [
     {
-      name: '看个位判 2、5',
-      when: '判断一个数是不是 2 或 5 的倍数',
-      steps: ['只看个位数字', '个位是 0、2、4、6、8 → 2 的倍数', '个位是 0 或 5 → 5 的倍数'],
-      example: '340 的个位是 0 → 既是 2 的倍数也是 5 的倍数',
+      name: 'Check the ones digit for 2 and 5',
+      when: 'Deciding whether a number is a multiple of 2 or 5',
+      steps: ['Look only at the ones digit', 'Ones digit 0, 2, 4, 6, 8 → multiple of 2', 'Ones digit 0 or 5 → multiple of 5'],
+      example: 'The ones digit of 340 is 0 → it is a multiple of both 2 and 5',
     },
     {
-      name: '数字求和判 3',
-      when: '判断一个数是不是 3 的倍数',
-      steps: ['把各位上的数字相加', '看和是不是 3 的倍数', '是则原数也是 3 的倍数'],
-      example: '123：1 + 2 + 3 = 6 → 是 3 的倍数',
+      name: 'Add the digits for 3',
+      when: 'Deciding whether a number is a multiple of 3',
+      steps: ['Add up all the digits', 'See whether the sum is a multiple of 3', 'If it is, the original number is too'],
+      example: '123: 1 + 2 + 3 = 6 → multiple of 3',
     },
     {
-      name: '短除法求公因数公倍数',
-      when: '求最大公因数或最小公倍数时',
-      steps: ['用两个数的公因数连续去除', '除到两个数互质为止', '左侧除数相乘是最大公因数，左侧与下边全部相乘是最小公倍数'],
-      example: '12 和 18：最大公因数 6，最小公倍数 36',
+      name: 'Short division for GCF and LCM',
+      when: 'Finding the greatest common factor or least common multiple',
+      steps: ['Keep dividing both numbers by a common factor', 'Stop when the two numbers share no more factors', 'The divisors multiplied together give the GCF; the divisors and the bottom numbers all multiplied give the LCM'],
+      example: '12 and 18: GCF 6, LCM 36',
     },
   ],
   levels: buildLevels(5, [
-    '认识因数与倍数',
-    '2、5、3 的倍数特征',
-    '质数与合数',
-    '最大公因数与最小公倍数',
-    '因数倍数综合应用',
+    'Learn factors and multiples',
+    'Divisibility rules for 2, 5 and 3',
+    'Prime and composite numbers',
+    'Greatest common factor and least common multiple',
+    'Factors and multiples word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -383,10 +383,10 @@ const factors: Topic = {
       const b = rng.int(2, 9)
       const product = a * b
       return makeFill({
-        prompt: `${a} × ${b} = ${product}，那么 ${product} ÷ ${a} 等于多少？`,
+        prompt: `${a} × ${b} = ${product}. What is ${product} ÷ ${a}?`,
         answer: b,
-        explanation: `由 ${a} × ${b} = ${product} 可知，${a} 和 ${b} 都是 ${product} 的因数，反过来 ${product} ÷ ${a} = ${b}。`,
-        smartTip: '看个位判 2、5',
+        explanation: `From ${a} × ${b} = ${product}, both ${a} and ${b} are factors of ${product}. Turned around, ${product} ÷ ${a} = ${b}.`,
+        smartTip: 'Check the ones digit for 2 and 5',
       })
     })
 
@@ -394,10 +394,10 @@ const factors: Topic = {
       const n = rng.int(10, 99)
       const isEven = n % 2 === 0
       return makeJudge({
-        prompt: `判断：${n} 是 2 的倍数。—— 对吗？`,
+        prompt: `True or false: ${n} is a multiple of 2.`,
         correct: isEven,
-        explanation: `${n} 的个位是 ${n % 10}，${isEven ? '是偶数，所以是 2 的倍数' : '不是 0、2、4、6、8，所以不是 2 的倍数'}。`,
-        smartTip: '看个位判 2、5',
+        explanation: `The ones digit of ${n} is ${n % 10}, ${isEven ? 'which is even, so it is a multiple of 2' : 'which is not 0, 2, 4, 6 or 8, so it is not a multiple of 2'}.`,
+        smartTip: 'Check the ones digit for 2 and 5',
       })
     })
 
@@ -409,10 +409,10 @@ const factors: Topic = {
           .reduce((s, c) => s + Number(c), 0)
         const isMultiple3 = digitSum % 3 === 0
         return makeJudge({
-          prompt: `判断：${n} 是 3 的倍数。—— 对吗？`,
+          prompt: `True or false: ${n} is a multiple of 3.`,
           correct: isMultiple3,
-          explanation: `各位数字之和：${String(n).split('').join(' + ')} = ${digitSum}，${digitSum} ${isMultiple3 ? '是' : '不是'} 3 的倍数，所以 ${n} ${isMultiple3 ? '是' : '不是'} 3 的倍数。`,
-          smartTip: '数字求和判 3',
+          explanation: `Sum of the digits: ${String(n).split('').join(' + ')} = ${digitSum}. ${digitSum} ${isMultiple3 ? 'is' : 'is not'} a multiple of 3, so ${n} ${isMultiple3 ? 'is' : 'is not'} a multiple of 3.`,
+          smartTip: 'Add the digits for 3',
         })
       })
     }
@@ -421,9 +421,9 @@ const factors: Topic = {
       makers.push(() => {
         const n = rng.int(11, 200)
         return makeFill({
-          prompt: `${n} 的最小倍数是几？`,
+          prompt: `What is the smallest multiple of ${n}?`,
           answer: n,
-          explanation: `一个数的最小倍数是它本身，最大的倍数不存在。`,
+          explanation: `The smallest multiple of a number is the number itself. There is no biggest multiple.`,
         })
       })
     }
@@ -435,13 +435,13 @@ const factors: Topic = {
         const isPrime = rng.bool()
         const n = isPrime ? rng.pick(primes) : rng.pick(composites)
         return makeChoice({
-          prompt: `${n} 是质数还是合数？`,
-          answer: isPrime ? '质数' : '合数',
-          wrong: [isPrime ? '合数' : '质数', '既不是质数也不是合数', '无法确定'],
+          prompt: `Is ${n} prime or composite?`,
+          answer: isPrime ? 'Prime' : 'Composite',
+          wrong: [isPrime ? 'Composite' : 'Prime', 'Neither prime nor composite', 'Cannot tell'],
           explanation: isPrime
-            ? `${n} 只有 1 和 ${n} 两个因数，所以是质数。`
-            : `${n} 除了 1 和它本身还有别的因数，所以是合数。`,
-          smartTip: '数字求和判 3',
+            ? `${n} has only two factors, 1 and ${n}, so it is prime.`
+            : `${n} has other factors besides 1 and itself, so it is composite.`,
+          smartTip: 'Add the digits for 3',
         })
       })
     }
@@ -454,10 +454,10 @@ const factors: Topic = {
         const g = gcd(a, b)
         const l = (a * b) / g
         return makeFill({
-          prompt: `${a} 和 ${b} 的最大公因数是多少？`,
+          prompt: `What is the greatest common factor of ${a} and ${b}?`,
           answer: g,
-          explanation: `${a} 和 ${b} 的公因数中最大的是 ${g}（最小公倍数是 ${l}）。`,
-          smartTip: '短除法求公因数公倍数',
+          explanation: `The biggest of the common factors of ${a} and ${b} is ${g} (and their least common multiple is ${l}).`,
+          smartTip: 'Short division for GCF and LCM',
         })
       })
     }
@@ -470,10 +470,10 @@ const factors: Topic = {
         const g = gcd(a, b)
         const l = (a * b) / g
         return makeFill({
-          prompt: `${a} 和 ${b} 的最小公倍数是多少？`,
+          prompt: `What is the least common multiple of ${a} and ${b}?`,
           answer: l,
-          explanation: `最小公倍数 = 两数之积 ÷ 最大公因数 = ${a} × ${b} ÷ ${g} = ${l}。`,
-          smartTip: '短除法求公因数公倍数',
+          explanation: `LCM = product of the two numbers ÷ GCF = ${a} × ${b} ÷ ${g} = ${l}.`,
+          smartTip: 'Short division for GCF and LCM',
         })
       })
     }
@@ -484,11 +484,11 @@ const factors: Topic = {
         const b = rng.int(2, 9)
         const l = (a * b) / gcd(a, b)
         return makeFill({
-          prompt: `甲每 ${a} 天去一次图书馆，乙每 ${b} 天去一次，今天两人同时去了，至少再过多少天两人又同时去？`,
+          prompt: `Sam goes to the library every ${a} days and Mia goes every ${b} days. They both went today. After how many days will they next go on the same day?`,
           answer: l,
-          unit: '天',
-          explanation: `这就是求 ${a} 和 ${b} 的最小公倍数：${l}，所以至少再过 ${l} 天。`,
-          smartTip: '短除法求公因数公倍数',
+          unit: 'days',
+          explanation: `This asks for the least common multiple of ${a} and ${b}, which is ${l}, so it is ${l} days later.`,
+          smartTip: 'Short division for GCF and LCM',
         })
       })
     }
@@ -498,59 +498,59 @@ const factors: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   4. 面积与体积
+   4. Area and volume
    ══════════════════════════════════════════════ */
 
 const areaVolume: Topic = {
   id: 'g5-area-volume',
   grade: 5,
-  name: '面积与体积',
+  name: 'Area and Volume',
   color: 'pink',
   icon: 'Box',
-  summary: '掌握平行四边形、三角形、梯形的面积，以及长方体、正方体的体积。',
+  summary: 'Master the areas of parallelograms, triangles and trapezoids, and the volumes of cuboids and cubes.',
   explanation: [
     {
-      title: '三种图形的面积',
-      body: '平行四边形面积 = 底 × 高；三角形面积 = 底 × 高 ÷ 2；梯形面积 = (上底 + 下底) × 高 ÷ 2。',
-      example: '三角形底 6、高 4 → 6 × 4 ÷ 2 = 12',
+      title: 'Areas of three shapes',
+      body: 'Area of a parallelogram = base × height. Area of a triangle = base × height ÷ 2. Area of a trapezoid = (top + bottom) × height ÷ 2.',
+      example: 'Triangle with base 6 and height 4 → 6 × 4 ÷ 2 = 12',
     },
     {
-      title: '面积公式的来历',
-      body: '两个完全一样的三角形可以拼成一个平行四边形，所以三角形面积是等底等高平行四边形面积的一半。梯形同理。',
-      example: '拼一拼就明白为什么要除以 2',
+      title: 'Where the area formulas come from',
+      body: 'Two identical triangles can be joined to make a parallelogram, so the area of a triangle is half the area of a parallelogram with the same base and height. A trapezoid works the same way.',
+      example: 'Try putting the shapes together and you will see why we divide by 2',
     },
     {
-      title: '体积与容积',
-      body: '长方体体积 = 长 × 宽 × 高，正方体体积 = 棱长³，也可以统一用「底面积 × 高」计算。1 升 = 1000 毫升 = 1 立方分米。',
-      example: '长 5、宽 4、高 3 → 体积 60 立方厘米',
+      title: 'Volume and capacity',
+      body: 'Volume of a cuboid = length × width × height. Volume of a cube = edge³. You can also use "base area × height" for both. 1 liter = 1,000 milliliters = 1 cubic decimeter.',
+      example: 'Length 5, width 4, height 3 → volume 60 cubic centimeters',
     },
   ],
   smartMethods: [
     {
-      name: '割补成已知图形',
-      when: '遇到不规则或没学过的图形时',
-      steps: ['把图形分割成几个学过的图形', '分别算出面积', '再把结果相加（或相减）'],
-      example: 'L 形可以分成两个长方形',
+      name: 'Cut and fill into known shapes',
+      when: 'The shape is irregular or you have not learned its formula',
+      steps: ['Cut the shape into a few shapes you know', 'Work out each area', 'Add the results together (or subtract)'],
+      example: 'An L shape can be split into two rectangles',
     },
     {
-      name: '等底等高一半',
-      when: '算三角形面积时',
-      steps: ['先想等底等高的平行四边形面积', '平行四边形面积 = 底 × 高', '再除以 2 就是三角形面积'],
-      example: '底 6 高 4 → 24 ÷ 2 = 12',
+      name: 'Half of the same base and height',
+      when: 'Finding the area of a triangle',
+      steps: ['First think of the parallelogram with the same base and height', 'Parallelogram area = base × height', 'Divide by 2 to get the triangle area'],
+      example: 'Base 6, height 4 → 24 ÷ 2 = 12',
     },
     {
-      name: '底面积乘高',
-      when: '算柱体体积时',
-      steps: ['先算出底面的面积', '再乘高', '单位要统一成立方单位'],
-      example: '底面积 20、高 5 → 体积 100',
+      name: 'Base area times height',
+      when: 'Finding the volume of a prism',
+      steps: ['First work out the area of the base', 'Then multiply by the height', 'Make sure the units are cubic units'],
+      example: 'Base area 20, height 5 → volume 100',
     },
   ],
   levels: buildLevels(5, [
-    '平行四边形的面积',
-    '三角形的面积',
-    '梯形的面积',
-    '长方体与正方体的体积',
-    '面积体积综合应用',
+    'Area of a parallelogram',
+    'Area of a triangle',
+    'Area of a trapezoid',
+    'Volume of cuboids and cubes',
+    'Area and volume word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -559,11 +559,11 @@ const areaVolume: Topic = {
       const base = rng.int(3, [9, 12, 15, 20, 25][level - 1])
       const height = rng.int(2, [8, 10, 12, 15, 18][level - 1])
       return makeFill({
-        prompt: `一个平行四边形底 ${base} 厘米，高 ${height} 厘米，面积是多少平方厘米？`,
+        prompt: `A parallelogram has a base of ${base} cm and a height of ${height} cm. What is its area in square centimeters?`,
         answer: base * height,
-        unit: '平方厘米',
-        explanation: `平行四边形面积 = 底 × 高 = ${base} × ${height} = ${base * height} 平方厘米。`,
-        smartTip: '割补成已知图形',
+        unit: 'cm²',
+        explanation: `Area of a parallelogram = base × height = ${base} × ${height} = ${base * height} cm².`,
+        smartTip: 'Cut and fill into known shapes',
       })
     })
 
@@ -572,11 +572,11 @@ const areaVolume: Topic = {
         const base = rng.int(4, [10, 14, 18, 24, 30][level - 1])
         const height = rng.int(2, 12) * 2
         return makeFill({
-          prompt: `一个三角形底 ${base} 厘米，高 ${height} 厘米，面积是多少平方厘米？`,
+          prompt: `A triangle has a base of ${base} cm and a height of ${height} cm. What is its area in square centimeters?`,
           answer: (base * height) / 2,
-          unit: '平方厘米',
-          explanation: `三角形面积 = 底 × 高 ÷ 2 = ${base} × ${height} ÷ 2 = ${(base * height) / 2} 平方厘米。`,
-          smartTip: '等底等高一半',
+          unit: 'cm²',
+          explanation: `Area of a triangle = base × height ÷ 2 = ${base} × ${height} ÷ 2 = ${(base * height) / 2} cm².`,
+          smartTip: 'Half of the same base and height',
         })
       })
     }
@@ -587,11 +587,11 @@ const areaVolume: Topic = {
         const bottom = top + rng.int(2, 12)
         const height = rng.int(2, 10) * 2
         return makeFill({
-          prompt: `一个梯形上底 ${top} 厘米，下底 ${bottom} 厘米，高 ${height} 厘米，面积是多少平方厘米？`,
+          prompt: `A trapezoid has a top of ${top} cm, a bottom of ${bottom} cm and a height of ${height} cm. What is its area in square centimeters?`,
           answer: ((top + bottom) * height) / 2,
-          unit: '平方厘米',
-          explanation: `梯形面积 = (上底 + 下底) × 高 ÷ 2 = (${top} + ${bottom}) × ${height} ÷ 2 = ${((top + bottom) * height) / 2} 平方厘米。`,
-          smartTip: '割补成已知图形',
+          unit: 'cm²',
+          explanation: `Area of a trapezoid = (top + bottom) × height ÷ 2 = (${top} + ${bottom}) × ${height} ÷ 2 = ${((top + bottom) * height) / 2} cm².`,
+          smartTip: 'Cut and fill into known shapes',
         })
       })
     }
@@ -600,11 +600,11 @@ const areaVolume: Topic = {
       makers.push(() => {
         const triangleArea = rng.pick([12, 18, 24, 30, 36])
         return makeChoice({
-          prompt: `一个三角形和一个平行四边形等底等高，三角形面积 ${triangleArea} 平方厘米，平行四边形面积是多少？`,
-          answer: `${triangleArea * 2} 平方厘米`,
-          wrong: [`${triangleArea} 平方厘米`, `${triangleArea / 2} 平方厘米`, `${triangleArea + 12} 平方厘米`],
-          explanation: `等底等高时，三角形面积是平行四边形的一半，所以平行四边形面积 = ${triangleArea} × 2 = ${triangleArea * 2} 平方厘米。`,
-          smartTip: '等底等高一半',
+          prompt: `A triangle and a parallelogram have the same base and height. The triangle has an area of ${triangleArea} cm². What is the area of the parallelogram?`,
+          answer: `${triangleArea * 2} cm²`,
+          wrong: [`${triangleArea} cm²`, `${triangleArea / 2} cm²`, `${triangleArea + 12} cm²`],
+          explanation: `With the same base and height, a triangle is half the area of a parallelogram, so the parallelogram's area = ${triangleArea} × 2 = ${triangleArea * 2} cm².`,
+          smartTip: 'Half of the same base and height',
         })
       })
     }
@@ -615,11 +615,11 @@ const areaVolume: Topic = {
         const w = rng.int(2, 10)
         const h = rng.int(2, 8)
         return makeFill({
-          prompt: `一个长方体长 ${l} 厘米、宽 ${w} 厘米、高 ${h} 厘米，体积是多少立方厘米？`,
+          prompt: `A cuboid is ${l} cm long, ${w} cm wide and ${h} cm high. What is its volume in cubic centimeters?`,
           answer: l * w * h,
-          unit: '立方厘米',
-          explanation: `长方体体积 = 长 × 宽 × 高 = ${l} × ${w} × ${h} = ${l * w * h} 立方厘米。`,
-          smartTip: '底面积乘高',
+          unit: 'cm³',
+          explanation: `Volume of a cuboid = length × width × height = ${l} × ${w} × ${h} = ${l * w * h} cm³.`,
+          smartTip: 'Base area times height',
         })
       })
     }
@@ -628,11 +628,11 @@ const areaVolume: Topic = {
       makers.push(() => {
         const edge = rng.int(2, 12)
         return makeFill({
-          prompt: `一个正方体棱长 ${edge} 厘米，体积是多少立方厘米？`,
+          prompt: `A cube has an edge of ${edge} cm. What is its volume in cubic centimeters?`,
           answer: edge ** 3,
-          unit: '立方厘米',
-          explanation: `正方体体积 = 棱长 × 棱长 × 棱长 = ${edge} × ${edge} × ${edge} = ${edge ** 3} 立方厘米。`,
-          smartTip: '底面积乘高',
+          unit: 'cm³',
+          explanation: `Volume of a cube = edge × edge × edge = ${edge} × ${edge} × ${edge} = ${edge ** 3} cm³.`,
+          smartTip: 'Base area times height',
         })
       })
     }
@@ -644,11 +644,11 @@ const areaVolume: Topic = {
         const h = rng.int(2, 8)
         const volume = l * w * h
         return makeFill({
-          prompt: `一个长方体水池长 ${l} 米、宽 ${w} 米、深 ${h} 米，最多能装水多少立方米？`,
+          prompt: `A cuboid pool is ${l} m long, ${w} m wide and ${h} m deep. What is the most water it can hold, in cubic meters?`,
           answer: volume,
-          unit: '立方米',
-          explanation: `容积 = 长 × 宽 × 高 = ${l} × ${w} × ${h} = ${volume} 立方米。`,
-          smartTip: '底面积乘高',
+          unit: 'm³',
+          explanation: `Capacity = length × width × height = ${l} × ${w} × ${h} = ${volume} m³.`,
+          smartTip: 'Base area times height',
         })
       })
     }
@@ -658,10 +658,10 @@ const areaVolume: Topic = {
         const baseArea = rng.int(5, 30)
         const height = rng.int(3, 10)
         return makeJudge({
-          prompt: `判断：一个长方体的底面积是 ${baseArea} 平方厘米，高 ${height} 厘米，体积是 ${baseArea + height} 立方厘米。—— 对吗？`,
+          prompt: `True or false: A cuboid has a base area of ${baseArea} cm² and a height of ${height} cm. Its volume is ${baseArea + height} cm³.`,
           correct: false,
-          explanation: `体积 = 底面积 × 高 = ${baseArea} × ${height} = ${baseArea * height} 立方厘米，不是 ${baseArea + height}。`,
-          smartTip: '底面积乘高',
+          explanation: `Volume = base area × height = ${baseArea} × ${height} = ${baseArea * height} cm³, not ${baseArea + height}.`,
+          smartTip: 'Base area times height',
         })
       })
     }
@@ -671,59 +671,59 @@ const areaVolume: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   5. 百分数
+   5. Percentages
    ══════════════════════════════════════════════ */
 
 const percent: Topic = {
   id: 'g5-percent',
   grade: 5,
-  name: '百分数',
+  name: 'Percentages',
   color: 'purple',
   icon: 'Percent',
-  summary: '理解百分数的意义，会做百分数与小数、分数的互化和简单计算。',
+  summary: 'Understand what a percentage means, convert between percentages, decimals and fractions, and do simple calculations.',
   explanation: [
     {
-      title: '百分数的意义',
-      body: '表示一个数是另一个数的百分之几的数叫百分数，也叫百分率或百分比。百分数只表示两个数的倍比关系，不能带单位。',
-      example: '六（1）班的出勤率是 98%',
+      title: 'What a percentage means',
+      body: 'A number that shows one number as a certain number of hundredths of another is called a percentage (percent means "out of 100"). A percentage only describes a ratio between two numbers, so it has no unit.',
+      example: 'The attendance rate of Class 6A is 98%',
     },
     {
-      title: '百分数与小数、分数互化',
-      body: '百分数化小数：去掉百分号，小数点向左移两位；小数化百分数：小数点向右移两位，加上百分号。百分数化分数：写成分母是 100 的分数再约分。',
-      example: '25% = 0.25 = 1/4；0.6 = 60%',
+      title: 'Converting between percentages, decimals and fractions',
+      body: 'Percentage to decimal: drop the percent sign and move the decimal point two places left. Decimal to percentage: move the decimal point two places right and add the percent sign. Percentage to fraction: write it over 100, then simplify.',
+      example: '25% = 0.25 = 1/4; 0.6 = 60%',
     },
     {
-      title: '求一个数的百分之几',
-      body: '求一个数的百分之几是多少，用这个数乘百分数（先把百分数化成小数或分数再算）。',
-      example: '200 的 15% = 200 × 0.15 = 30',
+      title: 'Finding a percentage of a number',
+      body: 'To find a percentage of a number, multiply the number by the percentage (first change the percentage to a decimal or a fraction).',
+      example: '15% of 200 = 200 × 0.15 = 30',
     },
   ],
   smartMethods: [
     {
-      name: '小数点移两位',
-      when: '百分数与小数互化时',
-      steps: ['百分数化小数：去百分号，小数点左移两位', '小数化百分数：小数点右移两位，加百分号', '位数不够就补 0'],
-      example: '3% = 0.03；1.2 = 120%',
+      name: 'Move the decimal point two places',
+      when: 'Converting between percentages and decimals',
+      steps: ['Percentage to decimal: drop the percent sign, move the point left two places', 'Decimal to percentage: move the point right two places, add the percent sign', 'Add zeros if there are not enough digits'],
+      example: '3% = 0.03; 1.2 = 120%',
     },
     {
-      name: '先化成分母 100 再约分',
-      when: '百分数化分数时',
-      steps: ['把百分数写成分母是 100 的分数', '分子分母同时除以公因数', '化成最简分数'],
+      name: 'Write it over 100, then simplify',
+      when: 'Converting a percentage to a fraction',
+      steps: ['Write the percentage as a fraction over 100', 'Divide the numerator and denominator by a common factor', 'Reduce to simplest form'],
       example: '45% = 45/100 = 9/20',
     },
     {
-      name: '化成小数再乘',
-      when: '求一个数的百分之几时',
-      steps: ['把百分数化成小数', '用这个数乘得到的小数', '检查单位'],
-      example: '80 的 25% = 80 × 0.25 = 20',
+      name: 'Change to a decimal, then multiply',
+      when: 'Finding a percentage of a number',
+      steps: ['Change the percentage to a decimal', 'Multiply the number by that decimal', 'Check the unit'],
+      example: '25% of 80 = 80 × 0.25 = 20',
     },
   ],
   levels: buildLevels(5, [
-    '百分数的意义与读写',
-    '百分数与小数互化',
-    '百分数与分数互化',
-    '求一个数的百分之几',
-    '百分率的实际应用',
+    'Meaning of percentages, reading and writing',
+    'Convert between percentages and decimals',
+    'Convert between percentages and fractions',
+    'Find a percentage of a number',
+    'Percentage rates in real life',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -731,21 +731,21 @@ const percent: Topic = {
     makers.push(() => {
       const p = rng.pick([5, 8, 12, 15, 20, 25, 30, 36, 45, 50, 60, 75, 80, 90])
       return makeFill({
-        prompt: `${p}% 化成小数是多少？`,
+        prompt: `Write ${p}% as a decimal.`,
         answer: p / 100,
-        explanation: `去掉百分号，小数点向左移两位：${p}% = ${p / 100}。`,
-        smartTip: '小数点移两位',
+        explanation: `Drop the percent sign and move the decimal point two places left: ${p}% = ${p / 100}.`,
+        smartTip: 'Move the decimal point two places',
       })
     })
 
     makers.push(() => {
       const d = rng.pick([0.05, 0.08, 0.12, 0.25, 0.4, 0.6, 0.75, 0.9, 1.2])
       return makeFill({
-        prompt: `${d} 化成百分数，百分号前面的数是多少？`,
+        prompt: `Write ${d} as a percentage. What number comes before the percent sign?`,
         answer: Math.round(d * 100),
         unit: '%',
-        explanation: `小数点向右移两位，加上百分号：${d} = ${Math.round(d * 100)}%。`,
-        smartTip: '小数点移两位',
+        explanation: `Move the decimal point two places right and add the percent sign: ${d} = ${Math.round(d * 100)}%.`,
+        smartTip: 'Move the decimal point two places',
       })
     })
 
@@ -753,10 +753,10 @@ const percent: Topic = {
       makers.push(() => {
         const p = rng.pick([20, 25, 40, 50, 60, 75, 80])
         return makeFill({
-          prompt: `${p}% 化成最简分数，分子是多少？`,
+          prompt: `Write ${p}% as a fraction in simplest form. What is the numerator?`,
           answer: simplify(p, 100)[0],
-          explanation: `${p}% = ${p}/100 = ${fracStr(p, 100)}，分子是 ${simplify(p, 100)[0]}。`,
-          smartTip: '先化成分母 100 再约分',
+          explanation: `${p}% = ${p}/100 = ${fracStr(p, 100)}, so the numerator is ${simplify(p, 100)[0]}.`,
+          smartTip: 'Write it over 100, then simplify',
         })
       })
     }
@@ -766,10 +766,10 @@ const percent: Topic = {
         const n = rng.int(20, 200)
         const p = rng.pick([10, 20, 25, 50, 75])
         return makeFill({
-          prompt: `${n} 的 ${p}% 是多少？`,
+          prompt: `What is ${p}% of ${n}?`,
           answer: round2((n * p) / 100),
-          explanation: `${n} × ${p}% = ${n} × ${p / 100} = ${round2((n * p) / 100)}。`,
-          smartTip: '化成小数再乘',
+          explanation: `${n} × ${p}% = ${n} × ${p / 100} = ${round2((n * p) / 100)}.`,
+          smartTip: 'Change to a decimal, then multiply',
         })
       })
     }
@@ -780,11 +780,11 @@ const percent: Topic = {
         const part = rng.int(1, total - 1)
         const p = round2((part / total) * 100)
         return makeFill({
-          prompt: `全班 ${total} 人，其中男生 ${part} 人，男生占全班的百分之几？（保留一位小数，只填数字）`,
+          prompt: `A class has ${total} students and ${part} of them are boys. What percentage of the class are boys? (Round to one decimal place and enter only the number.)`,
           answer: Math.round(p * 10) / 10,
           unit: '%',
-          explanation: `${part} ÷ ${total} = ${round2(part / total)} = ${Math.round(p * 10) / 10}%。`,
-          smartTip: '化成小数再乘',
+          explanation: `${part} ÷ ${total} = ${round2(part / total)} = ${Math.round(p * 10) / 10}%.`,
+          smartTip: 'Change to a decimal, then multiply',
         })
       })
     }
@@ -794,11 +794,11 @@ const percent: Topic = {
         const total = rng.int(50, 400)
         const p = rng.pick([20, 25, 40, 60, 75, 80])
         return makeFill({
-          prompt: `一本书共 ${total} 页，已经读了 ${p}%，读了多少页？`,
+          prompt: `A book has ${total} pages and you have read ${p}% of it. How many pages have you read?`,
           answer: round2((total * p) / 100),
-          unit: '页',
-          explanation: `${total} × ${p / 100} = ${round2((total * p) / 100)} 页。`,
-          smartTip: '化成小数再乘',
+          unit: 'pages',
+          explanation: `${total} × ${p / 100} = ${round2((total * p) / 100)} pages.`,
+          smartTip: 'Change to a decimal, then multiply',
         })
       })
     }
@@ -808,10 +808,10 @@ const percent: Topic = {
         const total = rng.pick([200, 400, 500, 800, 1000])
         const p = rng.pick([10, 15, 20, 25, 30])
         return makeJudge({
-          prompt: `判断：${total} 元的 ${p}% 是 ${round2((total * p) / 100) + total} 元。—— 对吗？`,
+          prompt: `True or false: ${p}% of ${total} dollars is ${round2((total * p) / 100) + total} dollars.`,
           correct: false,
-          explanation: `${total} × ${p}% = ${total} × ${p / 100} = ${round2((total * p) / 100)} 元，不是 ${round2((total * p) / 100) + total} 元。`,
-          smartTip: '化成小数再乘',
+          explanation: `${total} × ${p}% = ${total} × ${p / 100} = ${round2((total * p) / 100)} dollars, not ${round2((total * p) / 100) + total} dollars.`,
+          smartTip: 'Change to a decimal, then multiply',
         })
       })
     }
@@ -821,11 +821,11 @@ const percent: Topic = {
         const total = rng.pick([40, 50, 80, 100, 200])
         const correct = rng.int(1, total - 1)
         return makeFill({
-          prompt: `一次数学测验共 ${total} 道题，小明做对了 ${correct} 道，正确率是多少？（只填百分号前的数字）`,
+          prompt: `A math quiz has ${total} questions and Alex got ${correct} right. What is the accuracy? (Enter only the number before the percent sign.)`,
           answer: round2((correct / total) * 100),
           unit: '%',
-          explanation: `正确率 = 做对题数 ÷ 总题数 × 100% = ${correct} ÷ ${total} × 100% = ${round2((correct / total) * 100)}%。`,
-          smartTip: '化成小数再乘',
+          explanation: `Accuracy = questions right ÷ total questions × 100% = ${correct} ÷ ${total} × 100% = ${round2((correct / total) * 100)}%.`,
+          smartTip: 'Change to a decimal, then multiply',
         })
       })
     }
@@ -835,59 +835,59 @@ const percent: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   6. 简易方程
+   6. Simple equations
    ══════════════════════════════════════════════ */
 
 const equation: Topic = {
   id: 'g5-equation',
   grade: 5,
-  name: '简易方程',
+  name: 'Simple Equations',
   color: 'teal',
   icon: 'Variable',
-  summary: '用字母表示数，理解等式性质，会解形如 x ± a = b、ax = b 的方程。',
+  summary: 'Use letters to stand for numbers, understand the properties of equality, and solve equations like x ± a = b and ax = b.',
   explanation: [
     {
-      title: '用字母表示数',
-      body: '用字母可以表示数、数量和数量关系。数字和字母相乘时，乘号可以省略，数字写在字母前面。',
-      example: 'a × 3 写作 3a；1 × a 写作 a',
+      title: 'Letters stand for numbers',
+      body: 'Letters can stand for numbers, quantities and relationships between quantities. When a number and a letter are multiplied, the multiplication sign can be left out, and the number is written before the letter.',
+      example: 'a × 3 is written 3a; 1 × a is written a',
     },
     {
-      title: '方程与等式性质',
-      body: '含有未知数的等式叫方程。等式两边同时加上（减去）同一个数，或同时乘（除以）同一个不为 0 的数，等式仍然成立。',
-      example: 'x + 5 = 12 → 两边同时减 5 → x = 7',
+      title: 'Equations and the properties of equality',
+      body: 'An equation is an equality that contains an unknown. If you add or subtract the same number on both sides, or multiply or divide both sides by the same number (not 0), the equality still holds.',
+      example: 'x + 5 = 12 → subtract 5 from both sides → x = 7',
     },
     {
-      title: '解方程的格式',
-      body: '解方程要写「解」字，每一步等号要对齐，最后要检验：把求出的 x 代入原方程，看左右两边是否相等。',
-      example: '3x = 15 → x = 5，检验 3 × 5 = 15 ✓',
+      title: 'How to write a solution',
+      body: 'Write "Solution:" first and keep the equals signs lined up on each step. At the end, check your answer: put the value of x back into the original equation and see whether both sides are equal.',
+      example: '3x = 15 → x = 5. Check: 3 × 5 = 15 ✓',
     },
   ],
   smartMethods: [
     {
-      name: '天平平衡法',
-      when: '不理解等式性质时',
-      steps: ['把等号想成天平', '左边加多少右边也要加多少', '保持天平平衡'],
-      example: 'x + 5 = 12，两边同时拿走 5',
+      name: 'Balance scale',
+      when: 'You do not understand the properties of equality',
+      steps: ['Think of the equals sign as a balance scale', 'Whatever you add on the left you must add on the right', 'Keep the scale balanced'],
+      example: 'x + 5 = 12: take 5 away from both sides',
     },
     {
-      name: '移项变号',
-      when: '解 x ± a = b 型方程时',
-      steps: ['把含有 x 的项留在左边', '把常数项移到右边', '加变减、减变加'],
+      name: 'Undo with the opposite operation',
+      when: 'Solving x ± a = b equations',
+      steps: ['Keep the term with x on the left', 'Move the number to the right side', 'Addition becomes subtraction and subtraction becomes addition'],
       example: 'x + 8 = 20 → x = 20 − 8 = 12',
     },
     {
-      name: '代入检验',
-      when: '解出 x 之后',
-      steps: ['把 x 的值代入原方程左边', '算出结果', '看是否等于右边'],
-      example: 'x = 7 代入 x + 5 = 12 → 7 + 5 = 12 ✓',
+      name: 'Check by substituting',
+      when: 'After you have found x',
+      steps: ['Put the value of x into the left side of the original equation', 'Work out the result', 'See whether it equals the right side'],
+      example: 'x = 7 in x + 5 = 12 → 7 + 5 = 12 ✓',
     },
   ],
   levels: buildLevels(5, [
-    '用字母表示数',
-    '解 x + a = b 与 x − a = b',
-    '解 ax = b',
-    '解 ax + b = c',
-    '列方程解决问题',
+    'Letters stand for numbers',
+    'Solve x + a = b and x − a = b',
+    'Solve ax = b',
+    'Solve ax + b = c',
+    'Write equations to solve problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -895,10 +895,10 @@ const equation: Topic = {
     makers.push(() => {
       const coeff = rng.int(2, 9)
       return makeFill({
-        prompt: `用字母表示：每支铅笔 ${coeff} 元，买 a 支需要多少元？请写出 a 前面的数字。`,
+        prompt: `Use a letter: each pencil costs ${coeff} dollars. How much do a pencils cost? Enter the number in front of a.`,
         answer: coeff,
-        explanation: `总价 = 单价 × 数量 = ${coeff} × a = ${coeff}a，a 前面的数字是 ${coeff}。`,
-        smartTip: '天平平衡法',
+        explanation: `Total price = unit price × quantity = ${coeff} × a = ${coeff}a, so the number in front of a is ${coeff}.`,
+        smartTip: 'Balance scale',
       })
     })
 
@@ -906,10 +906,10 @@ const equation: Topic = {
       const a = rng.int(2, [20, 30, 50, 80, 100][level - 1])
       const x = rng.int(1, [18, 28, 48, 78, 98][level - 1])
       return makeFill({
-        prompt: `解方程：x + ${a} = ${x + a}，x 是多少？`,
+        prompt: `Solve the equation: x + ${a} = ${x + a}. What is x?`,
         answer: x,
-        explanation: `等式两边同时减去 ${a}：x = ${x + a} − ${a} = ${x}。检验：${x} + ${a} = ${x + a} ✓`,
-        smartTip: '移项变号',
+        explanation: `Subtract ${a} from both sides: x = ${x + a} − ${a} = ${x}. Check: ${x} + ${a} = ${x + a} ✓`,
+        smartTip: 'Undo with the opposite operation',
       })
     })
 
@@ -918,10 +918,10 @@ const equation: Topic = {
         const a = rng.int(2, [20, 30, 50, 80, 100][level - 1])
         const x = rng.int(a + 1, a + [20, 30, 50, 80, 100][level - 1])
         return makeFill({
-          prompt: `解方程：x − ${a} = ${x - a}，x 是多少？`,
+          prompt: `Solve the equation: x − ${a} = ${x - a}. What is x?`,
           answer: x,
-          explanation: `等式两边同时加上 ${a}：x = ${x - a} + ${a} = ${x}。检验：${x} − ${a} = ${x - a} ✓`,
-          smartTip: '移项变号',
+          explanation: `Add ${a} to both sides: x = ${x - a} + ${a} = ${x}. Check: ${x} − ${a} = ${x - a} ✓`,
+          smartTip: 'Undo with the opposite operation',
         })
       })
     }
@@ -931,10 +931,10 @@ const equation: Topic = {
         const a = rng.int(2, [5, 7, 9, 12, 12][level - 1])
         const x = rng.int(2, [9, 12, 15, 20, 25][level - 1])
         return makeFill({
-          prompt: `解方程：${a}x = ${a * x}，x 是多少？`,
+          prompt: `Solve the equation: ${a}x = ${a * x}. What is x?`,
           answer: x,
-          explanation: `等式两边同时除以 ${a}：x = ${a * x} ÷ ${a} = ${x}。检验：${a} × ${x} = ${a * x} ✓`,
-          smartTip: '天平平衡法',
+          explanation: `Divide both sides by ${a}: x = ${a * x} ÷ ${a} = ${x}. Check: ${a} × ${x} = ${a * x} ✓`,
+          smartTip: 'Balance scale',
         })
       })
     }
@@ -944,11 +944,11 @@ const equation: Topic = {
         const x = rng.int(2, 12)
         const a = rng.int(2, 9)
         return makeChoice({
-          prompt: `下面哪个是方程 ${a}x = ${a * x} 的解？`,
+          prompt: `Which is the solution of the equation ${a}x = ${a * x}?`,
           answer: `x = ${x}`,
           wrong: [`x = ${x + 1}`, `x = ${x + a}`, `x = ${x * a}`],
-          explanation: `把 x = ${x} 代入：${a} × ${x} = ${a * x}，左右相等，所以 x = ${x} 是方程的解。`,
-          smartTip: '代入检验',
+          explanation: `Put x = ${x} in: ${a} × ${x} = ${a * x}. Both sides are equal, so x = ${x} is the solution.`,
+          smartTip: 'Check by substituting',
         })
       })
     }
@@ -959,10 +959,10 @@ const equation: Topic = {
         const x = rng.int(2, 15)
         const b = rng.int(1, 30)
         return makeFill({
-          prompt: `解方程：${a}x + ${b} = ${a * x + b}，x 是多少？`,
+          prompt: `Solve the equation: ${a}x + ${b} = ${a * x + b}. What is x?`,
           answer: x,
-          explanation: `先把 ${a}x 看成一个整体：${a}x = ${a * x + b} − ${b} = ${a * x}，再两边除以 ${a}：x = ${x}。`,
-          smartTip: '移项变号',
+          explanation: `First treat ${a}x as one piece: ${a}x = ${a * x + b} − ${b} = ${a * x}. Then divide both sides by ${a}: x = ${x}.`,
+          smartTip: 'Undo with the opposite operation',
         })
       })
     }
@@ -973,10 +973,10 @@ const equation: Topic = {
         const count = rng.int(3, 12)
         const total = price * count + rng.int(1, 20)
         return makeFill({
-          prompt: `每本笔记本 ${price} 元，买了 x 本，付了 ${total} 元后找回 ${total - price * count} 元。请列出方程 ${price}x + ${total - price * count} = ${total} 的解，x 是多少？`,
+          prompt: `Each notebook costs ${price} dollars. Mia buys x notebooks, pays ${total} dollars and gets ${total - price * count} dollars back in change. This gives the equation ${price}x + ${total - price * count} = ${total}. What is x?`,
           answer: count,
-          explanation: `${price}x = ${total} − ${total - price * count} = ${price * count}，x = ${price * count} ÷ ${price} = ${count}。`,
-          smartTip: '代入检验',
+          explanation: `${price}x = ${total} − ${total - price * count} = ${price * count}, so x = ${price * count} ÷ ${price} = ${count}.`,
+          smartTip: 'Check by substituting',
         })
       })
     }
@@ -987,10 +987,10 @@ const equation: Topic = {
         const a = rng.int(2, 8)
         const b = rng.int(1, 20)
         return makeJudge({
-          prompt: `判断：x = ${x} 是方程 ${a}x + ${b} = ${a * x + b} 的解。—— 对吗？`,
+          prompt: `True or false: x = ${x} is the solution of the equation ${a}x + ${b} = ${a * x + b}.`,
           correct: true,
-          explanation: `代入检验：${a} × ${x} + ${b} = ${a * x} + ${b} = ${a * x + b}，左右相等，所以正确。`,
-          smartTip: '代入检验',
+          explanation: `Check by substituting: ${a} × ${x} + ${b} = ${a * x} + ${b} = ${a * x + b}. Both sides are equal, so the statement is true.`,
+          smartTip: 'Check by substituting',
         })
       })
     }

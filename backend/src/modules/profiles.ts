@@ -59,7 +59,7 @@ profileRouter.post('/get', async (req: Request, res: Response) => {
     [id]
   )
   if (result.rows.length === 0) {
-    throw new AppError(404, '档案不存在')
+    throw new AppError(404, 'Profile not found')
   }
   ok(res, { profile: toProfile(result.rows[0]) })
 })
@@ -81,7 +81,7 @@ profileRouter.post('/update', async (req: Request, res: Response) => {
   }
 
   if (fields.length === 0) {
-    throw new AppError(400, '没有需要更新的字段')
+    throw new AppError(400, 'No fields to update')
   }
 
   values.push(input.id)
@@ -92,7 +92,7 @@ profileRouter.post('/update', async (req: Request, res: Response) => {
   )
 
   if (result.rows.length === 0) {
-    throw new AppError(404, '档案不存在')
+    throw new AppError(404, 'Profile not found')
   }
   ok(res, { profile: toProfile(result.rows[0]) })
 })

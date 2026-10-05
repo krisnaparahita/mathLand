@@ -44,7 +44,7 @@ export default function LevelsPage() {
           fontSize: 'var(--font-size-label)',
         }}
       >
-        <ArrowLeft size={16} /> 返回{gradeInfo.name}
+        <ArrowLeft size={16} /> Back to {gradeInfo.name}
       </Link>
 
       <FadeIn>
@@ -64,10 +64,10 @@ export default function LevelsPage() {
                 {gradeInfo.name} · {topic.name}
               </div>
               <h1 className="font-bold text-title" style={{ color: topicColor(topic.color) }}>
-                选择关卡
+                Choose a level
               </h1>
               <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 4 }}>
-                每次进入都会重新随机出题，同一关卡永远不会重复上一轮的题目
+                Questions are regenerated every time, so a level never repeats the previous round
               </div>
             </div>
           </div>
@@ -83,7 +83,7 @@ export default function LevelsPage() {
               borderRadius: 'var(--radius)',
             }}
           >
-            <BookOpen size={15} /> 复习讲解与巧算
+            <BookOpen size={15} /> Review concepts and smart tricks
           </Link>
         </section>
       </FadeIn>
@@ -147,10 +147,10 @@ export default function LevelsPage() {
                     }}
                   >
                     <span className="inline-flex items-center" style={{ gap: 4 }}>
-                      <Clock size={13} /> {meta.questionCount} 题 · 每题 {meta.secondsPerQuestion} 秒
+                      <Clock size={13} /> {meta.questionCount} questions · {meta.secondsPerQuestion} sec each
                     </span>
-                    <span>总时长 {Math.floor(totalSeconds / 60)} 分 {totalSeconds % 60} 秒</span>
-                    {best && <span>最佳 {best.bestScore} 分</span>}
+                    <span>Total {Math.floor(totalSeconds / 60)} min {totalSeconds % 60} sec</span>
+                    {best && <span>Best {best.bestScore} pts</span>}
                   </div>
                 </div>
 
@@ -171,7 +171,7 @@ export default function LevelsPage() {
                       }}
                     >
                       {best ? <RotateCcw size={16} /> : <Play size={16} />}
-                      {best ? '再练一次' : '开始'}
+                      {best ? 'Play again' : 'Start'}
                     </button>
                     <button
                       type="button"
@@ -183,7 +183,7 @@ export default function LevelsPage() {
                         color: 'var(--muted-foreground)',
                       }}
                     >
-                      <InfinityIcon size={13} /> 不限时练习
+                      <InfinityIcon size={13} /> Untimed practice
                     </button>
                   </div>
                 ) : (
@@ -199,7 +199,7 @@ export default function LevelsPage() {
                       fontSize: 'var(--font-size-label)',
                     }}
                   >
-                    <Lock size={15} /> 先通过第 {meta.level - 1} 关
+                    <Lock size={15} /> Pass level {meta.level - 1} first
                   </span>
                 )}
               </div>

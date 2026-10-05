@@ -2,59 +2,59 @@ import { buildLevels, buildQuestionSet, fmt, makeChoice, makeFill, makeJudge, rn
 import type { Question, Topic } from './types'
 
 /* ══════════════════════════════════════════════
-   1. 100 以内加减法
+   1. Addition and subtraction within 100
    ══════════════════════════════════════════════ */
 
 const add100: Topic = {
   id: 'g2-add100',
   grade: 2,
-  name: '100 以内加减法',
+  name: 'Addition and Subtraction Within 100',
   color: 'indigo',
   icon: 'Plus',
-  summary: '两位数加减两位数与整十数，掌握相同数位对齐的计算规则。',
+  summary: 'Add and subtract two-digit numbers and multiples of ten, and line up matching place values.',
   explanation: [
     {
-      title: '相同数位要对齐',
-      body: '做加减法时，个位和个位相加减，十位和十位相加减。竖式计算一定要把相同数位对齐。',
-      example: '23 + 45：个位 3 + 5 = 8，十位 20 + 40 = 60，合起来 68',
+      title: 'Line up matching place values',
+      body: 'When you add or subtract, work with ones and ones, and tens and tens. In column form, always line up the matching place values.',
+      example: '23 + 45: ones 3 + 5 = 8, tens 20 + 40 = 60, together 68',
     },
     {
-      title: '整十数相加减',
-      body: '整十数就是个位是 0 的数，比如 20、50、80。计算时只看十位上的数，最后添一个 0。',
-      example: '30 + 50：想 3 + 5 = 8，所以是 80',
+      title: 'Adding and subtracting multiples of ten',
+      body: 'Multiples of ten are numbers whose ones digit is 0, such as 20, 50 and 80. Only look at the tens digits, then put a 0 on the end.',
+      example: '30 + 50: think 3 + 5 = 8, so the answer is 80',
     },
     {
-      title: '两位数加两位数',
-      body: '可以把一个数拆成整十数和个位数，先加整十数，再加个位数，这样口算更快。',
-      example: '36 + 27：36 + 20 = 56，56 + 7 = 63',
+      title: 'Adding two-digit numbers',
+      body: 'Split one number into tens and ones. Add the tens first, then the ones. This makes mental math faster.',
+      example: '36 + 27: 36 + 20 = 56, then 56 + 7 = 63',
     },
   ],
   smartMethods: [
     {
-      name: '拆分法',
-      when: '两位数加减两位数，想口算时',
-      steps: ['把第二个数的十位和个位拆开', '先加（减）整十数', '再加（减）个位数'],
-      example: '48 + 35：48 + 30 = 78，78 + 5 = 83',
+      name: 'Split and add',
+      when: 'Adding or subtracting two-digit numbers in your head',
+      steps: ['Split the second number into tens and ones', 'Add (or subtract) the tens first', 'Then add (or subtract) the ones'],
+      example: '48 + 35: 48 + 30 = 78, then 78 + 5 = 83',
     },
     {
-      name: '补整法',
-      when: '加数接近整十数（如 29、48）时',
-      steps: ['把接近整十的数看成整十数', '先按整十数算', '多算了就减去，少算了就加上'],
-      example: '56 + 29：看成 56 + 30 = 86，多算 1，所以 86 − 1 = 85',
+      name: 'Round and adjust',
+      when: 'A number is close to a multiple of ten (like 29 or 48)',
+      steps: ['Treat the number as the nearby multiple of ten', 'Calculate with the multiple of ten', 'If you added too much, subtract the extra; if too little, add it back'],
+      example: '56 + 29: think 56 + 30 = 86, that is 1 too many, so 86 − 1 = 85',
     },
     {
-      name: '两头凑',
-      when: '减法中被减数个位较小不好减时',
-      steps: ['先把减数拆成两部分', '先减到整十数', '再减剩下的部分'],
-      example: '73 − 28：73 − 23 = 50，50 − 5 = 45',
+      name: 'Step down to a ten',
+      when: 'In subtraction, the ones digit of the first number is too small',
+      steps: ['Split the number you subtract into two parts', 'Subtract the first part to land on a multiple of ten', 'Subtract the remaining part'],
+      example: '73 − 28: 73 − 23 = 50, then 50 − 5 = 45',
     },
   ],
   levels: buildLevels(2, [
-    '两位数加减整十数',
-    '两位数加减两位数（不进位不退位）',
-    '两位数加法（含进位）',
-    '两位数减法（含退位）',
-    '加减混合与填未知数',
+    'Add and subtract multiples of ten',
+    'Two-digit add and subtract (no carrying or borrowing)',
+    'Two-digit addition (with carrying)',
+    'Two-digit subtraction (with borrowing)',
+    'Mixed add and subtract, and missing numbers',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -66,12 +66,12 @@ const add100: Topic = {
         const isPlus = rng.bool()
         const value = isPlus ? a + b : a - b
         return makeFill({
-          prompt: `${a} ${isPlus ? '+' : '−'} ${b} = ？`,
+          prompt: `${a} ${isPlus ? '+' : '−'} ${b} = ?`,
           answer: value,
           explanation: isPlus
-            ? `先算十位：${Math.floor(a / 10) * 10} + ${b} = ${Math.floor(a / 10) * 10 + b}，再加上个位 ${a % 10}，得 ${value}。`
-            : `先算十位：${Math.floor(a / 10) * 10} − ${b} = ${Math.floor(a / 10) * 10 - b}，再加上个位 ${a % 10}，得 ${value}。`,
-          smartTip: '拆分法',
+            ? `Do the tens first: ${Math.floor(a / 10) * 10} + ${b} = ${Math.floor(a / 10) * 10 + b}. Then add the ones digit ${a % 10} to get ${value}.`
+            : `Do the tens first: ${Math.floor(a / 10) * 10} − ${b} = ${Math.floor(a / 10) * 10 - b}. Then add the ones digit ${a % 10} to get ${value}.`,
+          smartTip: 'Split and add',
         })
       })
     }
@@ -82,20 +82,20 @@ const add100: Topic = {
       const isPlus = rng.bool()
       if (!isPlus && a < b) {
         return makeFill({
-          prompt: `${b} − ${a} = ？`,
+          prompt: `${b} − ${a} = ?`,
           answer: b - a,
-          explanation: `个位 ${b % 10} − ${a % 10}，十位 ${Math.floor(b / 10)} − ${Math.floor(a / 10)}，结果是 ${b - a}。`,
-          smartTip: '拆分法',
+          explanation: `Ones: ${b % 10} − ${a % 10}. Tens: ${Math.floor(b / 10)} − ${Math.floor(a / 10)}. The result is ${b - a}.`,
+          smartTip: 'Split and add',
         })
       }
       const value = isPlus ? a + b : a - b
       return makeFill({
-        prompt: `${a} ${isPlus ? '+' : '−'} ${b} = ？`,
+        prompt: `${a} ${isPlus ? '+' : '−'} ${b} = ?`,
         answer: value,
         explanation: isPlus
-          ? `拆分：${a} + ${Math.floor(b / 10) * 10} = ${a + Math.floor(b / 10) * 10}，再加 ${b % 10} 得 ${value}。`
-          : `拆分：${a} − ${Math.floor(b / 10) * 10} = ${a - Math.floor(b / 10) * 10}，再减 ${b % 10} 得 ${value}。`,
-        smartTip: '拆分法',
+          ? `Split: ${a} + ${Math.floor(b / 10) * 10} = ${a + Math.floor(b / 10) * 10}, then add ${b % 10} to get ${value}.`
+          : `Split: ${a} − ${Math.floor(b / 10) * 10} = ${a - Math.floor(b / 10) * 10}, then subtract ${b % 10} to get ${value}.`,
+        smartTip: 'Split and add',
       })
     })
 
@@ -106,10 +106,10 @@ const add100: Topic = {
         const sum = a + near
         const round = near + 1
         return makeFill({
-          prompt: `${a} + ${near} = ？`,
+          prompt: `${a} + ${near} = ?`,
           answer: sum,
-          explanation: `补整法：把 ${near} 看成 ${round}，${a} + ${round} = ${a + round}，多算了 1，所以是 ${sum}。`,
-          smartTip: '补整法',
+          explanation: `Round and adjust: treat ${near} as ${round}. ${a} + ${round} = ${a + round}, which is 1 too many, so the answer is ${sum}.`,
+          smartTip: 'Round and adjust',
         })
       })
     }
@@ -120,10 +120,10 @@ const add100: Topic = {
         const b = rng.int(15, 39)
         const value = a - b
         return makeFill({
-          prompt: `${a} − ${b} = ？`,
+          prompt: `${a} − ${b} = ?`,
           answer: value,
-          explanation: `两头凑：${a} − ${a % 10} = ${a - (a % 10)}，再减去剩下的 ${b - (a % 10)}，得 ${value}。`,
-          smartTip: '两头凑',
+          explanation: `Step down to a ten: ${a} − ${a % 10} = ${a - (a % 10)}, then subtract the remaining ${b - (a % 10)} to get ${value}.`,
+          smartTip: 'Step down to a ten',
         })
       })
     }
@@ -134,9 +134,9 @@ const add100: Topic = {
         const b = rng.int(10, 40)
         const c = rng.int(5, 30)
         return makeFill({
-          prompt: `${a} − ${b} + ${c} = ？`,
+          prompt: `${a} − ${b} + ${c} = ?`,
           answer: a - b + c,
-          explanation: `按从左到右的顺序：${a} − ${b} = ${a - b}，${a - b} + ${c} = ${a - b + c}。`,
+          explanation: `Work from left to right: ${a} − ${b} = ${a - b}, then ${a - b} + ${c} = ${a - b + c}.`,
         })
       })
     }
@@ -147,9 +147,9 @@ const add100: Topic = {
         const total = rng.int(a + 11, 99)
         const b = total - a
         return makeFill({
-          prompt: `${a} + （  ） = ${total}`,
+          prompt: `${a} + (  ) = ${total}`,
           answer: b,
-          explanation: `用减法求未知加数：${total} − ${a} = ${b}。`,
+          explanation: `Use subtraction to find the missing addend: ${total} − ${a} = ${b}.`,
         })
       })
     }
@@ -160,10 +160,10 @@ const add100: Topic = {
         const b = rng.int(11, 45)
         const sum = a + b
         return makeJudge({
-          prompt: `判断：${a} + ${b} = ${sum + rng.pick([-1, 1])} —— 对吗？`,
+          prompt: `True or false: ${a} + ${b} = ${sum + rng.pick([-1, 1])}`,
           correct: false,
-          explanation: `${a} + ${b} = ${sum}，所以原题的说法是错误的。`,
-          smartTip: '拆分法',
+          explanation: `${a} + ${b} = ${sum}, so the statement is false.`,
+          smartTip: 'Split and add',
         })
       })
     }
@@ -173,59 +173,59 @@ const add100: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   2. 进位加与退位减
+   2. Carrying and borrowing
    ══════════════════════════════════════════════ */
 
 const carryBorrow: Topic = {
   id: 'g2-carryborrow',
   grade: 2,
-  name: '进位加与退位减',
+  name: 'Carrying and Borrowing',
   color: 'orange',
   icon: 'ArrowUpDown',
-  summary: '竖式计算的核心：满十进一、退一当十，做到又快又准。',
+  summary: 'The heart of column math: carry when you reach ten and borrow a ten when you need one, quickly and accurately.',
   explanation: [
     {
-      title: '满十进一',
-      body: '个位相加满十，就要向十位进 1；十位相加满十，就要向百位进 1。进上来的 1 别忘了加。',
-      example: '58 + 27：个位 8 + 7 = 15，写 5 进 1；十位 5 + 2 + 1 = 8，结果 85',
+      title: 'Carry when you reach ten',
+      body: 'When the ones add up to 10 or more, carry 1 to the tens place. When the tens add up to 10 or more, carry 1 to the hundreds place. Do not forget to add the carried 1.',
+      example: '58 + 27: ones 8 + 7 = 15, write 5 and carry 1; tens 5 + 2 + 1 = 8, so the answer is 85',
     },
     {
-      title: '退一当十',
-      body: '个位不够减时，从十位退 1，在个位上当 10 用；十位被退走 1 后要记得减 1。',
-      example: '62 − 37：个位 2 不够减 7，退 1 当 10，12 − 7 = 5；十位 6 − 1 − 3 = 2，结果 25',
+      title: 'Borrow a ten',
+      body: 'When the ones digit is too small to subtract from, borrow 1 from the tens place and use it as 10 in the ones place. After borrowing, remember to subtract 1 from the tens.',
+      example: '62 − 37: 2 is too small to subtract 7, so borrow 1 to make 12, and 12 − 7 = 5; tens 6 − 1 − 3 = 2, so the answer is 25',
     },
     {
-      title: '验算习惯',
-      body: '加法可以用交换加数或减法验算；减法可以用加法验算（差 + 减数 = 被减数）。',
-      example: '85 − 27 = 58，验算：58 + 27 = 85 ✓',
+      title: 'The habit of checking',
+      body: 'Check addition by swapping the addends or by subtracting. Check subtraction by adding (difference + subtracted number = starting number).',
+      example: '85 − 27 = 58. Check: 58 + 27 = 85 ✓',
     },
   ],
   smartMethods: [
     {
-      name: '进位标记法',
-      when: '个位相加满十时',
-      steps: ['个位相加，结果满十就在十位旁写个小「1」', '个位写结果的个位数', '十位相加时别忘加上小 1'],
-      example: '58 + 27 → 个位进 1，十位 5 + 2 + 1 = 8',
+      name: 'Mark the carry',
+      when: 'The ones add up to 10 or more',
+      steps: ['Add the ones. If the result is 10 or more, write a small "1" beside the tens', 'Write the ones digit of the result in the ones place', 'When you add the tens, remember to add the small 1'],
+      example: '58 + 27 → carry 1 from the ones, tens 5 + 2 + 1 = 8',
     },
     {
-      name: '退位点法',
-      when: '个位不够减时',
-      steps: ['在被减数十位上点一个点表示退 1', '个位加上 10 再减', '十位计算时先减掉退走的 1'],
-      example: '62 − 37 → 十位 6 变成 5，5 − 3 = 2',
+      name: 'Mark the borrow',
+      when: 'The ones digit is too small to subtract from',
+      steps: ['Put a dot over the tens digit of the first number to show you borrowed 1', 'Add 10 to the ones digit, then subtract', 'When you do the tens, subtract the 1 you borrowed first'],
+      example: '62 − 37 → the tens digit 6 becomes 5, and 5 − 3 = 2',
     },
     {
-      name: '加减互验',
-      when: '算完想确认对不对时',
-      steps: ['减法用加法验：差 + 减数', '看是否等于被减数', '不相等就重新算一遍'],
-      example: '71 − 46 = 25，验算 25 + 46 = 71 ✓',
+      name: 'Check with the inverse',
+      when: 'You want to make sure your answer is right',
+      steps: ['Check subtraction with addition: difference + subtracted number', 'See whether it equals the starting number', 'If not, work it out again'],
+      example: '71 − 46 = 25. Check: 25 + 46 = 71 ✓',
     },
   ],
   levels: buildLevels(2, [
-    '个位进位加法',
-    '十位也进位的加法',
-    '个位退位减法',
-    '连续退位减法',
-    '进位退位综合与验算',
+    'Addition with carrying in the ones',
+    'Addition that also carries in the tens',
+    'Subtraction with borrowing in the ones',
+    'Subtraction with repeated borrowing',
+    'Carrying, borrowing and checking',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -237,10 +237,10 @@ const carryBorrow: Topic = {
       const b = rng.int(1, 8) * 10 + bOnes
       const sum = a + b
       return makeFill({
-        prompt: `竖式计算：${a} + ${b} = ？`,
+        prompt: `Use column addition: ${a} + ${b} = ?`,
         answer: sum,
-        explanation: `个位 ${aOnes} + ${bOnes} = ${aOnes + bOnes}，写 ${(aOnes + bOnes) % 10} 进 1；十位 ${Math.floor(a / 10)} + ${Math.floor(b / 10)} + 1 = ${Math.floor(a / 10) + Math.floor(b / 10) + 1}，结果是 ${sum}。`,
-        smartTip: '进位标记法',
+        explanation: `Ones: ${aOnes} + ${bOnes} = ${aOnes + bOnes}, write ${(aOnes + bOnes) % 10} and carry 1. Tens: ${Math.floor(a / 10)} + ${Math.floor(b / 10)} + 1 = ${Math.floor(a / 10) + Math.floor(b / 10) + 1}. The result is ${sum}.`,
+        smartTip: 'Mark the carry',
       })
     })
 
@@ -250,10 +250,10 @@ const carryBorrow: Topic = {
         const b = rng.int(55, 89)
         const sum = a + b
         return makeFill({
-          prompt: `${a} + ${b} = ？`,
+          prompt: `${a} + ${b} = ?`,
           answer: sum,
-          explanation: `个位 ${a % 10} + ${b % 10} = ${(a % 10) + (b % 10)}，进 1；十位 ${Math.floor(a / 10)} + ${Math.floor(b / 10)} + 1 = ${Math.floor(a / 10) + Math.floor(b / 10) + 1}，满十再进 1，结果是 ${sum}。`,
-          smartTip: '进位标记法',
+          explanation: `Ones: ${a % 10} + ${b % 10} = ${(a % 10) + (b % 10)}, carry 1. Tens: ${Math.floor(a / 10)} + ${Math.floor(b / 10)} + 1 = ${Math.floor(a / 10) + Math.floor(b / 10) + 1}, which reaches ten so carry 1 again. The result is ${sum}.`,
+          smartTip: 'Mark the carry',
         })
       })
     }
@@ -266,10 +266,10 @@ const carryBorrow: Topic = {
         const b = rng.int(1, Math.floor(a / 10) - 1) * 10 + bOnes
         const diff = a - b
         return makeFill({
-          prompt: `${a} − ${b} = ？`,
+          prompt: `${a} − ${b} = ?`,
           answer: diff,
-          explanation: `个位 ${aOnes} 不够减 ${bOnes}，从十位退 1：${aOnes + 10} − ${bOnes} = ${aOnes + 10 - bOnes}；十位 ${Math.floor(a / 10)} − 1 − ${Math.floor(b / 10)} = ${Math.floor(a / 10) - 1 - Math.floor(b / 10)}，结果是 ${diff}。`,
-          smartTip: '退位点法',
+          explanation: `The ones digit ${aOnes} is too small to subtract ${bOnes}, so borrow 1 from the tens: ${aOnes + 10} − ${bOnes} = ${aOnes + 10 - bOnes}. Tens: ${Math.floor(a / 10)} − 1 − ${Math.floor(b / 10)} = ${Math.floor(a / 10) - 1 - Math.floor(b / 10)}. The result is ${diff}.`,
+          smartTip: 'Mark the borrow',
         })
       })
     }
@@ -280,10 +280,10 @@ const carryBorrow: Topic = {
         const b = rng.int(50, a - 1)
         const diff = a - b
         return makeFill({
-          prompt: `${a} − ${b} = ？`,
+          prompt: `${a} − ${b} = ?`,
           answer: diff,
-          explanation: `按位退位计算，结果是 ${diff}。可以用加法验算：${diff} + ${b} = ${a}。`,
-          smartTip: '加减互验',
+          explanation: `Borrow place by place and the result is ${diff}. You can check by adding: ${diff} + ${b} = ${a}.`,
+          smartTip: 'Check with the inverse',
         })
       })
     }
@@ -294,10 +294,10 @@ const carryBorrow: Topic = {
         const b = rng.int(15, Math.max(16, a - 1))
         const diff = a - b
         return makeJudge({
-          prompt: `判断：${a} − ${b} = ${diff} 对吗？`,
+          prompt: `True or false: ${a} − ${b} = ${diff}`,
           correct: true,
-          explanation: `用加法验算：${diff} + ${b} = ${diff + b}，正好等于 ${a}，所以正确。`,
-          smartTip: '加减互验',
+          explanation: `Check with addition: ${diff} + ${b} = ${diff + b}, which equals ${a}, so the statement is true.`,
+          smartTip: 'Check with the inverse',
         })
       })
     }
@@ -308,11 +308,11 @@ const carryBorrow: Topic = {
         const b = rng.int(16, 59)
         const sum = a + b
         return makeChoice({
-          prompt: `${a} + ${b} = ？`,
+          prompt: `${a} + ${b} = ?`,
           answer: String(sum),
           wrong: [String(sum - 10), String(sum + 10), String(sum - 1)],
-          explanation: `个位 ${a % 10} + ${b % 10} = ${(a % 10) + (b % 10)}，满十进 1；十位加上进位的 1，结果是 ${sum}。`,
-          smartTip: '进位标记法',
+          explanation: `Ones: ${a % 10} + ${b % 10} = ${(a % 10) + (b % 10)}, carry 1. Add the carried 1 to the tens, and the result is ${sum}.`,
+          smartTip: 'Mark the carry',
         })
       })
     }
@@ -323,10 +323,10 @@ const carryBorrow: Topic = {
         const a = rng.int(23, 89)
         const b = total - a
         return makeFill({
-          prompt: `${a} + （  ） = 100`,
+          prompt: `${a} + (  ) = 100`,
           answer: b,
-          explanation: `凑百：100 − ${a} = ${b}，可以先凑到整十再加剩下的。`,
-          smartTip: '补整法',
+          explanation: `Make 100: 100 − ${a} = ${b}. You can also go up to the next ten first, then add the rest.`,
+          smartTip: 'Round and adjust',
         })
       })
     }
@@ -336,59 +336,59 @@ const carryBorrow: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   3. 乘法入门
+   3. Introduction to multiplication
    ══════════════════════════════════════════════ */
 
 const multiplyIntro: Topic = {
   id: 'g2-multintro',
   grade: 2,
-  name: '乘法入门',
+  name: 'Introduction to Multiplication',
   color: 'green',
   icon: 'X',
-  summary: '从「几个几」认识乘法，熟记 2～5 的乘法口诀。',
+  summary: 'Meet multiplication as "groups of", and memorize the times tables for 2 to 5.',
   explanation: [
     {
-      title: '乘法是求几个相同加数的和',
-      body: '求几个相同加数的和，用乘法计算更简便。相同加数 × 个数 = 总数。',
+      title: 'Multiplication adds equal groups',
+      body: 'To find the total of several equal groups, multiplication is quicker. Number in each group × number of groups = total.',
       example: '3 + 3 + 3 + 3 = 3 × 4 = 12',
     },
     {
-      title: '乘法算式的读法',
-      body: '「×」读作乘号，a × b = c 中 a 和 b 都叫乘数，c 叫积。读的时候从左往右读。',
-      example: '3 × 4 = 12 读作「三乘四等于十二」',
+      title: 'How to read a multiplication sentence',
+      body: '"×" is read "times". In a × b = c, a and b are called factors and c is called the product. Read it from left to right.',
+      example: '3 × 4 = 12 is read "three times four equals twelve"',
     },
     {
-      title: '乘法口诀',
-      body: '乘法口诀是计算乘法的捷径。口诀中较小的数在前，较大的数在后，一句口诀可以算两道算式。',
-      example: '三四十二 → 3 × 4 = 12，4 × 3 = 12',
+      title: 'Times tables',
+      body: 'Times tables are a shortcut for multiplying. Each fact works both ways, so one fact gives you two multiplication sentences.',
+      example: '3 × 4 = 12 and 4 × 3 = 12',
     },
   ],
   smartMethods: [
     {
-      name: '几个几 → 乘法',
-      when: '看到连加算式想改写时',
-      steps: ['数一数相同的加数是几', '数一数一共出现了几次', '写成「几 × 几」'],
+      name: 'Groups of → multiplication',
+      when: 'You see a repeated addition and want to rewrite it',
+      steps: ['Find the number that repeats', 'Count how many times it appears', 'Write it as "number × times"'],
       example: '5 + 5 + 5 = 5 × 3 = 15',
     },
     {
-      name: '交换乘数',
-      when: '口诀想不起来时',
-      steps: ['把两个乘数交换位置', '换成你更熟的那一句口诀', '积不变'],
-      example: '7 × 3 想不起来？想 3 × 7 = 21',
+      name: 'Swap the factors',
+      when: 'You cannot remember a times table fact',
+      steps: ['Swap the two factors', 'Use the fact you know better', 'The product stays the same'],
+      example: 'Cannot remember 7 × 3? Think 3 × 7 = 21',
     },
     {
-      name: '分组数数',
-      when: '看图列乘法算式时',
-      steps: ['先数每组有几个', '再数一共有几组', '每份数 × 份数 = 总数'],
-      example: '每组 4 个，共 3 组 → 4 × 3 = 12',
+      name: 'Count the groups',
+      when: 'Writing a multiplication sentence from a picture',
+      steps: ['Count how many are in each group', 'Count how many groups there are', 'Number in each group × number of groups = total'],
+      example: '4 in each group, 3 groups → 4 × 3 = 12',
     },
   ],
   levels: buildLevels(2, [
-    '把连加改写成乘法',
-    '看图列乘法算式',
-    '2～5 的乘法口诀',
-    '乘法算式填空',
-    '乘法与加法对比应用',
+    'Rewrite repeated addition as multiplication',
+    'Write multiplication sentences from pictures',
+    'Times tables for 2 to 5',
+    'Fill in multiplication sentences',
+    'Compare multiplication and addition',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -397,10 +397,10 @@ const multiplyIntro: Topic = {
       const a = rng.int(2, [5, 6, 8, 9, 9][level - 1])
       const times = rng.int(2, [5, 6, 7, 8, 9][level - 1])
       return makeFill({
-        prompt: `${Array.from({ length: times }, () => a).join(' + ')} = ？（写成乘法结果）`,
+        prompt: `${Array.from({ length: times }, () => a).join(' + ')} = ? (give the result as a multiplication)`,
         answer: a * times,
-        explanation: `${times} 个 ${a} 相加，写成乘法是 ${a} × ${times} = ${a * times}。`,
-        smartTip: '几个几 → 乘法',
+        explanation: `Adding ${a} ${times} times is written as ${a} × ${times} = ${a * times}.`,
+        smartTip: 'Groups of → multiplication',
       })
     })
 
@@ -408,10 +408,10 @@ const multiplyIntro: Topic = {
       const a = rng.int(2, [5, 7, 9, 9, 9][level - 1])
       const times = rng.int(2, [5, 6, 8, 9, 9][level - 1])
       return makeFill({
-        prompt: `${a} × ${times} = ？`,
+        prompt: `${a} × ${times} = ?`,
         answer: a * times,
-        explanation: `口诀：${a} × ${times} = ${a * times}。也可以想 ${times} 个 ${a} 相加。`,
-        smartTip: '交换乘数',
+        explanation: `Times table: ${a} × ${times} = ${a * times}. You can also think of adding ${a} ${times} times.`,
+        smartTip: 'Swap the factors',
       })
     })
 
@@ -420,11 +420,11 @@ const multiplyIntro: Topic = {
         const each = rng.int(2, 6)
         const groups = rng.int(2, 6)
         return makeFill({
-          prompt: `有 ${groups} 盘苹果，每盘放 ${each} 个，一共有多少个苹果？`,
+          prompt: `There are ${groups} plates of apples with ${each} apples on each plate. How many apples are there in all?`,
           answer: each * groups,
-          unit: '个',
-          explanation: `每份数 × 份数：${each} × ${groups} = ${each * groups} 个。`,
-          smartTip: '分组数数',
+          unit: 'apples',
+          explanation: `Number in each group × number of groups: ${each} × ${groups} = ${each * groups} apples.`,
+          smartTip: 'Count the groups',
         })
       })
     }
@@ -435,11 +435,11 @@ const multiplyIntro: Topic = {
         const b = rng.int(2, 9)
         const product = a * b
         return makeChoice({
-          prompt: `${a} × ${b} = ？`,
+          prompt: `${a} × ${b} = ?`,
           answer: String(product),
           wrong: [String(product + a), String(product - a), String(product + b)],
-          explanation: `口诀：${a} × ${b} = ${product}。${b} 个 ${a} 相加也等于 ${product}。`,
-          smartTip: '交换乘数',
+          explanation: `Times table: ${a} × ${b} = ${product}. Adding ${a} ${b} times also gives ${product}.`,
+          smartTip: 'Swap the factors',
         })
       })
     }
@@ -450,9 +450,9 @@ const multiplyIntro: Topic = {
         const b = rng.int(2, 9)
         const product = a * b
         return makeFill({
-          prompt: `${a} × （  ） = ${product}`,
+          prompt: `${a} × (  ) = ${product}`,
           answer: b,
-          explanation: `想口诀：${a} × ${b} = ${product}，所以括号里填 ${b}。`,
+          explanation: `Think of the times table: ${a} × ${b} = ${product}, so the blank is ${b}.`,
         })
       })
     }
@@ -464,10 +464,10 @@ const multiplyIntro: Topic = {
         const product = a * b
         const sum = a + b
         return makeChoice({
-          prompt: `下面哪个算式的结果最大？\nA. ${a} × ${b}　　B. ${a} + ${b}　　C. ${a} × 2　　D. ${b} + ${b}`,
+          prompt: `Which expression has the biggest result?\nA. ${a} × ${b} | B. ${a} + ${b} | C. ${a} × 2 | D. ${b} + ${b}`,
           answer: 'A',
           wrong: ['B', 'C', 'D'],
-          explanation: `A = ${product}，B = ${sum}，C = ${a * 2}，D = ${b * 2}，最大的是 A（${product}）。`,
+          explanation: `A = ${product}, B = ${sum}, C = ${a * 2}, D = ${b * 2}. The biggest is A (${product}).`,
         })
       })
     }
@@ -478,10 +478,10 @@ const multiplyIntro: Topic = {
         const b = rng.int(3, 8)
         const product = a * b
         return makeJudge({
-          prompt: `判断：${a} × ${b} 和 ${b} × ${a} 的结果相同。—— 对吗？`,
+          prompt: `True or false: ${a} × ${b} and ${b} × ${a} have the same result.`,
           correct: true,
-          explanation: `交换两个乘数的位置，积不变：${a} × ${b} = ${b} × ${a} = ${product}。`,
-          smartTip: '交换乘数',
+          explanation: `Swapping the two factors does not change the product: ${a} × ${b} = ${b} × ${a} = ${product}.`,
+          smartTip: 'Swap the factors',
         })
       })
     }
@@ -491,59 +491,59 @@ const multiplyIntro: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   4. 认识时间
+   4. Telling time
    ══════════════════════════════════════════════ */
 
 const time: Topic = {
   id: 'g2-time',
   grade: 2,
-  name: '认识时间',
+  name: 'Telling Time',
   color: 'pink',
   icon: 'Clock',
-  summary: '会认几时几分，掌握时分秒的换算和经过时间的计算。',
+  summary: 'Read the time in hours and minutes, convert hours, minutes and seconds, and work out elapsed time.',
   explanation: [
     {
-      title: '钟面上的大格和小格',
-      body: '钟面上一共有 12 个大格、60 个小格。时针走一大格是 1 小时，分针走一小格是 1 分钟，走一大格是 5 分钟。',
-      example: '分针从 12 走到 3，走了 3 大格 = 15 分钟',
+      title: 'Big marks and small marks on a clock',
+      body: 'A clock face has 12 big marks and 60 small marks. The hour hand moving one big mark is 1 hour. The minute hand moving one small mark is 1 minute, and moving one big mark is 5 minutes.',
+      example: 'The minute hand goes from 12 to 3, which is 3 big marks = 15 minutes',
     },
     {
-      title: '认读几时几分',
-      body: '看时针过了几就是几时，再看分针从 12 起走了多少小格就是多少分。',
-      example: '时针过 8，分针指到 30 分 → 8:30',
+      title: 'Reading hours and minutes',
+      body: 'Look at which number the hour hand has passed to get the hour. Then count how many small marks the minute hand is past 12 to get the minutes.',
+      example: 'Hour hand just past 8, minute hand at 30 minutes → 8:30',
     },
     {
-      title: '时间单位换算',
-      body: '1 时 = 60 分，1 分 = 60 秒，半小时 = 30 分。大单位换小单位乘 60，小单位换大单位除以 60。',
-      example: '2 时 = 120 分，180 秒 = 3 分',
+      title: 'Converting time units',
+      body: '1 hour = 60 minutes, 1 minute = 60 seconds, and half an hour = 30 minutes. To change a big unit to a small unit, multiply by 60. To change a small unit to a big unit, divide by 60.',
+      example: '2 hours = 120 minutes, 180 seconds = 3 minutes',
     },
   ],
   smartMethods: [
     {
-      name: '分针跳格法',
-      when: '读分钟数时',
-      steps: ['看分针指在第几个数字上', '用这个数字乘 5', '再看多出的小格加几'],
-      example: '分针指着 7 → 7 × 5 = 35 分',
+      name: 'Count the minute marks',
+      when: 'Reading the minutes',
+      steps: ['See which number the minute hand points to', 'Multiply that number by 5', 'Then add any extra small marks'],
+      example: 'The minute hand points to 7 → 7 × 5 = 35 minutes',
     },
     {
-      name: '经过时间分段算',
-      when: '求从几点到几点经过多久',
-      steps: ['先算到下一个整时经过多少分', '再算整时到整时经过多少时', '最后加上零头的分钟'],
-      example: '7:40 → 8:20：20 分 + 20 分 = 40 分',
+      name: 'Split the elapsed time',
+      when: 'Finding how long it is from one time to another',
+      steps: ['First work out the minutes to the next whole hour', 'Then work out the whole hours to the final hour', 'Finally add the leftover minutes'],
+      example: '7:40 → 8:20: 20 minutes + 20 minutes = 40 minutes',
     },
     {
-      name: '大化小乘 60',
-      when: '时、分、秒互换时',
-      steps: ['大单位换小单位就乘 60', '小单位换大单位就除以 60', '写答案时别忘带单位'],
-      example: '3 时 = 3 × 60 = 180 分',
+      name: 'Big to small: multiply by 60',
+      when: 'Converting between hours, minutes and seconds',
+      steps: ['Big unit to small unit: multiply by 60', 'Small unit to big unit: divide by 60', 'Do not forget to write the unit in your answer'],
+      example: '3 hours = 3 × 60 = 180 minutes',
     },
   ],
   levels: buildLevels(2, [
-    '认读整时和半时',
-    '认读几时几分',
-    '时、分、秒的换算',
-    '计算经过的时间',
-    '时间的综合应用',
+    'Read whole hours and half hours',
+    'Read hours and minutes',
+    'Convert hours, minutes and seconds',
+    'Work out elapsed time',
+    'Time word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -553,15 +553,15 @@ const time: Topic = {
       const minuteMark = rng.pick([0, 6])
       const minute = minuteMark === 0 ? 0 : 30
       return makeChoice({
-        prompt: `钟面上分针指着 ${minuteMark === 0 ? '12' : '6'}，时针指着 ${hour}，这时是几时？`,
-        answer: minute === 0 ? `${hour} 时` : `${hour} 时 30 分`,
+        prompt: `On a clock the minute hand points to ${minuteMark === 0 ? '12' : '6'} and the hour hand points to ${hour}. What time is it?`,
+        answer: minute === 0 ? `${hour}:00` : `${hour}:30`,
         wrong: [
-          minute === 0 ? `${hour} 时 30 分` : `${hour} 时`,
-          `${hour + 1 > 12 ? 1 : hour + 1} 时`,
-          `${hour} 时 15 分`,
+          minute === 0 ? `${hour}:30` : `${hour}:00`,
+          `${hour + 1 > 12 ? 1 : hour + 1}:00`,
+          `${hour}:15`,
         ],
-        explanation: `分针指着 ${minuteMark === 0 ? '12' : '6'} 是 ${minute} 分，时针指着 ${hour} 就是 ${hour} 时，所以是 ${hour} 时${minute === 0 ? '' : ' 30 分'}。`,
-        smartTip: '分针跳格法',
+        explanation: `The minute hand at ${minuteMark === 0 ? '12' : '6'} means ${minute} minutes, and the hour hand at ${hour} means ${hour} o'clock, so the time is ${hour}:${minute === 0 ? '00' : '30'}.`,
+        smartTip: 'Count the minute marks',
       })
     })
 
@@ -571,11 +571,11 @@ const time: Topic = {
         const mark = rng.int(1, 11)
         const minute = mark * 5
         return makeFill({
-          prompt: `分针指着 ${mark}，时针刚过 ${hour}，现在的分钟数是多少？`,
+          prompt: `The minute hand points to ${mark} and the hour hand has just passed ${hour}. How many minutes past the hour is it?`,
           answer: minute,
-          unit: '分',
-          explanation: `分针跳格法：${mark} × 5 = ${minute} 分。`,
-          smartTip: '分针跳格法',
+          unit: 'minutes',
+          explanation: `Count the minute marks: ${mark} × 5 = ${minute} minutes.`,
+          smartTip: 'Count the minute marks',
         })
       })
     }
@@ -584,11 +584,11 @@ const time: Topic = {
       makers.push(() => {
         const hours = rng.int(1, 5)
         return makeFill({
-          prompt: `${hours} 时 = （  ）分`,
+          prompt: `${hours} hours = (  ) minutes`,
           answer: hours * 60,
-          unit: '分',
-          explanation: `1 时 = 60 分，${hours} × 60 = ${hours * 60} 分。`,
-          smartTip: '大化小乘 60',
+          unit: 'minutes',
+          explanation: `1 hour = 60 minutes, so ${hours} × 60 = ${hours * 60} minutes.`,
+          smartTip: 'Big to small: multiply by 60',
         })
       })
     }
@@ -597,11 +597,11 @@ const time: Topic = {
       makers.push(() => {
         const minutes = rng.int(2, 6) * 60
         return makeFill({
-          prompt: `${minutes} 分 = （  ）时`,
+          prompt: `${minutes} minutes = (  ) hours`,
           answer: minutes / 60,
-          unit: '时',
-          explanation: `小单位换大单位除以 60：${minutes} ÷ 60 = ${minutes / 60} 时。`,
-          smartTip: '大化小乘 60',
+          unit: 'hours',
+          explanation: `Small unit to big unit: divide by 60. ${minutes} ÷ 60 = ${minutes / 60} hours.`,
+          smartTip: 'Big to small: multiply by 60',
         })
       })
     }
@@ -610,11 +610,11 @@ const time: Topic = {
       makers.push(() => {
         const seconds = rng.int(2, 6) * 60
         return makeFill({
-          prompt: `${seconds} 秒 = （  ）分`,
+          prompt: `${seconds} seconds = (  ) minutes`,
           answer: seconds / 60,
-          unit: '分',
-          explanation: `1 分 = 60 秒，${seconds} ÷ 60 = ${seconds / 60} 分。`,
-          smartTip: '大化小乘 60',
+          unit: 'minutes',
+          explanation: `1 minute = 60 seconds, so ${seconds} ÷ 60 = ${seconds / 60} minutes.`,
+          smartTip: 'Big to small: multiply by 60',
         })
       })
     }
@@ -628,11 +628,11 @@ const time: Topic = {
         const endHour = Math.floor(totalMin / 60) % 24
         const endMin = totalMin % 60
         return makeFill({
-          prompt: `一场电影 ${startHour}:${String(startMin).padStart(2, '0')} 开始，放映 ${duration} 分钟，结束时间是几时几分？（只填分钟数）`,
+          prompt: `A movie starts at ${startHour}:${String(startMin).padStart(2, '0')} and runs for ${duration} minutes. What time does it end? (Enter only the minutes.)`,
           answer: endMin,
-          unit: '分',
-          explanation: `${startHour}:${String(startMin).padStart(2, '0')} 加上 ${duration} 分 = ${endHour}:${String(endMin).padStart(2, '0')}，分钟数是 ${endMin}。`,
-          smartTip: '经过时间分段算',
+          unit: 'minutes',
+          explanation: `${startHour}:${String(startMin).padStart(2, '0')} plus ${duration} minutes = ${endHour}:${String(endMin).padStart(2, '0')}, so the minutes are ${endMin}.`,
+          smartTip: 'Split the elapsed time',
         })
       })
     }
@@ -642,11 +642,11 @@ const time: Topic = {
         const startMin = rng.pick([10, 15, 20, 25, 30])
         const endMin = startMin + rng.pick([20, 30, 40])
         return makeFill({
-          prompt: `小红从 7:${String(startMin).padStart(2, '0')} 开始写作业，写到 7:${String(endMin).padStart(2, '0')}，一共写了多少分钟？`,
+          prompt: `Mia started her homework at 7:${String(startMin).padStart(2, '0')} and finished at 7:${String(endMin).padStart(2, '0')}. How many minutes did she work?`,
           answer: endMin - startMin,
-          unit: '分钟',
-          explanation: `同一个小时内，直接用后面的分钟减前面的：${endMin} − ${startMin} = ${endMin - startMin} 分钟。`,
-          smartTip: '经过时间分段算',
+          unit: 'minutes',
+          explanation: `Within the same hour, subtract the earlier minutes from the later minutes: ${endMin} − ${startMin} = ${endMin - startMin} minutes.`,
+          smartTip: 'Split the elapsed time',
         })
       })
     }
@@ -654,18 +654,18 @@ const time: Topic = {
     if (level >= 5) {
       makers.push(() => {
         const cases: Array<[string, string, string[]]> = [
-          ['时针走一大格是多久？', '1 小时', ['5 分钟', '1 分钟', '12 小时']],
-          ['分针走一小格是多久？', '1 分钟', ['5 分钟', '1 小时', '1 秒']],
-          ['分针走一圈，时针走了多远？', '1 大格', ['1 小格', '一圈', '6 大格']],
-          ['1 小时 30 分等于多少分钟？', '90 分钟', ['130 分钟', '60 分钟', '100 分钟']],
+          ['How long does the hour hand take to move one big mark?', '1 hour', ['5 minutes', '1 minute', '12 hours']],
+          ['How long does the minute hand take to move one small mark?', '1 minute', ['5 minutes', '1 hour', '1 second']],
+          ['When the minute hand goes once around, how far does the hour hand move?', '1 big mark', ['1 small mark', 'once around', '6 big marks']],
+          ['How many minutes are in 1 hour 30 minutes?', '90 minutes', ['130 minutes', '60 minutes', '100 minutes']],
         ]
         const [prompt, answer, wrong] = rng.pick(cases)
         return makeChoice({
           prompt,
           answer,
           wrong,
-          explanation: `正确答案是${answer}。记住 1 时 = 60 分，钟面 12 个大格、60 个小格。`,
-          smartTip: '大化小乘 60',
+          explanation: `The correct answer is ${answer}. Remember 1 hour = 60 minutes, and a clock face has 12 big marks and 60 small marks.`,
+          smartTip: 'Big to small: multiply by 60',
         })
       })
     }
@@ -675,59 +675,59 @@ const time: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   5. 长度与测量
+   5. Length and measuring
    ══════════════════════════════════════════════ */
 
 const measure: Topic = {
   id: 'g2-measure',
   grade: 2,
-  name: '长度与测量',
+  name: 'Length and Measuring',
   color: 'purple',
   icon: 'Ruler',
-  summary: '认识厘米和米，会选单位、换算单位、做简单的长度计算。',
+  summary: 'Learn centimeters and meters, choose units, convert units, and do simple length calculations.',
   explanation: [
     {
-      title: '厘米和米',
-      body: '量比较短的物体用「厘米（cm）」，量比较长的物体用「米（m）」。1 米 = 100 厘米。',
-      example: '铅笔长约 18 厘米，教室长约 9 米',
+      title: 'Centimeters and meters',
+      body: 'Use centimeters (cm) to measure shorter objects and meters (m) to measure longer ones. 1 meter = 100 centimeters.',
+      example: 'A pencil is about 18 cm long and a classroom is about 9 m long',
     },
     {
-      title: '正确测量',
-      body: '测量时要把尺子的 0 刻度对准物体的一端，再看另一端对着刻度几。尺子要放平、贴紧。',
-      example: '从 0 到 7 就是 7 厘米',
+      title: 'Measuring correctly',
+      body: 'Line up the 0 mark of the ruler with one end of the object, then read the mark at the other end. Keep the ruler flat and tight against the object.',
+      example: 'From 0 to 7 is 7 cm',
     },
     {
-      title: '从任意刻度开始量',
-      body: '如果物体一端没对准 0 刻度，就用「末端刻度 − 起点刻度」求长度。',
-      example: '从刻度 3 到刻度 10：10 − 3 = 7 厘米',
+      title: 'Measuring from any mark',
+      body: 'If one end of the object is not at the 0 mark, find the length with "end mark − start mark".',
+      example: 'From mark 3 to mark 10: 10 − 3 = 7 cm',
     },
   ],
   smartMethods: [
     {
-      name: '身体尺估算法',
-      when: '没有尺子要估长度时',
-      steps: ['记住一拃大约 10 厘米', '记住一步大约 50 厘米', '张开双臂大约 1 米'],
-      example: '课桌大约 6 拃 → 约 60 厘米',
+      name: 'Body ruler estimation',
+      when: 'You have no ruler and need to estimate a length',
+      steps: ['Remember that a hand span is about 10 cm', 'Remember that one big step is about 50 cm', 'Arms stretched wide are about 1 m'],
+      example: 'A desk is about 6 hand spans → about 60 cm',
     },
     {
-      name: '末端减起点',
-      when: '物体不是从 0 刻度开始量时',
-      steps: ['读出起点的刻度', '读出末端的刻度', '末端 − 起点 = 长度'],
-      example: '10 − 3 = 7 厘米',
+      name: 'End minus start',
+      when: 'The object is not measured from the 0 mark',
+      steps: ['Read the mark at the start', 'Read the mark at the end', 'End − start = length'],
+      example: '10 − 3 = 7 cm',
     },
     {
-      name: '单位换算进率',
-      when: '米和厘米互换时',
-      steps: ['记住 1 米 = 100 厘米', '米换厘米添两个 0', '厘米换米去掉两个 0'],
-      example: '3 米 = 300 厘米，500 厘米 = 5 米',
+      name: 'Unit conversion rates',
+      when: 'Converting between meters and centimeters',
+      steps: ['Remember 1 m = 100 cm', 'Meters to centimeters: add two zeros', 'Centimeters to meters: remove two zeros'],
+      example: '3 m = 300 cm, 500 cm = 5 m',
     },
   ],
   levels: buildLevels(2, [
-    '认识厘米，正确测量',
-    '选择合适的长度单位',
-    '米和厘米的换算',
-    '长度的简单计算',
-    '测量的综合应用',
+    'Learn centimeters and measure correctly',
+    'Choose a suitable unit of length',
+    'Convert meters and centimeters',
+    'Simple length calculations',
+    'Measuring word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -736,31 +736,31 @@ const measure: Topic = {
       const start = rng.int(0, 5)
       const length = rng.int(3, [10, 15, 20, 25, 30][level - 1])
       return makeFill({
-        prompt: `用尺子量一根铅笔，一端对着刻度 ${start}，另一端对着刻度 ${start + length}，铅笔长多少厘米？`,
+        prompt: `A pencil is measured with a ruler. One end is at mark ${start} and the other end is at mark ${start + length}. How many centimeters long is the pencil?`,
         answer: length,
-        unit: '厘米',
-        explanation: `末端减起点：${start + length} − ${start} = ${length} 厘米。`,
-        smartTip: '末端减起点',
+        unit: 'cm',
+        explanation: `End minus start: ${start + length} − ${start} = ${length} cm.`,
+        smartTip: 'End minus start',
       })
     })
 
     if (level >= 2) {
       makers.push(() => {
         const cases: Array<[string, string]> = [
-          ['一支铅笔的长度', '厘米'],
-          ['教室的长', '米'],
-          ['一根跳绳的长', '米'],
-          ['数学书封面的宽', '厘米'],
-          ['一棵大树的高度', '米'],
-          ['一枚硬币的厚度', '毫米'],
+          ['the length of a pencil', 'centimeters'],
+          ['the length of a classroom', 'meters'],
+          ['the length of a jump rope', 'meters'],
+          ['the width of a math book cover', 'centimeters'],
+          ['the height of a big tree', 'meters'],
+          ['the thickness of a coin', 'millimeters'],
         ]
         const [thing, answer] = rng.pick(cases)
         return makeChoice({
-          prompt: `测量「${thing}」，用哪个单位最合适？`,
+          prompt: `Which unit is best for measuring ${thing}?`,
           answer,
-          wrong: (['厘米', '米', '分米', '毫米'] as const).filter((u) => u !== answer),
-          explanation: `${thing}用${answer}作单位最合适。`,
-          smartTip: '身体尺估算法',
+          wrong: (['centimeters', 'meters', 'decimeters', 'millimeters'] as const).filter((u) => u !== answer),
+          explanation: `${answer.charAt(0).toUpperCase()}${answer.slice(1)} is the best unit for measuring ${thing}.`,
+          smartTip: 'Body ruler estimation',
         })
       })
     }
@@ -769,11 +769,11 @@ const measure: Topic = {
       makers.push(() => {
         const meters = rng.int(1, [5, 8, 10, 20, 50][level - 1])
         return makeFill({
-          prompt: `${meters} 米 = （  ）厘米`,
+          prompt: `${meters} m = (  ) cm`,
           answer: meters * 100,
-          unit: '厘米',
-          explanation: `1 米 = 100 厘米，${meters} × 100 = ${meters * 100} 厘米。`,
-          smartTip: '单位换算进率',
+          unit: 'cm',
+          explanation: `1 m = 100 cm, so ${meters} × 100 = ${meters * 100} cm.`,
+          smartTip: 'Unit conversion rates',
         })
       })
     }
@@ -782,11 +782,11 @@ const measure: Topic = {
       makers.push(() => {
         const meters = rng.int(2, 9)
         return makeFill({
-          prompt: `${meters * 100} 厘米 = （  ）米`,
+          prompt: `${meters * 100} cm = (  ) m`,
           answer: meters,
-          unit: '米',
-          explanation: `100 厘米 = 1 米，${meters * 100} ÷ 100 = ${meters} 米。`,
-          smartTip: '单位换算进率',
+          unit: 'm',
+          explanation: `100 cm = 1 m, so ${meters * 100} ÷ 100 = ${meters} m.`,
+          smartTip: 'Unit conversion rates',
         })
       })
     }
@@ -796,10 +796,10 @@ const measure: Topic = {
         const a = rng.int(10, 90)
         const b = rng.int(10, 90)
         return makeFill({
-          prompt: `一根绳子长 ${a} 厘米，另一根长 ${b} 厘米，两根接在一起一共长多少厘米？`,
+          prompt: `One rope is ${a} cm long and another is ${b} cm long. If they are tied end to end, how many centimeters long are they together?`,
           answer: a + b,
-          unit: '厘米',
-          explanation: `求总长用加法：${a} + ${b} = ${a + b} 厘米。`,
+          unit: 'cm',
+          explanation: `Use addition to find the total length: ${a} + ${b} = ${a + b} cm.`,
         })
       })
     }
@@ -809,10 +809,10 @@ const measure: Topic = {
         const total = rng.int(50, 200)
         const used = rng.int(10, total - 5)
         return makeFill({
-          prompt: `一根铁丝长 ${total} 厘米，用去 ${used} 厘米，还剩多少厘米？`,
+          prompt: `A piece of wire is ${total} cm long. ${used} cm is used. How many centimeters are left?`,
           answer: total - used,
-          unit: '厘米',
-          explanation: `求剩下用减法：${total} − ${used} = ${total - used} 厘米。`,
+          unit: 'cm',
+          explanation: `Use subtraction to find what is left: ${total} − ${used} = ${total - used} cm.`,
         })
       })
     }
@@ -823,11 +823,11 @@ const measure: Topic = {
         const each = rng.pick([10, 20, 25, 50])
         const pieces = (total * 100) / each
         return makeFill({
-          prompt: `一根 ${total} 米长的绳子，每 ${each} 厘米剪一段，可以剪成多少段？`,
+          prompt: `A rope is ${total} m long. It is cut into pieces of ${each} cm each. How many pieces can be cut?`,
           answer: pieces,
-          unit: '段',
-          explanation: `先统一单位：${total} 米 = ${total * 100} 厘米，再算 ${total * 100} ÷ ${each} = ${pieces} 段。`,
-          smartTip: '单位换算进率',
+          unit: 'pieces',
+          explanation: `Use the same unit first: ${total} m = ${total * 100} cm. Then ${total * 100} ÷ ${each} = ${pieces} pieces.`,
+          smartTip: 'Unit conversion rates',
         })
       })
     }
@@ -837,59 +837,59 @@ const measure: Topic = {
 }
 
 /* ══════════════════════════════════════════════
-   6. 人民币与购物
+   6. Money and shopping
    ══════════════════════════════════════════════ */
 
 const money: Topic = {
   id: 'g2-money',
   grade: 2,
-  name: '人民币与购物',
+  name: 'Money and Shopping',
   color: 'teal',
   icon: 'Coins',
-  summary: '认识元、角、分，学会换算、付钱和找零。',
+  summary: 'Learn dollars, dimes and cents, and practice converting, paying and making change.',
   explanation: [
     {
-      title: '元、角、分',
-      body: '人民币的单位有元、角、分。1 元 = 10 角，1 角 = 10 分，1 元 = 100 分。',
-      example: '3 元 = 30 角，5 角 = 50 分',
+      title: 'Dollars, dimes and cents',
+      body: 'Money here is counted in dollars, dimes and cents. 1 dollar = 10 dimes, 1 dime = 10 cents, and 1 dollar = 100 cents.',
+      example: '3 dollars = 30 dimes, 5 dimes = 50 cents',
     },
     {
-      title: '付钱与找零',
-      body: '买东西时，付出的钱减去商品的价格就是应找回的钱；商品的价格加起来就是应付的钱。',
-      example: '买 8 元的本子，付 10 元，找回 10 − 8 = 2 元',
+      title: 'Paying and making change',
+      body: 'When you buy something, the money you pay minus the price is the change you get back. Adding up the prices gives the amount you must pay.',
+      example: 'Buy a notebook for 8 dollars and pay 10 dollars, so the change is 10 − 8 = 2 dollars',
     },
     {
-      title: '比较价格',
-      body: '比较价格要先统一单位，再比较数字大小。单位不同不能直接比。',
-      example: '3 元 5 角 = 35 角 > 30 角',
+      title: 'Comparing prices',
+      body: 'To compare prices, first use the same unit, then compare the numbers. You cannot compare directly when the units are different.',
+      example: '3 dollars 5 dimes = 35 dimes > 30 dimes',
     },
   ],
   smartMethods: [
     {
-      name: '统一单位再算',
-      when: '元、角混在一起计算时',
-      steps: ['先把所有金额换成同一个单位', '统一计算', '最后再换回需要的单位'],
-      example: '2 元 5 角 + 3 角 = 25 角 + 3 角 = 28 角 = 2 元 8 角',
+      name: 'Convert to one unit first',
+      when: 'Dollars and dimes are mixed together in a calculation',
+      steps: ['First change every amount to the same unit', 'Calculate with that unit', 'Change back to the unit you need at the end'],
+      example: '2 dollars 5 dimes + 3 dimes = 25 dimes + 3 dimes = 28 dimes = 2 dollars 8 dimes',
     },
     {
-      name: '凑整付款',
-      when: '思考怎么付钱最方便时',
-      steps: ['看价格离哪个整元数最近', '先付到整元', '再加上零头'],
-      example: '价格 8 元 6 角：付 10 元，找回 1 元 4 角',
+      name: 'Pay with round amounts',
+      when: 'Thinking about the easiest way to pay',
+      steps: ['See which whole dollar amount the price is closest to', 'Pay up to the whole dollar first', 'Then add the small change'],
+      example: 'Price 8 dollars 6 dimes: pay 10 dollars, get back 1 dollar 4 dimes',
     },
     {
-      name: '分步找零',
-      when: '计算找回多少钱时',
-      steps: ['先算到整元差多少', '再算零头还差多少', '两部分合起来就是找零'],
-      example: '付 20 元买 13 元 5 角 → 找 6 元 5 角',
+      name: 'Make change step by step',
+      when: 'Working out how much change you get back',
+      steps: ['First find how far it is up to the next whole dollar', 'Then find the remaining small change', 'Put the two parts together to get the change'],
+      example: 'Pay 20 dollars for 13 dollars 5 dimes → change is 6 dollars 5 dimes',
     },
   ],
   levels: buildLevels(2, [
-    '认识元、角、分',
-    '元与角的换算',
-    '简单的购物计算',
-    '付钱与找零',
-    '购物综合应用',
+    'Learn dollars, dimes and cents',
+    'Convert dollars and dimes',
+    'Simple shopping calculations',
+    'Paying and making change',
+    'Shopping word problems',
   ]),
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
@@ -897,22 +897,22 @@ const money: Topic = {
     makers.push(() => {
       const yuan = rng.int(1, [5, 9, 20, 50, 100][level - 1])
       return makeFill({
-        prompt: `${yuan} 元 = （  ）角`,
+        prompt: `${yuan} dollars = (  ) dimes`,
         answer: yuan * 10,
-        unit: '角',
-        explanation: `1 元 = 10 角，${yuan} × 10 = ${yuan * 10} 角。`,
-        smartTip: '统一单位再算',
+        unit: 'dimes',
+        explanation: `1 dollar = 10 dimes, so ${yuan} × 10 = ${yuan * 10} dimes.`,
+        smartTip: 'Convert to one unit first',
       })
     })
 
     makers.push(() => {
       const jiao = rng.int(2, 9) * 10
       return makeFill({
-        prompt: `${jiao} 角 = （  ）元`,
+        prompt: `${jiao} dimes = (  ) dollars`,
         answer: jiao / 10,
-        unit: '元',
-        explanation: `10 角 = 1 元，${jiao} ÷ 10 = ${jiao / 10} 元。`,
-        smartTip: '统一单位再算',
+        unit: 'dollars',
+        explanation: `10 dimes = 1 dollar, so ${jiao} ÷ 10 = ${jiao / 10} dollars.`,
+        smartTip: 'Convert to one unit first',
       })
     })
 
@@ -921,11 +921,11 @@ const money: Topic = {
         const yuan = rng.int(1, 9)
         const jiao = rng.int(1, 9)
         return makeFill({
-          prompt: `${yuan} 元 ${jiao} 角 = （  ）角`,
+          prompt: `${yuan} dollars ${jiao} dimes = (  ) dimes`,
           answer: yuan * 10 + jiao,
-          unit: '角',
-          explanation: `${yuan} 元 = ${yuan * 10} 角，加上 ${jiao} 角，一共 ${yuan * 10 + jiao} 角。`,
-          smartTip: '统一单位再算',
+          unit: 'dimes',
+          explanation: `${yuan} dollars = ${yuan * 10} dimes. Add ${jiao} dimes and you get ${yuan * 10 + jiao} dimes in all.`,
+          smartTip: 'Convert to one unit first',
         })
       })
     }
@@ -935,10 +935,10 @@ const money: Topic = {
         const a = rng.int(1, 20)
         const b = rng.int(1, 20)
         return makeFill({
-          prompt: `买一支笔 ${a} 元，买一个本子 ${b} 元，一共要付多少元？`,
+          prompt: `A pen costs ${a} dollars and a notebook costs ${b} dollars. How many dollars do you have to pay in all?`,
           answer: a + b,
-          unit: '元',
-          explanation: `求一共用加法：${a} + ${b} = ${a + b} 元。`,
+          unit: 'dollars',
+          explanation: `Use addition to find the total: ${a} + ${b} = ${a + b} dollars.`,
         })
       })
     }
@@ -948,11 +948,11 @@ const money: Topic = {
         const price = rng.int(3, 45)
         const pay = rng.pick([50, 20, 100, 10].filter((p) => p > price))
         return makeFill({
-          prompt: `一个书包 ${price} 元，付了 ${pay} 元，应找回多少元？`,
+          prompt: `A backpack costs ${price} dollars. You pay ${pay} dollars. How many dollars do you get back in change?`,
           answer: pay - price,
-          unit: '元',
-          explanation: `付出的钱 − 价格 = 找零：${pay} − ${price} = ${pay - price} 元。`,
-          smartTip: '分步找零',
+          unit: 'dollars',
+          explanation: `Money paid − price = change: ${pay} − ${price} = ${pay - price} dollars.`,
+          smartTip: 'Make change step by step',
         })
       })
     }
@@ -966,11 +966,11 @@ const money: Topic = {
         const payTotalJiao = payYuan * 10
         const change = payTotalJiao - priceTotalJiao
         return makeFill({
-          prompt: `一块橡皮 ${priceYuan} 元 ${priceJiao} 角，付了 ${payYuan} 元，应找回多少角？`,
+          prompt: `An eraser costs ${priceYuan} dollars ${priceJiao} dimes. You pay ${payYuan} dollars. How many dimes do you get back in change?`,
           answer: change,
-          unit: '角',
-          explanation: `${payYuan} 元 = ${payTotalJiao} 角，${priceYuan} 元 ${priceJiao} 角 = ${priceTotalJiao} 角，找零 ${payTotalJiao} − ${priceTotalJiao} = ${change} 角。`,
-          smartTip: '分步找零',
+          unit: 'dimes',
+          explanation: `${payYuan} dollars = ${payTotalJiao} dimes and ${priceYuan} dollars ${priceJiao} dimes = ${priceTotalJiao} dimes, so the change is ${payTotalJiao} − ${priceTotalJiao} = ${change} dimes.`,
+          smartTip: 'Make change step by step',
         })
       })
     }
@@ -980,11 +980,11 @@ const money: Topic = {
         const price = rng.int(2, 9)
         const count = rng.int(2, 6)
         return makeFill({
-          prompt: `每支铅笔 ${price} 元，买 ${count} 支要付多少元？`,
+          prompt: `Each pencil costs ${price} dollars. How many dollars do ${count} pencils cost?`,
           answer: price * count,
-          unit: '元',
-          explanation: `单价 × 数量 = 总价：${price} × ${count} = ${price * count} 元。`,
-          smartTip: '凑整付款',
+          unit: 'dollars',
+          explanation: `Unit price × quantity = total price: ${price} × ${count} = ${price * count} dollars.`,
+          smartTip: 'Pay with round amounts',
         })
       })
     }
@@ -996,11 +996,11 @@ const money: Topic = {
         const priceA = a * 10 + 5
         const priceB = b * 10
         return makeChoice({
-          prompt: `下面哪个价格更贵？\nA. ${a} 元 5 角　　B. ${b} 元`,
+          prompt: `Which price is higher?\nA. ${a} dollars 5 dimes | B. ${b} dollars`,
           answer: priceA > priceB ? 'A' : 'B',
-          wrong: [priceA > priceB ? 'B' : 'A', '一样贵', '无法比较'],
-          explanation: `${a} 元 5 角 = ${priceA} 角，${b} 元 = ${priceB} 角，${priceA > priceB ? `${priceA} > ${priceB}，A 更贵` : `${priceB} > ${priceA}，B 更贵`}。`,
-          smartTip: '统一单位再算',
+          wrong: [priceA > priceB ? 'B' : 'A', 'They are the same', 'Cannot be compared'],
+          explanation: `${a} dollars 5 dimes = ${priceA} dimes and ${b} dollars = ${priceB} dimes. ${priceA > priceB ? `${priceA} > ${priceB}, so A is higher` : `${priceB} > ${priceA}, so B is higher`}.`,
+          smartTip: 'Convert to one unit first',
         })
       })
     }
@@ -1011,5 +1011,5 @@ const money: Topic = {
 
 export const grade2Topics: Topic[] = [add100, carryBorrow, multiplyIntro, time, measure, money]
 
-/** 供其它模块复用的工具 */
-export const moneyFormat = (yuan: number): string => `¥${fmt(yuan)}`
+/** Helper reused by other modules */
+export const moneyFormat = (yuan: number): string => `$${fmt(yuan)}`

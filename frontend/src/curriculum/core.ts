@@ -1,7 +1,7 @@
 import type { Question, Rng } from './types'
 
 /* ──────────────────────────────────────────────
-   随机数工具
+   Random number helpers
    ────────────────────────────────────────────── */
 
 export const createRng = (): Rng => {
@@ -29,16 +29,16 @@ export const createRng = (): Rng => {
 export const rng = createRng()
 
 /* ──────────────────────────────────────────────
-   数值工具
+   Number helpers
    ────────────────────────────────────────────── */
 
-/** 最多保留 2 位小数并去掉多余的 0 */
+/** Keep at most 2 decimal places and drop trailing zeros */
 export const fmt = (n: number): string => {
   const rounded = Math.round(n * 100) / 100
   return String(rounded)
 }
 
-/** 保留指定小数位并去掉多余 0 */
+/** Keep the given number of decimal places and drop trailing zeros */
 export const fmtFixed = (n: number, digits: number): string => {
   const rounded = Math.round(n * 10 ** digits) / 10 ** digits
   return String(rounded)
@@ -55,25 +55,25 @@ export const gcd = (a: number, b: number): number => {
   return x || 1
 }
 
-/** 约分，返回 [分子, 分母] */
+/** Reduce a fraction, returning [numerator, denominator] */
 export const simplify = (n: number, d: number): [number, number] => {
   const g = gcd(n, d)
   return [n / g, d / g]
 }
 
-/** 分数字符串：分母为 1 时只显示整数 */
+/** Fraction string: shows only the whole number when the denominator is 1 */
 export const fracStr = (n: number, d: number): string => {
   const [a, b] = simplify(n, d)
   if (b === 1) return String(a)
   return `${a}/${b}`
 }
 
-/** 限制数值在 [min, max] */
+/** Clamp a number to [min, max] */
 export const clamp = (n: number, min: number, max: number): number =>
   Math.min(max, Math.max(min, n))
 
 /* ──────────────────────────────────────────────
-   题目构造
+   Question builders
    ────────────────────────────────────────────── */
 
 let questionSeq = 0
@@ -85,7 +85,7 @@ const nextId = (): string => {
 export interface ChoiceSpec {
   prompt: string
   answer: string
-  /** 干扰项 */
+  /** Distractors */
   wrong: string[]
   explanation: string
   smartTip?: string
@@ -143,14 +143,14 @@ export const makeJudge = (spec: JudgeSpec): Question => ({
 })
 
 /* ──────────────────────────────────────────────
-   出题集合：轮换 + 去重
+   Question sets: rotation + de-duplication
    ────────────────────────────────────────────── */
 
 /**
- * 从多个出题函数中轮换生成题目，自动去重。
- * 每次调用都会打乱出题函数顺序，保证「同一关卡每次进入题目都不同」。
+ * Generate questions by rotating through several maker functions, with automatic de-duplication.
+ * The maker order is shuffled on every call so the same level has different questions each time.
  *
- * @param exclude 最近已经做过的题干，会尽量避开（题库很小的专题如乘法口诀尤其有用）
+ * @param exclude Prompts answered recently, avoided where possible (especially useful for topics with a tiny question pool, such as multiplication tables)
  */
 export const buildQuestionSet = (
   count: number,
@@ -169,14 +169,14 @@ export const buildQuestionSet = (
       const q = maker()
       const sig = `${q.prompt}|${q.answer}`
       if (seen.has(sig)) continue
-      // 前 18 次尝试优先避开最近做过的题，之后为保证题量允许复用
+      // The first 18 attempts avoid recently answered questions; after that, reuse is allowed to guarantee the question count
       if (recent?.has(q.prompt) && attempt < 18) continue
       seen.add(sig)
       result.push(q)
       added = true
     }
     if (!added) {
-      // 极端情况兜底：允许重复
+      // Last-resort fallback: allow duplicates
       const q = order[i % order.length]()
       result.push(q)
     }
@@ -186,10 +186,10 @@ export const buildQuestionSet = (
 }
 
 /* ──────────────────────────────────────────────
-   关卡与计分
+   Levels and scoring
    ────────────────────────────────────────────── */
 
-export const LEVEL_NAMES = ['入门', '进阶', '熟练', '挑战', '大师'] as const
+export const LEVEL_NAMES = ['Starter', 'Intermediate', 'Skilled', 'Challenge', 'Master'] as const
 
 const BASE_LEVELS = [
   { questionCount: 8, secondsPerQuestion: 20 },
@@ -199,7 +199,7 @@ const BASE_LEVELS = [
   { questionCount: 16, secondsPerQuestion: 12 },
 ]
 
-/** 依据年级生成 5 个关卡的题量与单题时间（低年级更宽松） */
+/** Build question count and per-question time for the 5 levels by grade (lower grades get more relaxed settings) */
 export const buildLevels = (grade: number, goals: string[]): import('./types').LevelMeta[] => {
   const countDelta = grade <= 2 ? -2 : 0
   const secondDelta = grade <= 2 ? 5 : grade >= 5 ? -2 : 0
@@ -209,11 +209,11 @@ export const buildLevels = (grade: number, goals: string[]): import('./types').L
     name: LEVEL_NAMES[index],
     questionCount: Math.max(6, base.questionCount + countDelta),
     secondsPerQuestion: Math.max(8, base.secondsPerQuestion + secondDelta),
-    goal: goals[index] ?? '认真完成所有题目',
+    goal: goals[index] ?? 'Complete all the questions carefully',
   }))
 }
 
-/** 正确率 → 星级 */
+/** Accuracy → star rating */
 export const starsForAccuracy = (accuracy: number): number => {
   if (accuracy >= 90) return 3
   if (accuracy >= 70) return 2
@@ -221,7 +221,7 @@ export const starsForAccuracy = (accuracy: number): number => {
   return 0
 }
 
-/** 判断用户答案是否正确（数字按数值比较） */
+/** Check whether the user's answer is correct (numbers are compared by value) */
 export const isAnswerCorrect = (question: Question, input: string): boolean => {
   const user = input.trim()
   const answer = question.answer.trim()
@@ -235,5 +235,5 @@ export const isAnswerCorrect = (question: Question, input: string): boolean => {
   return false
 }
 
-/** 规范化用户输入的分数比较（支持 1/2 形式） */
+/** Normalize user input for fraction comparison (supports the 1/2 form) */
 export const normalizeFractionInput = (input: string): string => input.trim().replace(/\s+/g, '')

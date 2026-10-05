@@ -50,14 +50,14 @@ function App() {
           <ProfileProvider>
             <AppHeader />
             <AnimatedRoutes>
-              <Route path="/" data-genie-title="数学乐园 · 首页" data-genie-key="Home" element={<PageTransition transition="slide-up"><Index /></PageTransition>} />
-              <Route path="/grades/:grade" data-genie-title="年级专题" data-genie-key="Grade" element={<PageTransition transition="slide-up"><GradePage /></PageTransition>} />
-              <Route path="/study/:grade/:topicId" data-genie-title="学习方法" data-genie-key="Study" element={<PageTransition transition="slide-up"><StudyPage /></PageTransition>} />
-              <Route path="/levels/:grade/:topicId" data-genie-title="关卡地图" data-genie-key="Levels" element={<PageTransition transition="slide-up"><LevelsPage /></PageTransition>} />
-              <Route path="/play/:grade/:topicId/:level" data-genie-title="闯关挑战" data-genie-key="Play" element={<PageTransition transition="fade"><PlayPage /></PageTransition>} />
-              <Route path="/result/:resultId" data-genie-title="闯关成绩" data-genie-key="Result" element={<PageTransition transition="scale"><ResultPage /></PageTransition>} />
-              <Route path="/history" data-genie-title="成绩历史" data-genie-key="History" element={<PageTransition transition="slide-up"><HistoryPage /></PageTransition>} />
-              <Route path="/profile" data-genie-title="我的档案" data-genie-key="Profile" element={<PageTransition transition="slide-up"><ProfilePage /></PageTransition>} />
+              <Route path="/" data-genie-title="MathLand · Home" data-genie-key="Home" element={<PageTransition transition="slide-up"><Index /></PageTransition>} />
+              <Route path="/grades/:grade" data-genie-title="Grade Topics" data-genie-key="Grade" element={<PageTransition transition="slide-up"><GradePage /></PageTransition>} />
+              <Route path="/study/:grade/:topicId" data-genie-title="Study Guide" data-genie-key="Study" element={<PageTransition transition="slide-up"><StudyPage /></PageTransition>} />
+              <Route path="/levels/:grade/:topicId" data-genie-title="Level Map" data-genie-key="Levels" element={<PageTransition transition="slide-up"><LevelsPage /></PageTransition>} />
+              <Route path="/play/:grade/:topicId/:level" data-genie-title="Level Challenge" data-genie-key="Play" element={<PageTransition transition="fade"><PlayPage /></PageTransition>} />
+              <Route path="/result/:resultId" data-genie-title="Level Result" data-genie-key="Result" element={<PageTransition transition="scale"><ResultPage /></PageTransition>} />
+              <Route path="/history" data-genie-title="Result History" data-genie-key="History" element={<PageTransition transition="slide-up"><HistoryPage /></PageTransition>} />
+              <Route path="/profile" data-genie-title="My Profile" data-genie-key="Profile" element={<PageTransition transition="slide-up"><ProfilePage /></PageTransition>} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" data-genie-key="NotFound" data-genie-title="Not Found" element={<PageTransition transition="fade"><NotFound /></PageTransition>} />
             </AnimatedRoutes>

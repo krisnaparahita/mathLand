@@ -54,7 +54,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         return fallback
       })
     } catch {
-      setError('无法连接服务器，成绩暂时不能保存')
+      setError('Cannot reach the server. Your results cannot be saved right now.')
       setProfiles([])
     } finally {
       setLoading(false)
@@ -130,6 +130,6 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
 export function useProfile(): ProfileContextValue {
   const ctx = useContext(ProfileContext)
-  if (!ctx) throw new Error('useProfile 必须在 ProfileProvider 内部使用')
+  if (!ctx) throw new Error('useProfile must be used inside ProfileProvider')
   return ctx
 }

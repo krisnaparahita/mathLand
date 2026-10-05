@@ -5,13 +5,13 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* === 圆角 === */
+  /* === Border radius === */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* === 核心颜色 === */
+  /* === Core colors === */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -31,7 +31,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* === 功能颜色 (新增) === */
+  /* === Functional colors === */
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
@@ -39,20 +39,20 @@
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
 
-  /* === 主题特色颜色 (新增) === */
+  /* === Theme accent colors === */
   --color-theme-red: var(--theme-red);
   --color-theme-green: var(--theme-green);
   --color-theme-gold: var(--theme-gold);
   --color-theme-blue: var(--theme-blue);
 
-  /* === 图表颜色 === */
+  /* === Chart colors === */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
-  /* === 侧边栏颜色 === */
+  /* === Sidebar colors === */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -62,27 +62,27 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* === Hero 区域颜色 (新增) === */
+  /* === Hero section colors === */
   --color-hero: var(--hero);
   --color-hero-foreground: var(--hero-foreground);
 
-  /* === 阴影 === */
+  /* === Shadows === */
   --shadow-sm: var(--ds-shadow-sm);
   --shadow-md: var(--ds-shadow-md);
   --shadow-lg: var(--ds-shadow-lg);
   --shadow-xl: var(--ds-shadow-xl);
 
-  /* === 字号（仅覆盖基础 3 级，默认值与 Tailwind 一致） === */
+  /* === Font sizes (only the 3 base levels are overridden; defaults match Tailwind) === */
   --text-xs: var(--font-size-small);
   --text-sm: var(--font-size-label);
   --text-base: var(--font-size-body);
 }
 
 :root {
-  /* === 圆角基准值 === */
+  /* === Base radius values === */
   --radius: 0.625rem;
 
-  /* === 字体排版（儿童圆润字体） === */
+  /* === Typography (rounded, kid-friendly font) === */
   --font-family: "Baloo 2", "Comic Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
   --font-size-display: 3rem;
   --font-size-headline: 2.125rem;
@@ -98,7 +98,7 @@
   --letter-spacing-tight: -0.01em;
   --letter-spacing-normal: 0;
 
-  /* === 间距系统 === */
+  /* === Spacing system === */
   --spacing-xs: 0.5rem;
   --spacing-sm: 0.75rem;
   --spacing-md: 1rem;
@@ -107,23 +107,23 @@
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
 
-  /* === 阴影层级（Claymorphism 黏土拟态：内阴影 + 柔和外投影） === */
+  /* === Shadow levels (Claymorphism: inner shadow + soft outer shadow) === */
   --ds-shadow-sm: inset 0 -2px 0 oklch(0.257 0.09 281.288 / 0.06), 0 2px 6px oklch(0.257 0.09 281.288 / 0.08);
   --ds-shadow-md: inset 0 -3px 0 oklch(0.257 0.09 281.288 / 0.07), 0 5px 14px oklch(0.257 0.09 281.288 / 0.12);
   --ds-shadow-lg: inset 0 -4px 0 oklch(0.257 0.09 281.288 / 0.08), 0 10px 26px oklch(0.257 0.09 281.288 / 0.16);
   --ds-shadow-xl: inset 0 -5px 0 oklch(0.257 0.09 281.288 / 0.09), 0 18px 44px oklch(0.257 0.09 281.288 / 0.2);
-  /* 向后兼容别名（供原生 CSS var(--shadow-*) 引用使用） */
+  /* Backward-compatible aliases (for plain CSS var(--shadow-*) references) */
   --shadow-sm: var(--ds-shadow-sm);
   --shadow-md: var(--ds-shadow-md);
   --shadow-lg: var(--ds-shadow-lg);
   --shadow-xl: var(--ds-shadow-xl);
 
-  /* === 黏土风圆角与描边 === */
+  /* === Clay-style radius and borders === */
   --radius: 1.25rem;
   --clay-border-width: 3px;
   --clay-press: 200ms;
 
-  /* === 动效时间 === */
+  /* === Motion timing === */
   --duration-fast: 150ms;
   --duration-normal: 200ms;
   --duration-slow: 300ms;
@@ -132,44 +132,44 @@
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* === 背景颜色（淡靛蓝底） === */
+  /* === Background color (pale indigo) === */
   --background: oklch(0.962 0.018 272.314);
   --foreground: oklch(0.257 0.09 281.288);
 
-  /* === 卡片 === */
+  /* === Card === */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.257 0.09 281.288);
 
-  /* === 弹出层 === */
+  /* === Popover === */
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.257 0.09 281.288);
 
-  /* === 主色调（活泼靛蓝 #4F46E5） === */
+  /* === Primary color (vivid indigo #4F46E5) === */
   --primary: oklch(0.511 0.262 276.966);
   --primary-foreground: oklch(0.985 0 0);
 
-  /* === 次要色（浅靛 #818CF8） === */
+  /* === Secondary color (light indigo #818CF8) === */
   --secondary: oklch(0.704 0.157 279.164);
   --secondary-foreground: oklch(0.985 0 0);
 
-  /* === 柔和色 === */
+  /* === Muted colors === */
   --muted: oklch(0.945 0.021 272.314);
   --muted-foreground: oklch(0.523 0.062 281.288);
 
-  /* === 强调色（能量橙 #F97316） === */
+  /* === Accent color (energetic orange #F97316) === */
   --accent: oklch(0.646 0.222 41.116);
   --accent-foreground: oklch(0.985 0 0);
 
-  /* === 危险/错误色 === */
+  /* === Destructive / error color === */
   --destructive: oklch(0.586 0.224 22.5);
   --destructive-foreground: oklch(0.985 0 0);
 
-  /* === 边框和输入框 === */
+  /* === Borders and inputs === */
   --border: oklch(0.878 0.036 272.314);
   --input: oklch(0.878 0.036 272.314);
   --ring: oklch(0.511 0.262 276.966);
 
-  /* === 功能颜色 === */
+  /* === Functional colors === */
   --success: oklch(0.723 0.219 149.579);
   --success-foreground: oklch(0.985 0 0);
   --warning: oklch(0.828 0.189 84.429);
@@ -177,7 +177,7 @@
   --info: oklch(0.623 0.214 259.815);
   --info-foreground: oklch(0.985 0 0);
 
-  /* === 主题特色颜色（专题 / 关卡色板） === */
+  /* === Theme accent colors (topic / level palette) === */
   --theme-red: oklch(0.627 0.229 22.5);
   --theme-green: oklch(0.723 0.219 149.579);
   --theme-gold: oklch(0.828 0.189 84.429);
@@ -187,14 +187,14 @@
   --theme-teal: oklch(0.704 0.14 182.503);
   --theme-indigo: oklch(0.511 0.262 276.966);
 
-  /* === 图表颜色 === */
+  /* === Chart colors === */
   --chart-1: oklch(0.511 0.262 276.966);
   --chart-2: oklch(0.646 0.222 41.116);
   --chart-3: oklch(0.723 0.219 149.579);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.645 0.246 16.439);
 
-  /* === 侧边栏 === */
+  /* === Sidebar === */
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.257 0.09 281.288);
   --sidebar-primary: oklch(0.511 0.262 276.966);
@@ -204,11 +204,11 @@
   --sidebar-border: oklch(0.878 0.036 272.314);
   --sidebar-ring: oklch(0.511 0.262 276.966);
 
-  /* === Hero 区域 === */
+  /* === Hero section === */
   --hero: oklch(0.511 0.262 276.966);
   --hero-foreground: oklch(0.985 0 0);
 
-  /* === 动画 Token === */
+  /* === Animation tokens === */
   --duration-fast: 150ms;
   --duration-normal: 200ms;
   --duration-slow: 300ms;
@@ -219,7 +219,7 @@
 }
 
 .dark {
-  /* === 阴影层级 (深色模式) === */
+  /* === Shadow levels (dark mode) === */
   --ds-shadow-sm: 0 1px 3px oklch(0 0 0 / 0.2);
   --ds-shadow-md: 0 4px 12px oklch(0 0 0 / 0.3), 0 2px 4px oklch(0 0 0 / 0.2);
   --ds-shadow-lg: 0 8px 24px oklch(0 0 0 / 0.4), 0 4px 8px oklch(0 0 0 / 0.3);
@@ -229,43 +229,43 @@
   --shadow-lg: var(--ds-shadow-lg);
   --shadow-xl: var(--ds-shadow-xl);
 
-  /* === 背景颜色 === */
+  /* === Background color === */
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
 
-  /* === 卡片 === */
+  /* === Card === */
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
 
-  /* === 弹出层 === */
+  /* === Popover === */
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
 
-  /* === 主色调 === */
+  /* === Primary color === */
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
 
-  /* === 次要色 === */
+  /* === Secondary color === */
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
 
-  /* === 柔和色 === */
+  /* === Muted colors === */
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
 
-  /* === 强调色 === */
+  /* === Accent color === */
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
 
-  /* === 危险/错误色 === */
+  /* === Destructive / error color === */
   --destructive: oklch(0.704 0.191 22.216);
 
-  /* === 边框和输入框 === */
+  /* === Borders and inputs === */
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
 
-  /* === 功能颜色 (新增) === */
+  /* === Functional colors === */
   --success: oklch(0.648 0.15 163.225);
   --success-foreground: oklch(0.145 0 0);
   --warning: oklch(0.8 0.165 55.934);
@@ -273,20 +273,20 @@
   --info: oklch(0.623 0.214 259.815);
   --info-foreground: oklch(0.145 0 0);
 
-  /* === 主题特色颜色 (新增) === */
+  /* === Theme accent colors === */
   --theme-red: oklch(0.704 0.191 22.216);
   --theme-green: oklch(0.648 0.15 163.225);
   --theme-gold: oklch(0.8 0.165 55.934);
   --theme-blue: oklch(0.623 0.214 259.815);
 
-  /* === 图表颜色 === */
+  /* === Chart colors === */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
 
-  /* === 侧边栏 === */
+  /* === Sidebar === */
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -296,7 +296,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
-  /* === Hero 区域 (新增) === */
+  /* === Hero section === */
   --hero: oklch(0.269 0 0);
   --hero-foreground: oklch(0.985 0 0);
 }
@@ -413,7 +413,7 @@
 }
 
 /* ================================================================
-   Claymorphism 儿童风格工具类
+   Claymorphism kid-style utility classes
    ================================================================ */
 .clay {
   background: var(--card);

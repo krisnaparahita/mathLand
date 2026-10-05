@@ -22,14 +22,14 @@ import NotFound from './NotFound'
 
 const formatDuration = (ms: number): string => {
   const total = Math.max(0, Math.round(ms / 1000))
-  return `${Math.floor(total / 60)} 分 ${total % 60} 秒`
+  return `${Math.floor(total / 60)} min ${total % 60} sec`
 }
 
 const ENCOURAGE: Record<number, { title: string; body: string }> = {
-  3: { title: '太棒了！满分小能手 🌟', body: '这一关你已经完全掌握，试试更高的关卡挑战自己吧！' },
-  2: { title: '做得很好！继续加油 💪', body: '只差一点点就满星了，复习一下巧算方法再来一次。' },
-  1: { title: '不错，再来一次会更好 👍', body: '先去看看讲解和巧算方法，弄懂思路后正确率会明显提升。' },
-  0: { title: '别灰心，学习就是慢慢来 🌱', body: '建议先到「学习方法」里看懂例题，再用不限时模式练一遍。' },
+  3: { title: 'Amazing! Perfect score 🌟', body: 'You have fully mastered this level. Try a higher level to challenge yourself!' },
+  2: { title: 'Well done! Keep it up 💪', body: 'You are just one step from full stars. Review the smart tricks and try again.' },
+  1: { title: 'Good job, and another try will be even better 👍', body: 'Read the concepts and smart tricks first. Once the idea clicks, your accuracy will improve a lot.' },
+  0: { title: 'Don\'t give up, learning takes time 🌱', body: 'Go through the worked examples in the Study Guide first, then practice again in untimed mode.' },
 }
 
 export default function ResultPage() {
@@ -52,7 +52,7 @@ export default function ResultPage() {
   if (isLoading) {
     return (
       <main className="container" style={{ maxWidth: 720, paddingBlock: 'var(--spacing-3xl)', textAlign: 'center' }}>
-        <p style={{ color: 'var(--muted-foreground)' }}>正在加载成绩…</p>
+        <p style={{ color: 'var(--muted-foreground)' }}>Loading result…</p>
       </main>
     )
   }
@@ -85,7 +85,7 @@ export default function ResultPage() {
           {topic && <TopicIcon icon={topic.icon} color={topic.color} size={64} />}
 
           <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 'var(--spacing-xs)' }}>
-            {gradeInfo?.name} · {topic?.name ?? result.topicName} · 第 {result.level} 关
+            {gradeInfo?.name} · {topic?.name ?? result.topicName} · Level {result.level}
           </div>
 
           <motion.div
@@ -96,7 +96,7 @@ export default function ResultPage() {
             style={{ color, marginTop: 'var(--spacing-xs)', fontVariantNumeric: 'tabular-nums' }}
           >
             {result.score}
-            <span style={{ fontSize: 'var(--font-size-title)', color: 'var(--muted-foreground)' }}> 分</span>
+            <span style={{ fontSize: 'var(--font-size-title)', color: 'var(--muted-foreground)' }}> pts</span>
           </motion.div>
 
           <div className="flex justify-center" style={{ marginTop: 'var(--spacing-xs)' }}>
@@ -118,25 +118,25 @@ export default function ResultPage() {
               marginTop: 'var(--spacing-lg)',
             }}
           >
-            <Metric icon={<Trophy size={16} />} label="答对题数" value={`${result.correct} / ${result.total}`} />
-            <Metric icon={<TrendingUp size={16} />} label="正确率" value={`${accuracy}%`} />
-            <Metric icon={<Timer size={16} />} label="用时" value={formatDuration(result.durationMs)} />
+            <Metric icon={<Trophy size={16} />} label="Correct answers" value={`${result.correct} / ${result.total}`} />
+            <Metric icon={<TrendingUp size={16} />} label="Accuracy" value={`${accuracy}%`} />
+            <Metric icon={<Timer size={16} />} label="Time" value={formatDuration(result.durationMs)} />
             <Metric
               icon={<Sparkles size={16} />}
-              label="模式"
-              value={result.timed ? '限时闯关' : '不限时练习'}
+              label="Mode"
+              value={result.timed ? 'Timed level' : 'Untimed practice'}
             />
           </div>
 
           {best && (
             <div style={{ marginTop: 'var(--spacing-sm)', fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
-              本关历史最佳：{best.bestScore} 分 · 已挑战 {best.plays} 次
+              Best on this level: {best.bestScore} pts · Played {best.plays} {best.plays === 1 ? 'time' : 'times'}
             </div>
           )}
         </section>
       </FadeIn>
 
-      {/* ── 下一步 ── */}
+      {/* ── Next steps ── */}
       <div
         style={{
           display: 'grid',
@@ -159,10 +159,10 @@ export default function ResultPage() {
             }}
           >
             <div className="inline-flex items-center font-bold" style={{ gap: 6, color }}>
-              <RotateCcw size={17} /> 换一批题再来一次
+              <RotateCcw size={17} /> Try again with new questions
             </div>
             <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 4 }}>
-              题目会重新随机生成，永远不会重复上一次
+              Questions are regenerated, so they never repeat the last round
             </div>
           </button>
         </HoverLift>
@@ -187,10 +187,10 @@ export default function ResultPage() {
                 className="inline-flex items-center font-bold"
                 style={{ gap: 6, color: nextUnlocked ? 'var(--accent)' : 'var(--muted-foreground)' }}
               >
-                <Trophy size={17} /> 挑战第 {nextLevel} 关
+                <Trophy size={17} /> Take on level {nextLevel}
               </div>
               <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 4 }}>
-                {nextUnlocked ? '难度升级，题量更多、时间更紧' : '至少获得 1 颗星才能解锁下一关'}
+                {nextUnlocked ? 'Harder level: more questions and less time' : 'Earn at least 1 star to unlock the next level'}
               </div>
             </button>
           </HoverLift>
@@ -208,10 +208,10 @@ export default function ResultPage() {
             }}
           >
             <div className="inline-flex items-center font-bold" style={{ gap: 6, color: 'var(--theme-purple)' }}>
-              <BookOpen size={17} /> 复习讲解与巧算方法
+              <BookOpen size={17} /> Review concepts and smart tricks
             </div>
             <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 4 }}>
-              <Lightbulb size={12} /> 看一遍例题，下次正确率更高
+              <Lightbulb size={12} /> Read the examples to score higher next time
             </div>
           </Link>
         </HoverLift>
@@ -228,10 +228,10 @@ export default function ResultPage() {
             }}
           >
             <div className="inline-flex items-center font-bold" style={{ gap: 6, color: 'var(--theme-blue)' }}>
-              <History size={17} /> 查看成绩历史
+              <History size={17} /> View result history
             </div>
             <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 4 }}>
-              回顾每一次闯关的记录与进步曲线
+              Look back at every result and your progress curve
             </div>
           </Link>
         </HoverLift>
@@ -243,7 +243,7 @@ export default function ResultPage() {
           className="cursor-pointer font-semibold inline-flex items-center"
           style={{ gap: 4, fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}
         >
-          <ArrowLeft size={14} /> 返回关卡列表
+          <ArrowLeft size={14} /> Back to level list
         </Link>
       </div>
     </main>

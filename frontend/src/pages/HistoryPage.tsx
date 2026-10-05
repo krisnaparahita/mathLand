@@ -17,7 +17,7 @@ const formatDateTime = (iso: string): string => {
 
 const formatDuration = (ms: number): string => {
   const total = Math.max(0, Math.round(ms / 1000))
-  return `${Math.floor(total / 60)} 分 ${total % 60} 秒`
+  return `${Math.floor(total / 60)} min ${total % 60} sec`
 }
 
 export default function HistoryPage() {
@@ -73,9 +73,9 @@ export default function HistoryPage() {
     <main className="container" style={{ maxWidth: 960, paddingBottom: 'var(--spacing-3xl)' }}>
       <FadeIn>
         <header style={{ marginTop: 'var(--spacing-xl)' }}>
-          <h1 className="font-bold text-display">成绩历史</h1>
+          <h1 className="font-bold text-display">Result History</h1>
           <p style={{ color: 'var(--muted-foreground)', marginTop: 'var(--spacing-xs)' }}>
-            {profile ? `${profile.name} 的每一次闯关都被记录下来，看看自己的进步吧。` : '正在加载档案…'}
+            {profile ? `Every level ${profile.name} plays is recorded here. See how far you have come!` : 'Loading profile…'}
           </p>
         </header>
       </FadeIn>
@@ -86,20 +86,20 @@ export default function HistoryPage() {
           style={{ gap: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}
           stagger={0.06}
         >
-          <StatCard icon={<Trophy size={18} />} label="闯关次数" value={String(stats.totalGames)} tone="var(--theme-gold)" />
-          <StatCard icon={<Target size={18} />} label="总正确率" value={`${stats.accuracy}%`} tone="var(--theme-green)" />
-          <StatCard icon={<Sparkles size={18} />} label="获得星星" value={String(stats.totalStars)} tone="var(--theme-gold)" />
-          <StatCard icon={<TrendingUp size={18} />} label="累计题数" value={String(stats.totalQuestions)} tone="var(--primary)" />
-          <StatCard icon={<Clock size={18} />} label="练习时长" value={formatDuration(stats.totalTimeMs)} tone="var(--theme-blue)" />
-          <StatCard icon={<CalendarDays size={18} />} label="连续练习" value={`${stats.streakDays} 天`} tone="var(--accent)" />
+          <StatCard icon={<Trophy size={18} />} label="Levels played" value={String(stats.totalGames)} tone="var(--theme-gold)" />
+          <StatCard icon={<Target size={18} />} label="Overall accuracy" value={`${stats.accuracy}%`} tone="var(--theme-green)" />
+          <StatCard icon={<Sparkles size={18} />} label="Stars earned" value={String(stats.totalStars)} tone="var(--theme-gold)" />
+          <StatCard icon={<TrendingUp size={18} />} label="Questions answered" value={String(stats.totalQuestions)} tone="var(--primary)" />
+          <StatCard icon={<Clock size={18} />} label="Practice time" value={formatDuration(stats.totalTimeMs)} tone="var(--theme-blue)" />
+          <StatCard icon={<CalendarDays size={18} />} label="Practice streak" value={`${stats.streakDays} ${stats.streakDays === 1 ? 'day' : 'days'}`} tone="var(--accent)" />
         </Stagger>
       )}
 
-      {/* ── 专题掌握度 ── */}
+      {/* ── Topic mastery ── */}
       {topics.length > 0 && (
         <FadeIn>
           <section className="clay" style={{ marginTop: 'var(--spacing-lg)', padding: 'var(--spacing-lg)' }}>
-            <h2 className="font-bold text-title">专题掌握度</h2>
+            <h2 className="font-bold text-title">Topic mastery</h2>
             <div className="flex flex-wrap" style={{ gap: 'var(--spacing-sm)', marginTop: 'var(--spacing-md)' }}>
               {topics.slice(0, 12).map((t) => {
                 const topic = getTopic(t.grade, t.topicId)
@@ -126,7 +126,7 @@ export default function HistoryPage() {
                         className="flex items-center"
                         style={{ gap: 6, fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}
                       >
-                        <Stars value={t.bestStars} size={12} /> {acc}% · {t.plays} 次
+                        <Stars value={t.bestStars} size={12} /> {acc}% · {t.plays} {t.plays === 1 ? 'play' : 'plays'}
                       </div>
                     </div>
                   </Link>
@@ -137,16 +137,16 @@ export default function HistoryPage() {
         </FadeIn>
       )}
 
-      {/* ── 筛选 ── */}
+      {/* ── Filters ── */}
       <div
         className="clay flex items-center flex-wrap"
         style={{ marginTop: 'var(--spacing-lg)', padding: 'var(--spacing-md)', gap: 'var(--spacing-sm)' }}
       >
         <span className="inline-flex items-center font-semibold" style={{ gap: 6, fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
-          <Filter size={14} /> 筛选
+          <Filter size={14} /> Filter
         </span>
         <Chip active={gradeFilter === 'all'} onClick={() => { setGradeFilter('all'); setTopicFilter('all') }}>
-          全部年级
+          All grades
         </Chip>
         {GRADES.map((g) => (
           <Chip
@@ -164,7 +164,7 @@ export default function HistoryPage() {
           <>
             <span style={{ width: 1, height: 20, background: 'var(--border)' }} />
             <Chip active={topicFilter === 'all'} onClick={() => setTopicFilter('all')}>
-              全部专题
+              All topics
             </Chip>
             {topicOptions.slice(0, 8).map((t) => (
               <Chip key={t.topicId} active={topicFilter === t.topicId} onClick={() => setTopicFilter(t.topicId)}>
@@ -175,16 +175,16 @@ export default function HistoryPage() {
         )}
       </div>
 
-      {/* ── 记录列表 ── */}
+      {/* ── Result list ── */}
       {isLoading ? (
-        <p style={{ marginTop: 'var(--spacing-lg)', color: 'var(--muted-foreground)' }}>正在加载成绩…</p>
+        <p style={{ marginTop: 'var(--spacing-lg)', color: 'var(--muted-foreground)' }}>Loading results…</p>
       ) : filtered.length === 0 ? (
         <div className="clay" style={{ marginTop: 'var(--spacing-lg)', padding: 'var(--spacing-xl)', textAlign: 'center' }}>
           <p className="font-bold" style={{ fontSize: 'var(--font-size-body)' }}>
-            还没有闯关记录
+            No results yet
           </p>
           <p style={{ color: 'var(--muted-foreground)', marginTop: 4, fontSize: 'var(--font-size-small)' }}>
-            去挑一个喜欢的专题开始吧！
+            Pick a topic you like and get started!
           </p>
           <Link
             to="/"
@@ -198,7 +198,7 @@ export default function HistoryPage() {
               borderRadius: 'var(--radius)',
             }}
           >
-            开始闯关
+            Start playing
           </Link>
         </div>
       ) : (
@@ -224,21 +224,21 @@ export default function HistoryPage() {
                 {topic && <TopicIcon icon={topic.icon} color={topic.color} size={40} />}
                 <div style={{ flex: 1, minWidth: 200 }}>
                   <div className="font-bold" style={{ fontSize: 'var(--font-size-body)', color }}>
-                    {r.topicName} · 第 {r.level} 关
+                    {r.topicName} · Level {r.level}
                   </div>
                   <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 2 }}>
-                    {GRADES[r.grade - 1]?.name} · {formatDateTime(r.createdAt)} · 用时 {formatDuration(r.durationMs)}
-                    {!r.timed && ' · 不限时'}
+                    {GRADES[r.grade - 1]?.name} · {formatDateTime(r.createdAt)} · Time {formatDuration(r.durationMs)}
+                    {!r.timed && ' · Untimed'}
                   </div>
                 </div>
 
                 <div style={{ textAlign: 'right' }}>
                   <div className="font-bold" style={{ fontSize: 'var(--font-size-title)', fontVariantNumeric: 'tabular-nums' }}>
                     {r.score}
-                    <span style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}> 分</span>
+                    <span style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}> pts</span>
                   </div>
                   <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
-                    答对 {r.correct}/{r.total} · {acc}%
+                    Correct {r.correct}/{r.total} · {acc}%
                   </div>
                 </div>
 
@@ -247,7 +247,7 @@ export default function HistoryPage() {
                 <button
                   type="button"
                   onClick={() => removeMutation.mutate(r.id)}
-                  title="删除这条记录"
+                  title="Delete this result"
                   className="cursor-pointer"
                   style={{
                     background: soft,

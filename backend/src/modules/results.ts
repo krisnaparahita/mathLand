@@ -58,7 +58,7 @@ resultRouter.post('/create', async (req: Request, res: Response) => {
 
   const userExists = await query('SELECT id FROM users WHERE id = $1', [input.userId])
   if (userExists.rows.length === 0) {
-    throw new AppError(404, '档案不存在，请先创建档案')
+    throw new AppError(404, 'Profile not found. Please create a profile first')
   }
 
   const result = await query<ResultRow>(
@@ -115,7 +115,7 @@ resultRouter.post('/list', async (req: Request, res: Response) => {
   ok(res, { results: result.rows.map(toResult) })
 })
 
-/** POST /api/results/get — 单条成绩详情 */
+/** POST /api/results/get — Get a single result */
 resultRouter.post('/get', async (req: Request, res: Response) => {
   const { id } = getResultSchema.parse(req.body)
   const result = await query<ResultRow>(
@@ -123,7 +123,7 @@ resultRouter.post('/get', async (req: Request, res: Response) => {
     [id]
   )
   if (result.rows.length === 0) {
-    throw new AppError(404, '成绩记录不存在')
+    throw new AppError(404, 'Result not found')
   }
   ok(res, { result: toResult(result.rows[0]) })
 })
@@ -302,7 +302,7 @@ resultRouter.post('/level-progress', async (req: Request, res: Response) => {
 resultRouter.post('/delete', async (req: Request, res: Response) => {
   const id = Number(req.body?.id)
   if (!Number.isInteger(id) || id <= 0) {
-    throw new AppError(400, '缺少有效的成绩 id')
+    throw new AppError(400, 'A valid result id is required')
   }
   await query('DELETE FROM game_results WHERE id = $1', [id])
   ok(res, { deleted: true })

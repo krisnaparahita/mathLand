@@ -39,7 +39,7 @@ export default function GradePage() {
           fontSize: 'var(--font-size-label)',
         }}
       >
-        <ArrowLeft size={16} /> 返回首页
+        <ArrowLeft size={16} /> Back to home
       </Link>
 
       <FadeIn>
@@ -69,7 +69,7 @@ export default function GradePage() {
               style={{ padding: 'var(--spacing-md)', minWidth: 150, textAlign: 'center' }}
             >
               <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
-                本年级累计星星
+                Stars earned this grade
               </div>
               <div
                 className="font-bold"
@@ -87,9 +87,9 @@ export default function GradePage() {
 
       <section style={{ marginTop: 'var(--spacing-xl)' }}>
         <FadeIn>
-          <h2 className="font-bold text-title">选择专题</h2>
+          <h2 className="font-bold text-title">Choose a topic</h2>
           <p style={{ color: 'var(--muted-foreground)', fontSize: 'var(--font-size-label)' }}>
-            先点「学习方法」看懂巧算技巧，再点「开始闯关」练手。
+            Open the Study Guide first to learn the smart tricks, then press Play to practice.
           </p>
         </FadeIn>
 
@@ -137,8 +137,8 @@ export default function GradePage() {
                       color: 'var(--muted-foreground)',
                     }}
                   >
-                    <span>已练 {p?.plays ?? 0} 次</span>
-                    {p ? <span>最佳 {p.bestScore} 分</span> : <span>还没有成绩</span>}
+                    <span>Played {p?.plays ?? 0} {p?.plays === 1 ? 'time' : 'times'}</span>
+                    {p ? <span>Best {p.bestScore} pts</span> : <span>No results yet</span>}
                   </div>
 
                   <div className="flex" style={{ gap: 'var(--spacing-xs)', marginTop: 'var(--spacing-sm)' }}>
@@ -153,7 +153,7 @@ export default function GradePage() {
                         borderRadius: 'var(--radius)',
                       }}
                     >
-                      <BookOpen size={15} /> 学习方法
+                      <BookOpen size={15} /> Study Guide
                     </Link>
                     <Link
                       to={`/levels/${gradeNumber}/${topic.id}`}
@@ -167,7 +167,7 @@ export default function GradePage() {
                         borderRadius: 'var(--radius)',
                       }}
                     >
-                      <Play size={15} /> 开始闯关
+                      <Play size={15} /> Play
                     </Link>
                   </div>
                 </div>
@@ -188,7 +188,7 @@ export default function GradePage() {
             fontSize: 'var(--font-size-label)',
           }}
         >
-          换个年级看看 <ArrowRight size={16} />
+          Try another grade <ArrowRight size={16} />
         </Link>
       </div>
     </main>

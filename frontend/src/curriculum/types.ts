@@ -1,31 +1,31 @@
-/** 题型：选择题 / 填空题 / 判断题 */
+/** Question kind: multiple choice / fill in the blank / true or false */
 export type QuestionKind = 'choice' | 'fill' | 'judge'
 
 export interface Question {
   id: string
   kind: QuestionKind
-  /** 题干 */
+  /** Question prompt */
   prompt: string
-  /** 填空时显示的单位，如「个」「厘米」 */
+  /** Unit shown next to a fill-in answer, such as "apples" or "cm" */
   unit?: string
-  /** 正确答案（统一字符串化，便于比较） */
+  /** Correct answer (always stored as a string for easy comparison) */
   answer: string
-  /** 选择题选项（顺序已随机打乱） */
+  /** Multiple-choice options (already shuffled) */
   options?: string[]
-  /** 逐题解析 */
+  /** Per-question explanation */
   explanation: string
-  /** 关联的巧算方法名 */
+  /** Name of the related smart method */
   smartTip?: string
 }
 
 export interface SmartMethod {
-  /** 方法名，如「凑十法」 */
+  /** Method name, such as "Make a ten" */
   name: string
-  /** 适用情形 */
+  /** When the method applies */
   when: string
-  /** 步骤拆解 */
+  /** Step-by-step breakdown */
   steps: string[]
-  /** 示例算式 */
+  /** Worked example */
   example: string
 }
 
@@ -40,7 +40,7 @@ export interface LevelMeta {
   name: string
   questionCount: number
   secondsPerQuestion: number
-  /** 关卡目标说明 */
+  /** Level goal description */
   goal: string
 }
 
@@ -48,17 +48,17 @@ export interface Topic {
   id: string
   grade: number
   name: string
-  /** 专题配色 key */
+  /** Topic color key */
   color: string
-  /** lucide 图标名 */
+  /** lucide icon name */
   icon: string
   summary: string
   explanation: ExplanationBlock[]
   smartMethods: SmartMethod[]
   levels: LevelMeta[]
   /**
-   * 按关卡难度生成题目（每次调用结果不同，实现题目轮换）
-   * @param exclude 最近做过的题干，生成器会尽量避开
+   * Generate questions for a level's difficulty (results differ on every call, which rotates the questions)
+   * @param exclude Prompts answered recently, which the generator avoids where possible
    */
   generate: (level: number, count: number, exclude?: string[]) => Question[]
 }
@@ -68,6 +68,6 @@ export interface Rng {
   pick: <T>(arr: readonly T[]) => T
   shuffle: <T>(arr: readonly T[]) => T[]
   bool: (probability?: number) => boolean
-  /** 从数组中取 n 个不重复元素 */
+  /** Take n distinct elements from the array */
   sample: <T>(arr: readonly T[], n: number) => T[]
 }
