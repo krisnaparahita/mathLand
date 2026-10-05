@@ -1,5 +1,7 @@
 # MathLand
 
+Live site: https://mathland.my.id
+
 A math level-up learning site for primary school **grades 1–6**. Each grade is split into topics, and each topic has **5 levels of rising difficulty**. Questions rotate at random on every visit, timing follows the level's difficulty, wrong answers get an instant explanation, and every score and star is saved in the player's profile.
 
 ## Features
@@ -59,6 +61,15 @@ GitHub Actions then does the rest:
 - `.github/workflows/deploy.yml` deploys a preview for each pull request and a production deployment for every push to `main`. It skips itself with a warning while the secrets are missing.
 
 If you prefer Vercel's own Git integration instead, delete `deploy.yml` and import the repository in Vercel.
+
+## Contributing
+
+MathLand started as a father's project to help his son learn math, and it is open source so more kids can benefit. Contributions of every size are welcome: new topics and question generators, clearer explanations, translations, accessibility and design improvements, and bug fixes.
+
+1. Open an [issue](https://github.com/krisnaparahita/mathLand/issues) to share an idea or report a problem.
+2. Fork the repository, create a branch and open a pull request. CI lints, builds and tests every pull request, and a preview deployment is created for it.
+
+Read more on the site's About page (`/about`).
 
 ## Project structure
 
