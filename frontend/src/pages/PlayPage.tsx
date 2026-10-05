@@ -68,6 +68,8 @@ export default function PlayPage() {
       /* Ignore storage failures in private mode */
     }
     return generated
+  // `round` is intentionally a dependency: bumping it re-rolls the question set
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic, meta, round, historyKey])
 
   const [phase, setPhase] = useState<'ready' | 'playing' | 'saving'>('ready')
@@ -130,7 +132,7 @@ export default function PlayPage() {
       toast.error('Could not save your result. Check your connection and try again.')
       navigate(`/levels/${gradeNumber}/${topic!.id}`)
     }
-  }, [profile, gradeNumber, topic, meta, questions.length, startedAt, navigate, saveMutation])
+  }, [profile, gradeNumber, topic, startedAt, navigate, saveMutation])
 
   /* Ref bridge for finish: avoids re-creating the timer / auto-advance timer on every render */
   const finishRef = useRef<() => void>(() => {})
