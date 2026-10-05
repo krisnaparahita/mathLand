@@ -47,7 +47,7 @@ On first launch you are guided to create a profile. After that, pick a grade →
 
 ## Deploy to Vercel
 
-The whole app runs on Vercel: the Vite frontend is served as static files, and the Express API runs as a single serverless function (`api/[...path].ts`) that reuses `backend/src/app.ts`. Routes under `/api/*` go to the function and every other path falls back to the single-page app (see `vercel.json`).
+The whole app runs on Vercel: the Vite frontend is served as static files, and the Express API runs as a single serverless function (`api/index.ts`) that reuses `backend/src/app.ts`. Routes under `/api/*` go to the function and every other path falls back to the single-page app (see `vercel.json`).
 
 1. Create a hosted PostgreSQL database (for example Neon, available from the Vercel Marketplace) and copy its **pooled** connection string. It should end with `?sslmode=require`.
 2. In Vercel, import the repository (or run `vercel link`) and add `DATABASE_URL` under Project Settings → Environment Variables for Production and Preview. Tables are created automatically on the first request.
