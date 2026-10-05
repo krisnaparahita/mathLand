@@ -2,12 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "npx -y pnpm@10 install --frozen-lockfile --dir frontend && npx -y pnpm@10 install --frozen-lockfile --dir backend",
-  "buildCommand": "npx -y pnpm@10 --dir frontend build",
+  "buildCommand": "npx -y pnpm@10 --dir backend build && npx -y pnpm@10 --dir frontend build",
   "outputDirectory": "frontend/dist",
   "functions": {
-    "api/index.ts": {
+    "api/index.js": {
       "maxDuration": 15,
-      "includeFiles": "backend/src/**"
+      "includeFiles": "backend/dist/**"
     }
   },
   "rewrites": [
