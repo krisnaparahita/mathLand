@@ -27,7 +27,7 @@ import {
   ArrowUpDown,
   type LucideIcon,
 } from 'lucide-react'
-import { topicColor, topicSoft } from '@/curriculum'
+import { topicColor, topicEdge, topicInk } from '@/curriculum'
 
 const ICON_MAP: Record<string, LucideIcon> = {
   Hash,
@@ -72,9 +72,10 @@ export function TopicIcon({ icon, color, size = 56 }: TopicIconProps) {
       style={{
         width: size,
         height: size,
-        background: topicSoft(color),
-        color: topicColor(color),
-        border: '2px solid oklch(0.257 0.09 281.288 / 0.1)',
+        background: topicColor(color),
+        color: topicInk(color),
+        transform: 'rotate(-4deg)',
+        boxShadow: `0 ${Math.max(3, Math.round(size / 14))}px 0 ${topicEdge(color)}`,
       }}
     >
       <Icon size={Math.round(size * 0.52)} strokeWidth={2.2} />

@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { ChevronDown, GraduationCap, History, Home, Info, UserRound } from 'lucide-react'
 import { AvatarBubble } from './AvatarBubble'
 import {
@@ -11,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useProfile } from '@/context/ProfileContext'
 import { getGrade } from '@/curriculum'
+import { resultsApi } from '@/lib/api'
 
 const NAV = [
   { to: '/', label: 'Home', Icon: Home },
@@ -23,11 +25,17 @@ export function AppHeader() {
   const { pathname } = useLocation()
   const { profile, profiles, selectProfile } = useProfile()
 
+  const { data: stats } = useQuery({
+    queryKey: ['stats', profile?.id],
+    queryFn: () => resultsApi.stats(profile!.id),
+    enabled: Boolean(profile),
+  })
+
   return (
     <header
       className="sticky top-0 z-40 backdrop-blur"
       style={{
-        background: 'oklch(1 0 0 / 0.85)',
+        background: 'oklch(0.985 0.012 85 / 0.9)',
         borderBottom: '3px solid var(--border)',
       }}
     >
@@ -39,15 +47,17 @@ export function AppHeader() {
           <span
             className="inline-flex items-center justify-center rounded-xl"
             style={{
-              width: 38,
-              height: 38,
+              width: 42,
+              height: 42,
               background: 'var(--primary)',
               color: 'var(--primary-foreground)',
+              transform: 'rotate(-6deg)',
+              boxShadow: '0 4px 0 oklch(0.42 0.17 25)',
             }}
           >
             <GraduationCap size={22} strokeWidth={2.4} />
           </span>
-          <span className="font-bold" style={{ fontSize: 'var(--font-size-title)', letterSpacing: 'var(--letter-spacing-tight)' }}>
+          <span className="font-bold font-display" style={{ fontSize: 'var(--font-size-title)', letterSpacing: 'var(--letter-spacing-tight)' }}>
             MathLand
           </span>
         </Link>
@@ -65,9 +75,10 @@ export function AppHeader() {
                   paddingInline: 'var(--spacing-sm)',
                   paddingBlock: 'var(--spacing-xs)',
                   fontSize: 'var(--font-size-label)',
-                  fontWeight: active ? 700 : 500,
-                  color: active ? 'var(--primary)' : 'var(--muted-foreground)',
-                  background: active ? 'var(--muted)' : 'transparent',
+                  fontWeight: active ? 800 : 700,
+                  color: active ? 'var(--foreground)' : 'var(--muted-foreground)',
+                  background: active ? 'color-mix(in oklch, var(--c-sun) 40%, white)' : 'transparent',
+                  borderRadius: 999,
                   transition: 'var(--duration-normal) var(--ease-default)',
                 }}
               >
@@ -96,6 +107,11 @@ export function AppHeader() {
                   <span className="hidden sm:inline font-semibold" style={{ fontSize: 'var(--font-size-label)' }}>
                     {profile.name}
                   </span>
+                  {stats && (
+                    <span className="font-bold" style={{ fontSize: 'var(--font-size-small)', color: 'oklch(0.58 0.15 70)' }}>
+                      ★ {stats.totalStars}
+                    </span>
+                  )}
                   <ChevronDown size={14} />
                 </button>
               </DropdownMenuTrigger>

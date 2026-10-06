@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { AVATAR_OPTIONS, AvatarBubble, COLOR_OPTIONS } from './AvatarBubble'
-import { GRADES, topicColor } from '@/curriculum'
+import { GRADES, topicColor, topicInk } from '@/curriculum'
 import { useProfile } from '@/context/ProfileContext'
 
 export function ProfileSetupDialog() {
@@ -147,7 +147,7 @@ export function ProfileSetupDialog() {
                       fontSize: 'var(--font-size-label)',
                       fontWeight: active ? 700 : 500,
                       background: active ? topicColor(g.color) : 'var(--card)',
-                      color: active ? 'var(--card)' : 'var(--foreground)',
+                      color: active ? topicInk(g.color) : 'var(--foreground)',
                       borderRadius: '999px',
                       transition: 'var(--duration-normal) var(--ease-default)',
                     }}

@@ -1,5 +1,5 @@
 import { Bird, Bug, Cat, Dog, Fish, PawPrint, Rabbit, Snail, Squirrel, Turtle } from 'lucide-react'
-import { topicColor } from '@/curriculum'
+import { topicColor, topicInk } from '@/curriculum'
 
 export const AVATAR_OPTIONS = [
   { key: 'cat', label: 'Cat', Icon: Cat },
@@ -15,13 +15,13 @@ export const AVATAR_OPTIONS = [
 ] as const
 
 export const COLOR_OPTIONS = [
-  { key: 'indigo', label: 'Indigo' },
-  { key: 'orange', label: 'Orange' },
-  { key: 'green', label: 'Green' },
+  { key: 'indigo', label: 'Sky' },
+  { key: 'orange', label: 'Coral' },
+  { key: 'green', label: 'Mint' },
   { key: 'pink', label: 'Pink' },
-  { key: 'blue', label: 'Blue' },
-  { key: 'purple', label: 'Purple' },
-  { key: 'yellow', label: 'Gold' },
+  { key: 'blue', label: 'Ocean' },
+  { key: 'purple', label: 'Grape' },
+  { key: 'yellow', label: 'Sun' },
   { key: 'teal', label: 'Teal' },
 ] as const
 
@@ -43,8 +43,8 @@ export function AvatarBubble({ avatar, color, size = 44 }: AvatarBubbleProps) {
         width: size,
         height: size,
         background: bg,
-        color: 'var(--card)',
-        border: '2px solid oklch(0.257 0.09 281.288 / 0.18)',
+        color: topicInk(color),
+        border: '2px solid oklch(0 0 0 / 0.12)',
       }}
     >
       <Icon size={Math.round(size * 0.55)} strokeWidth={2.2} />

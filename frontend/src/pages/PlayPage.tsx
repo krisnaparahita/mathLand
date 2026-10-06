@@ -15,11 +15,11 @@ import { motion } from 'framer-motion'
 import { FadeIn } from '@/components/MotionPrimitives'
 import { Stars } from '@/components/Stars'
 import { TopicIcon } from '@/components/TopicIcon'
-import { getGrade, getTopic, isAnswerCorrect, starsForAccuracy, topicColor, topicSoft } from '@/curriculum'
+import { getGrade, getTopic, isAnswerCorrect, starsForAccuracy, topicColor, topicInk, topicSoft, topicText } from '@/curriculum'
 import type { Question } from '@/curriculum'
 import { useProfile } from '@/context/ProfileContext'
 import { resultsApi } from '@/lib/api'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import NotFound from './NotFound'
 
@@ -97,7 +97,14 @@ export default function PlayPage() {
     setPhase('ready')
   }, [round, totalSeconds])
 
+  const queryClient = useQueryClient()
   const saveMutation = useMutation({
+    onSuccess: () => {
+      // Refresh stars, progress and stickers everywhere they are shown
+      for (const key of ['stats', 'level-progress', 'topic-progress', 'recent-results', 'results']) {
+        void queryClient.invalidateQueries({ queryKey: [key] })
+      }
+    },
     mutationFn: () =>
       resultsApi.create({
         userId: profile!.id,
@@ -172,6 +179,8 @@ export default function PlayPage() {
   if (!gradeInfo || !topic || !meta) return <NotFound />
 
   const color = topicColor(topic.color)
+  const ink = topicInk(topic.color)
+  const text = topicText(topic.color)
   const soft = topicSoft(topic.color)
   const answeredCount = Object.keys(records).length
   const correctCount = Object.values(records).filter((r) => r.correct).length
@@ -215,7 +224,7 @@ export default function PlayPage() {
             <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 'var(--spacing-sm)' }}>
               {gradeInfo.name} · {topic.name}
             </div>
-            <h1 className="font-bold text-title" style={{ color, marginTop: 4 }}>
+            <h1 className="font-bold text-title" style={{ color: text, marginTop: 4 }}>
               Level {meta.level} · {meta.name}
             </h1>
             <p style={{ color: 'var(--muted-foreground)', marginTop: 'var(--spacing-sm)', fontSize: 'var(--font-size-body)' }}>
@@ -242,10 +251,10 @@ export default function PlayPage() {
                 className="clay-solid cursor-pointer font-bold"
                 style={{
                   background: color,
-                  color: 'var(--card)',
+                  color: ink,
                   paddingInline: 'var(--spacing-xl)',
                   paddingBlock: 'var(--spacing-md)',
-                  borderRadius: 'var(--radius)',
+                  borderRadius: '999px',
                   fontSize: 'var(--font-size-body)',
                 }}
               >
@@ -293,13 +302,15 @@ export default function PlayPage() {
           marginTop: 'var(--spacing-lg)',
           padding: 'var(--spacing-md)',
           gap: 'var(--spacing-md)',
-          background: `linear-gradient(120deg, ${soft}, var(--card))`,
+          background: soft,
+          borderColor: `color-mix(in oklch, ${color} 55%, white)`,
+          boxShadow: `0 5px 0 color-mix(in oklch, ${color} 55%, white)`,
         }}
       >
         <div className="flex items-center" style={{ gap: 'var(--spacing-sm)' }}>
           <TopicIcon icon={topic.icon} color={topic.color} size={38} />
           <div>
-            <div className="font-bold" style={{ fontSize: 'var(--font-size-body)', color }}>
+            <div className="font-bold font-display" style={{ fontSize: 'var(--font-size-body)', color: text }}>
               Level {meta.level} · {meta.name}
             </div>
             <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
@@ -313,9 +324,8 @@ export default function PlayPage() {
             style={{
               height: 12,
               borderRadius: 999,
-              background: 'var(--muted)',
+              background: 'oklch(1 0 0 / 0.8)',
               overflow: 'hidden',
-              boxShadow: 'inset 0 2px 4px oklch(0 0 0 / 0.08)',
             }}
           >
             <motion.div
@@ -397,28 +407,29 @@ export default function PlayPage() {
               {current.options?.map((option) => {
                 const isAnswer = option === current.answer
                 const picked = answered && records[current.id]?.input === option
-                const bg = answered
-                  ? isAnswer
-                    ? 'var(--theme-green)'
-                    : picked
-                      ? 'var(--theme-red)'
-                      : 'var(--card)'
-                  : 'var(--card)'
+                const good = answered && isAnswer
+                const bad = answered && picked && !isAnswer
+                const bg = good
+                  ? 'color-mix(in oklch, var(--c-mint) 45%, white)'
+                  : bad
+                    ? 'color-mix(in oklch, var(--c-coral) 28%, white)'
+                    : 'var(--card)'
                 return (
                   <button
                     key={option}
                     type="button"
                     disabled={answered}
                     onClick={() => commit(option)}
-                    className={answered ? '' : 'clay clay-hover cursor-pointer'}
+                    className={`font-display ${answered ? '' : 'clay clay-hover cursor-pointer'} ${good ? 'animate-pop-in' : ''} ${bad ? 'animate-wiggle' : ''}`}
                     style={{
                       padding: 'var(--spacing-md)',
                       borderRadius: 'var(--radius)',
-                      fontSize: 'var(--font-size-body)',
-                      fontWeight: 700,
+                      fontSize: 'var(--font-size-title)',
+                      fontWeight: 600,
                       background: bg,
-                      color: answered && (isAnswer || picked) ? 'white' : 'var(--foreground)',
-                      border: `var(--clay-border-width) solid ${answered && (isAnswer || picked) ? 'transparent' : 'var(--border)'}`,
+                      color: 'var(--foreground)',
+                      border: `var(--clay-border-width) solid ${good ? 'var(--c-mint)' : bad ? 'var(--c-coral)' : 'var(--border)'}`,
+                      boxShadow: answered ? 'none' : undefined,
                     }}
                   >
                     {option}
@@ -436,33 +447,29 @@ export default function PlayPage() {
               ].map((opt) => {
                 const isAnswer = current.answer === opt.value
                 const picked = answered && records[current.id]?.input === opt.value
+                const good = answered && isAnswer
+                const bad = answered && picked && !isAnswer
                 return (
                   <button
                     key={opt.value}
                     type="button"
                     disabled={answered}
                     onClick={() => commit(opt.value)}
-                    className={answered ? '' : 'clay clay-hover cursor-pointer'}
+                    className={`font-display ${answered ? '' : 'clay clay-hover cursor-pointer'} ${good ? 'animate-pop-in' : ''} ${bad ? 'animate-wiggle' : ''}`}
                     style={{
                       flex: 1,
                       padding: 'var(--spacing-lg)',
                       borderRadius: 'var(--radius)',
                       fontSize: 'var(--font-size-title)',
-                      fontWeight: 700,
-                      background: answered
-                        ? isAnswer
-                          ? 'var(--theme-green)'
-                          : picked
-                            ? 'var(--theme-red)'
-                            : 'var(--card)'
-                        : 'var(--card)',
-                      color:
-                        answered && (isAnswer || picked)
-                          ? 'white'
-                          : opt.good
-                            ? 'var(--theme-green)'
-                            : 'var(--theme-red)',
-                      border: `var(--clay-border-width) solid ${answered && (isAnswer || picked) ? 'transparent' : 'var(--border)'}`,
+                      fontWeight: 600,
+                      background: good
+                        ? 'color-mix(in oklch, var(--c-mint) 45%, white)'
+                        : bad
+                          ? 'color-mix(in oklch, var(--c-coral) 28%, white)'
+                          : 'var(--card)',
+                      color: opt.good ? 'oklch(0.4 0.11 165)' : 'oklch(0.48 0.17 25)',
+                      border: `var(--clay-border-width) solid ${good ? 'var(--c-mint)' : bad ? 'var(--c-coral)' : 'var(--border)'}`,
+                      boxShadow: answered ? 'none' : undefined,
                     }}
                   >
                     {opt.label}
@@ -497,7 +504,7 @@ export default function PlayPage() {
                   borderRadius: 'var(--radius)',
                   fontSize: 'var(--font-size-title)',
                   fontWeight: 700,
-                  fontFamily: 'var(--font-sans)',
+                  fontFamily: 'var(--font-display)',
                   color: 'var(--foreground)',
                 }}
               />
@@ -512,10 +519,10 @@ export default function PlayPage() {
                   className="clay-solid cursor-pointer font-bold"
                   style={{
                     background: color,
-                    color: 'var(--card)',
+                    color: ink,
                     paddingInline: 'var(--spacing-lg)',
                     paddingBlock: 'var(--spacing-md)',
-                    borderRadius: 'var(--radius)',
+                    borderRadius: '999px',
                     fontSize: 'var(--font-size-body)',
                   }}
                 >
@@ -535,15 +542,17 @@ export default function PlayPage() {
                 marginTop: 'var(--spacing-lg)',
                 padding: 'var(--spacing-md)',
                 borderRadius: 'var(--radius)',
-                background: lastCorrect ? 'var(--theme-green)' : 'var(--theme-red)',
-                color: 'white',
+                background: lastCorrect
+                  ? 'color-mix(in oklch, var(--c-mint) 35%, white)'
+                  : 'color-mix(in oklch, var(--c-sun) 38%, white)',
+                color: lastCorrect ? 'oklch(0.33 0.09 165)' : 'oklch(0.36 0.08 75)',
               }}
             >
               <div className="flex items-center font-bold" style={{ gap: 8, fontSize: 'var(--font-size-body)' }}>
                 {lastCorrect ? <Check size={18} /> : <X size={18} />}
                 {lastCorrect
-                  ? 'Correct!'
-                  : `The correct answer is: ${current.kind === 'judge' ? (current.answer === 'true' ? 'True ✓' : 'False ✗') : current.answer}${current.unit ? ` ${current.unit}` : ''}`}
+                  ? 'Correct! Great job ★'
+                  : `Almost! The correct answer is: ${current.kind === 'judge' ? (current.answer === 'true' ? 'True ✓' : 'False ✗') : current.answer}${current.unit ? ` ${current.unit}` : ''}`}
               </div>
               <div style={{ marginTop: 6, fontSize: 'var(--font-size-small)', lineHeight: 1.6 }}>
                 {current.explanation}
@@ -557,7 +566,8 @@ export default function PlayPage() {
                     paddingInline: 'var(--spacing-sm)',
                     paddingBlock: 3,
                     borderRadius: 999,
-                    background: 'oklch(1 0 0 / 0.22)',
+                    background: 'oklch(1 0 0 / 0.85)',
+                    color: 'oklch(0.4 0.14 300)',
                     fontSize: 'var(--font-size-small)',
                   }}
                 >
@@ -579,7 +589,7 @@ export default function PlayPage() {
                   color: 'var(--card)',
                   paddingInline: 'var(--spacing-lg)',
                   paddingBlock: 'var(--spacing-sm)',
-                  borderRadius: 'var(--radius)',
+                  borderRadius: '999px',
                   fontSize: 'var(--font-size-body)',
                 }}
               >
@@ -606,7 +616,7 @@ export default function PlayPage() {
                   width: 12,
                   height: 12,
                   borderRadius: 999,
-                  background: rec ? (rec.correct ? 'var(--theme-green)' : 'var(--theme-red)') : 'var(--border)',
+                  background: rec ? (rec.correct ? 'var(--c-mint)' : 'var(--c-coral)') : 'var(--border)',
                   outline: i === index ? '2px solid var(--foreground)' : 'none',
                   outlineOffset: 2,
                 }}
@@ -645,6 +655,7 @@ function InfoPill({ icon, label, value }: { icon: React.ReactNode; label: string
     <div
       className="clay-inset"
       style={{
+        background: 'var(--muted)',
         padding: 'var(--spacing-md)',
         borderRadius: 'var(--radius)',
         minWidth: 150,

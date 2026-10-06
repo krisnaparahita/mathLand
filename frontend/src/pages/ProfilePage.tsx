@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { Check, Pencil, Plus, Sparkles, Target, Trash2, Trophy, UserRound } from 'lucide-react'
 import { FadeIn, HoverLift } from '@/components/MotionPrimitives'
 import { AVATAR_OPTIONS, AvatarBubble, COLOR_OPTIONS } from '@/components/AvatarBubble'
-import { GRADES, getGrade, topicColor } from '@/curriculum'
+import { GRADES, getGrade, topicColor, topicInk, topicSoft, topicText } from '@/curriculum'
+import { StickerBoard } from '@/components/StickerBoard'
 import { useProfile } from '@/context/ProfileContext'
 import { resultsApi } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
@@ -102,7 +103,9 @@ export default function ProfilePage() {
               style={{
                 marginTop: 'var(--spacing-lg)',
                 padding: 'var(--spacing-lg)',
-                background: `linear-gradient(120deg, var(--muted), var(--card))`,
+                background: topicSoft(profile.color),
+                borderColor: `color-mix(in oklch, ${topicColor(profile.color)} 55%, white)`,
+                boxShadow: `0 6px 0 color-mix(in oklch, ${topicColor(profile.color)} 55%, white)`,
               }}
             >
               <div className="flex items-center flex-wrap" style={{ gap: 'var(--spacing-md)' }}>
@@ -184,6 +187,15 @@ export default function ProfilePage() {
             </section>
           </FadeIn>
 
+          {/* ── Stickers ── */}
+          {stats && (
+            <FadeIn>
+              <section style={{ marginTop: 'var(--spacing-md)' }}>
+                <StickerBoard totalStars={stats.totalStars} />
+              </section>
+            </FadeIn>
+          )}
+
           {/* ── Progress by grade ── */}
           {stats && stats.gradeCounts.length > 0 && (
             <FadeIn>
@@ -206,7 +218,7 @@ export default function ProfilePage() {
                         <div className="font-semibold" style={{ fontSize: 'var(--font-size-small)' }}>
                           {g.name}
                         </div>
-                        <div className="font-bold" style={{ fontSize: 'var(--font-size-title)', color: topicColor(g.color) }}>
+                        <div className="font-bold" style={{ fontSize: 'var(--font-size-title)', color: topicText(g.color) }}>
                           {count}
                         </div>
                       </Link>
@@ -284,7 +296,8 @@ export default function ProfilePage() {
                       gap: 'var(--spacing-md)',
                       padding: 'var(--spacing-md)',
                       flexWrap: 'wrap',
-                      borderLeft: `8px solid ${active ? topicColor(p.color) : 'var(--border)'}`,
+                      borderColor: active ? `color-mix(in oklch, ${topicColor(p.color)} 60%, white)` : undefined,
+                      background: active ? topicSoft(p.color) : undefined,
                     }}
                   >
                     <AvatarBubble avatar={p.avatar} color={p.color} size={44} />
@@ -302,7 +315,7 @@ export default function ProfilePage() {
                         className="font-semibold"
                         style={{
                           fontSize: 'var(--font-size-small)',
-                          color: topicColor(p.color),
+                          color: topicText(p.color),
                           paddingInline: 'var(--spacing-sm)',
                         }}
                       >
@@ -316,10 +329,10 @@ export default function ProfilePage() {
                         style={{
                           paddingInline: 'var(--spacing-md)',
                           paddingBlock: 'var(--spacing-xs)',
-                          borderRadius: 'var(--radius)',
+                          borderRadius: '999px',
                           fontSize: 'var(--font-size-small)',
                           background: topicColor(p.color),
-                          color: 'var(--card)',
+                          color: topicInk(p.color),
                         }}
                       >
                         Switch to this profile
@@ -457,7 +470,7 @@ function ProfileFields({
                   fontSize: 'var(--font-size-label)',
                   fontWeight: active ? 700 : 500,
                   background: active ? topicColor(g.color) : 'var(--card)',
-                  color: active ? 'var(--card)' : 'var(--foreground)',
+                  color: active ? topicInk(g.color) : 'var(--foreground)',
                   borderRadius: 999,
                 }}
               >
@@ -484,8 +497,8 @@ function MiniStat({
 }) {
   return (
     <div className="clay-inset" style={{ padding: 'var(--spacing-sm) var(--spacing-md)', borderRadius: 'var(--radius)' }}>
-      <div className="inline-flex items-center font-semibold" style={{ gap: 4, fontSize: 'var(--font-size-small)', color: tone }}>
-        {icon} {label}
+      <div className="inline-flex items-center font-semibold" style={{ gap: 4, fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
+        <span style={{ color: tone, display: 'inline-flex' }}>{icon}</span> {label}
       </div>
       <div className="font-bold" style={{ fontSize: 'var(--font-size-body)' }}>
         {value}

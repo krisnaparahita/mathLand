@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom'
 import { Bug, ExternalLink, Github, GitPullRequest, Heart, Lightbulb, Users } from 'lucide-react'
 import { FadeIn, HoverLift, Stagger } from '@/components/MotionPrimitives'
+import { topicColor, topicEdge, topicInk } from '@/curriculum'
 import { SITE } from '@/lib/site'
 
 const STORY = [
   {
     Icon: Heart,
     title: 'Why I built MathLand',
-    color: 'var(--theme-pink)',
+    color: 'pink',
     paragraphs: [
       'I built MathLand to help my son learn math step by step. Math sticks when you practice it again and again, one small level at a time, and when every mistake is explained right away instead of being left as a red mark on a page.',
       'So every topic starts with a short explanation and a few smart tricks, then moves through levels that get a little harder each time. Questions are different on every visit, so he can come back to the same level as often as he needs.',
@@ -16,7 +17,7 @@ const STORY = [
   {
     Icon: Users,
     title: 'For busy parents, especially fathers',
-    color: 'var(--primary)',
+    color: 'indigo',
     paragraphs: [
       'Many of us are busy with work and cannot sit next to our kids for every study session, but we still want to be part of it. MathLand gives a busy dad a way to stay involved in his child\'s math.',
       'The result history, practice streak and topic mastery show where your child is doing well and where they need a hand. Even five minutes in the evening can turn into a good conversation: "I saw you got three stars on fractions. Show me how you did it!"',
@@ -27,6 +28,7 @@ const STORY = [
 const WAYS_TO_HELP = [
   {
     Icon: Lightbulb,
+    color: 'yellow',
     title: 'Share an idea',
     body: 'New topics, clearer explanations, better smart tricks, or a feature that would help your own child or students.',
     href: SITE.issuesUrl,
@@ -34,6 +36,7 @@ const WAYS_TO_HELP = [
   },
   {
     Icon: Bug,
+    color: 'orange',
     title: 'Report a problem',
     body: 'Found a wrong answer, a confusing question or a bug? Tell us what happened and we will fix it.',
     href: SITE.issuesUrl,
@@ -41,6 +44,7 @@ const WAYS_TO_HELP = [
   },
   {
     Icon: GitPullRequest,
+    color: 'green',
     title: 'Contribute code',
     body: 'Fix a bug, improve the design, add translations or write new question generators. Pull requests are welcome.',
     href: SITE.pullRequestsUrl,
@@ -69,7 +73,14 @@ export default function AboutPage() {
           <div key={title} className="clay h-full" style={{ padding: 'var(--spacing-lg)' }}>
             <span
               className="inline-flex items-center justify-center rounded-xl"
-              style={{ width: 44, height: 44, background: 'var(--muted)', color }}
+              style={{
+                width: 48,
+                height: 48,
+                background: topicColor(color),
+                color: topicInk(color),
+                transform: 'rotate(-4deg)',
+                boxShadow: `0 3px 0 ${topicEdge(color)}`,
+              }}
             >
               <Icon size={22} strokeWidth={2.3} />
             </span>
@@ -117,12 +128,19 @@ export default function AboutPage() {
           style={{ gap: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}
           stagger={0.08}
         >
-          {WAYS_TO_HELP.map(({ Icon, title, body, href, label }) => (
+          {WAYS_TO_HELP.map(({ Icon, color, title, body, href, label }) => (
             <HoverLift key={title} lift={-5}>
               <div className="clay h-full flex flex-col" style={{ padding: 'var(--spacing-lg)' }}>
                 <span
                   className="inline-flex items-center justify-center rounded-xl"
-                  style={{ width: 44, height: 44, background: 'var(--muted)', color: 'var(--primary)' }}
+                  style={{
+                    width: 48,
+                    height: 48,
+                    background: topicColor(color),
+                    color: topicInk(color),
+                    transform: 'rotate(-4deg)',
+                    boxShadow: `0 3px 0 ${topicEdge(color)}`,
+                  }}
                 >
                   <Icon size={22} strokeWidth={2.3} />
                 </span>
@@ -164,7 +182,7 @@ export default function AboutPage() {
             href={SITE.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="clay clay-hover inline-flex items-center font-bold cursor-pointer"
+            className="clay-solid inline-flex items-center font-bold cursor-pointer"
             style={{
               gap: 'var(--spacing-xs)',
               paddingInline: 'var(--spacing-lg)',

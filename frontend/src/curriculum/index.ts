@@ -28,7 +28,7 @@ export const GRADES: GradeInfo[] = [
     name: 'Grade 1',
     tagline: 'Counting and first addition and subtraction',
     description: 'Start by counting, learn the numbers up to 100, add and subtract within 20, and meet basic shapes.',
-    color: 'indigo',
+    color: 'orange',
     topics: grade1Topics,
   },
   {
@@ -36,7 +36,7 @@ export const GRADES: GradeInfo[] = [
     name: 'Grade 2',
     tagline: 'Regrouping and first multiplication',
     description: 'Master addition with carrying and subtraction with borrowing within 100, meet multiplication, and learn to tell time, measure length and use money.',
-    color: 'orange',
+    color: 'yellow',
     topics: grade2Topics,
   },
   {
@@ -52,7 +52,7 @@ export const GRADES: GradeInfo[] = [
     name: 'Grade 4',
     tagline: 'Large numbers and decimals',
     description: 'Work with numbers beyond ten thousand, multiply three-digit by two-digit numbers, divide by two-digit numbers, and learn fraction addition and subtraction and decimals.',
-    color: 'pink',
+    color: 'indigo',
     topics: grade4Topics,
   },
   {
@@ -68,7 +68,7 @@ export const GRADES: GradeInfo[] = [
     name: 'Grade 6',
     tagline: 'Ratios, proportions and circles',
     description: 'Master mixed fraction operations, ratios and proportions, percentage applications, circles, negative numbers and algebraic equations.',
-    color: 'teal',
+    color: 'pink',
     topics: grade6Topics,
   },
 ]
@@ -81,33 +81,37 @@ export const getGrade = (grade: number): GradeInfo | undefined =>
 export const getTopic = (grade: number, topicId: string): Topic | undefined =>
   getGrade(grade)?.topics.find((t) => t.id === topicId)
 
-/** Topic color map: key → CSS variable name */
+/** Topic color map: key → CSS variable (bright fill color of the playful palette) */
 export const COLOR_VAR: Record<string, string> = {
-  indigo: 'var(--theme-indigo)',
-  orange: 'var(--accent)',
-  green: 'var(--theme-green)',
-  pink: 'var(--theme-pink)',
-  purple: 'var(--theme-purple)',
-  teal: 'var(--theme-teal)',
-  blue: 'var(--theme-blue)',
-  yellow: 'var(--theme-gold)',
-  gold: 'var(--theme-gold)',
-  red: 'var(--theme-red)',
+  orange: 'var(--c-coral)',
+  red: 'var(--c-coral)',
+  yellow: 'var(--c-sun)',
+  gold: 'var(--c-sun)',
+  green: 'var(--c-mint)',
+  indigo: 'var(--c-sky)',
+  purple: 'var(--c-grape)',
+  pink: 'var(--c-pink)',
+  teal: 'var(--c-teal)',
+  blue: 'var(--c-ocean)',
 }
 
-/** Topic soft background map: key → translucent tint */
-export const COLOR_SOFT: Record<string, string> = {
-  indigo: 'oklch(0.511 0.262 276.966 / 0.12)',
-  orange: 'oklch(0.646 0.222 41.116 / 0.14)',
-  green: 'oklch(0.723 0.219 149.579 / 0.14)',
-  pink: 'oklch(0.645 0.246 16.439 / 0.14)',
-  purple: 'oklch(0.627 0.265 303.9 / 0.14)',
-  teal: 'oklch(0.704 0.14 182.503 / 0.14)',
-  blue: 'oklch(0.623 0.214 259.815 / 0.14)',
-  yellow: 'oklch(0.828 0.189 84.429 / 0.18)',
-  gold: 'oklch(0.828 0.189 84.429 / 0.18)',
-  red: 'oklch(0.627 0.229 22.5 / 0.14)',
-}
+const DEFAULT_KEY = 'indigo'
+const fill = (key: string): string => COLOR_VAR[key] ?? COLOR_VAR[DEFAULT_KEY]
 
-export const topicColor = (key: string): string => COLOR_VAR[key] ?? COLOR_VAR.indigo
-export const topicSoft = (key: string): string => COLOR_SOFT[key] ?? COLOR_SOFT.indigo
+/** Bright fill, for backgrounds, bars and icons */
+export const topicColor = (key: string): string => fill(key)
+
+/** Pale tint of the color, for card and badge backgrounds */
+export const topicSoft = (key: string): string => `color-mix(in oklch, ${fill(key)} 24%, white)`
+
+/** Darker shade of the color that stays readable as text on white or tinted backgrounds */
+export const topicText = (key: string): string =>
+  `color-mix(in oklch, ${fill(key)} 52%, oklch(0.28 0.04 280))`
+
+/** Darker shade for the hard bottom edge of solid, pressable elements */
+export const topicEdge = (key: string): string =>
+  `color-mix(in oklch, ${fill(key)} 62%, oklch(0.2 0.04 280))`
+
+/** Text color that stays readable on top of the bright fill */
+export const topicInk = (key: string): string =>
+  key === 'blue' ? 'oklch(0.99 0.005 85)' : 'oklch(0.28 0.04 280)'
