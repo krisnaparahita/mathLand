@@ -5,6 +5,7 @@ import 'express-async-errors'
 import { env } from './config/env'
 import { errorHandler } from './middleware/errorHandler'
 import { httpLogger } from './middleware/logger'
+import { requireDevice } from './middleware/device'
 import { systemRouter } from './modules/system'
 import { profileRouter } from './modules/profiles'
 import { resultRouter } from './modules/results'
@@ -42,8 +43,8 @@ export const createApp = (): Application => {
   app.use(env.API_PREFIX, systemRouter)
 
   // Domain routes
-  app.use(`${env.API_PREFIX}/profiles`, profileRouter)
-  app.use(`${env.API_PREFIX}/results`, resultRouter)
+  app.use(`${env.API_PREFIX}/profiles`, requireDevice, profileRouter)
+  app.use(`${env.API_PREFIX}/results`, requireDevice, resultRouter)
 
   // Error handling
   app.use(errorHandler)

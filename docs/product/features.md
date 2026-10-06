@@ -42,7 +42,7 @@ MathLand is an online math practice platform for primary school students in grad
 - For each topic you can see your personal best and your progress trend
 
 ### 2.6 User profile (User Profile)
-- Switch between multiple profiles (one browser can hold several children's profiles). There are no passwords, which keeps it friendly and safe
+- Switch between multiple profiles (one browser can hold several children's profiles). There are no passwords. Profiles are private to the browser that created them: the browser creates a random device id, sends it with every request, and the server only returns profiles and results owned by that id
 - Profile fields: nickname, avatar (animal emoji or icon + color) and current grade
 - Stats: total levels played, total questions answered, average accuracy, total stars and practice streak in days
 - Achievement badges: first level cleared, 10 correct answers in a row, three stars on every level of a topic, 100 questions practiced, and so on
