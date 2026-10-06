@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, Lightbulb, Play, ScrollText, Sparkles } from 'lu
 import { FadeIn, HoverLift, Stagger } from '@/components/MotionPrimitives'
 import { TopicIcon } from '@/components/TopicIcon'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { getGrade, getTopic, topicColor, topicSoft } from '@/curriculum'
+import { getGrade, getTopic, topicColor, topicInk, topicSoft, topicText } from '@/curriculum'
 import NotFound from './NotFound'
 
 export default function StudyPage() {
@@ -36,7 +36,9 @@ export default function StudyPage() {
             marginTop: 'var(--spacing-md)',
             padding: 'var(--spacing-lg)',
             gap: 'var(--spacing-md)',
-            background: `linear-gradient(120deg, ${topicSoft(topic.color)}, var(--card))`,
+            background: topicSoft(topic.color),
+            borderColor: `color-mix(in oklch, ${topicColor(topic.color)} 55%, white)`,
+            boxShadow: `0 6px 0 color-mix(in oklch, ${topicColor(topic.color)} 55%, white)`,
           }}
         >
           <TopicIcon icon={topic.icon} color={topic.color} size={64} />
@@ -44,7 +46,7 @@ export default function StudyPage() {
             <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
               {gradeInfo.name} · {topic.name}
             </div>
-            <h1 className="font-bold text-title" style={{ color: topicColor(topic.color) }}>
+            <h1 className="font-bold text-title">
               {topic.name}
             </h1>
             <p style={{ fontSize: 'var(--font-size-body)', marginTop: 'var(--spacing-xs)' }}>
@@ -67,7 +69,7 @@ export default function StudyPage() {
             <TabsTrigger
               value="explain"
               className="cursor-pointer font-semibold"
-              style={{ borderRadius: 'var(--radius)', fontSize: 'var(--font-size-label)' }}
+              style={{ borderRadius: '999px', fontSize: 'var(--font-size-label)', fontFamily: 'var(--font-display)' }}
             >
               <span className="inline-flex items-center" style={{ gap: 'var(--spacing-xs)' }}>
                 <ScrollText size={15} /> Concepts
@@ -76,7 +78,7 @@ export default function StudyPage() {
             <TabsTrigger
               value="smart"
               className="cursor-pointer font-semibold"
-              style={{ borderRadius: 'var(--radius)', fontSize: 'var(--font-size-label)' }}
+              style={{ borderRadius: '999px', fontSize: 'var(--font-size-label)', fontFamily: 'var(--font-display)' }}
             >
               <span className="inline-flex items-center" style={{ gap: 'var(--spacing-xs)' }}>
                 <Lightbulb size={15} /> Smart tricks
@@ -95,8 +97,8 @@ export default function StudyPage() {
                         style={{
                           width: 28,
                           height: 28,
-                          background: topicSoft(topic.color),
-                          color: topicColor(topic.color),
+                          background: topicColor(topic.color),
+                          color: topicInk(topic.color),
                           fontSize: 'var(--font-size-small)',
                         }}
                       >
@@ -144,11 +146,12 @@ export default function StudyPage() {
                     className="clay"
                     style={{
                       padding: 'var(--spacing-lg)',
-                      borderLeft: `6px solid ${topicColor(topic.color)}`,
+                      borderColor: `color-mix(in oklch, ${topicColor(topic.color)} 45%, white)`,
+                      boxShadow: `0 5px 0 color-mix(in oklch, ${topicColor(topic.color)} 45%, white)`,
                     }}
                   >
                     <div className="flex items-center" style={{ gap: 'var(--spacing-sm)' }}>
-                      <Sparkles size={18} color={topicColor(topic.color)} />
+                      <Sparkles size={18} color={topicText(topic.color)} />
                       <h2 className="font-bold" style={{ fontSize: 'var(--font-size-body)' }}>
                         Smart trick {index + 1}: {method.name}
                       </h2>
@@ -212,7 +215,7 @@ export default function StudyPage() {
             marginTop: 'var(--spacing-xl)',
             padding: 'var(--spacing-lg)',
             gap: 'var(--spacing-md)',
-            background: `linear-gradient(120deg, var(--card), ${topicSoft(topic.color)})`,
+            background: topicSoft(topic.color),
           }}
         >
           <div>
@@ -231,8 +234,8 @@ export default function StudyPage() {
               paddingInline: 'var(--spacing-lg)',
               paddingBlock: 'var(--spacing-sm)',
               background: topicColor(topic.color),
-              color: 'var(--card)',
-              borderRadius: 'var(--radius)',
+              color: topicInk(topic.color),
+              borderRadius: '999px',
               fontSize: 'var(--font-size-body)',
             }}
           >

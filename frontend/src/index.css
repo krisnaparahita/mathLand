@@ -82,7 +82,8 @@
   --radius: 0.625rem;
 
   /* === Typography (rounded, kid-friendly font) === */
-  --font-family: "Baloo 2", "Comic Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  --font-family: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fredoka", "Trebuchet MS", "Nunito", system-ui, sans-serif;
   --font-size-display: 3rem;
   --font-size-headline: 2.125rem;
   --font-size-title: 1.5rem;
@@ -106,11 +107,11 @@
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
 
-  /* === Shadow levels (Claymorphism: inner shadow + soft outer shadow) === */
-  --ds-shadow-sm: inset 0 -2px 0 oklch(0.257 0.09 281.288 / 0.06), 0 2px 6px oklch(0.257 0.09 281.288 / 0.08);
-  --ds-shadow-md: inset 0 -3px 0 oklch(0.257 0.09 281.288 / 0.07), 0 5px 14px oklch(0.257 0.09 281.288 / 0.12);
-  --ds-shadow-lg: inset 0 -4px 0 oklch(0.257 0.09 281.288 / 0.08), 0 10px 26px oklch(0.257 0.09 281.288 / 0.16);
-  --ds-shadow-xl: inset 0 -5px 0 oklch(0.257 0.09 281.288 / 0.09), 0 18px 44px oklch(0.257 0.09 281.288 / 0.2);
+  /* === Shadow levels (chunky: a hard bottom edge that makes cards and buttons look pressable) === */
+  --ds-shadow-sm: 0 3px 0 oklch(0.86 0.025 85);
+  --ds-shadow-md: 0 5px 0 oklch(0.86 0.025 85);
+  --ds-shadow-lg: 0 8px 0 oklch(0.86 0.025 85);
+  --ds-shadow-xl: 0 12px 0 oklch(0.86 0.025 85), 0 22px 40px oklch(0.3 0.035 280 / 0.12);
   /* Backward-compatible aliases (for plain CSS var(--shadow-*) references) */
   --shadow-sm: var(--ds-shadow-sm);
   --shadow-md: var(--ds-shadow-md);
@@ -118,7 +119,7 @@
   --shadow-xl: var(--ds-shadow-xl);
 
   /* === Clay-style radius and borders === */
-  --radius: 1.25rem;
+  --radius: 1.5rem;
   --clay-border-width: 3px;
   --clay-press: 200ms;
 
@@ -132,59 +133,69 @@
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* === Background color (pale indigo) === */
-  --background: oklch(0.962 0.018 272.314);
-  --foreground: oklch(0.257 0.09 281.288);
+  --background: oklch(0.97 0.02 85);
+  --foreground: oklch(0.3 0.035 280);
 
   /* === Card === */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.257 0.09 281.288);
+  --card: oklch(0.997 0.005 85);
+  --card-foreground: oklch(0.3 0.035 280);
 
   /* === Popover === */
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.257 0.09 281.288);
+  --popover: oklch(0.997 0.005 85);
+  --popover-foreground: oklch(0.3 0.035 280);
 
-  /* === Primary color (vivid indigo #4F46E5) === */
-  --primary: oklch(0.511 0.262 276.966);
-  --primary-foreground: oklch(0.985 0 0);
+  /* === Primary color (strong coral, white text stays readable) === */
+  --primary: oklch(0.57 0.2 25);
+  --primary-foreground: oklch(0.99 0.005 85);
 
-  /* === Secondary color (light indigo #818CF8) === */
-  --secondary: oklch(0.704 0.157 279.164);
-  --secondary-foreground: oklch(0.985 0 0);
+  /* === Secondary color (sky) === */
+  --secondary: oklch(0.62 0.13 235);
+  --secondary-foreground: oklch(0.99 0.005 85);
 
   /* === Muted colors === */
-  --muted: oklch(0.945 0.021 272.314);
-  --muted-foreground: oklch(0.523 0.062 281.288);
+  --muted: oklch(0.945 0.022 85);
+  --muted-foreground: oklch(0.5 0.03 280);
 
-  /* === Accent color (energetic orange #F97316) === */
-  --accent: oklch(0.646 0.222 41.116);
-  --accent-foreground: oklch(0.985 0 0);
+  /* === Accent color (tangerine) === */
+  --accent: oklch(0.62 0.19 48);
+  --accent-foreground: oklch(0.99 0.005 85);
 
   /* === Destructive / error color === */
   --destructive: oklch(0.586 0.224 22.5);
   --destructive-foreground: oklch(0.985 0 0);
 
   /* === Borders and inputs === */
-  --border: oklch(0.878 0.036 272.314);
-  --input: oklch(0.878 0.036 272.314);
-  --ring: oklch(0.511 0.262 276.966);
+  --border: oklch(0.89 0.022 85);
+  --input: oklch(0.89 0.022 85);
+  --ring: oklch(0.73 0.13 230);
 
   /* === Functional colors === */
   --success: oklch(0.723 0.219 149.579);
   --success-foreground: oklch(0.985 0 0);
   --warning: oklch(0.828 0.189 84.429);
-  --warning-foreground: oklch(0.257 0.09 281.288);
+  --warning-foreground: oklch(0.3 0.035 280);
   --info: oklch(0.623 0.214 259.815);
   --info-foreground: oklch(0.985 0 0);
 
   /* === Theme accent colors (topic / level palette) === */
-  --theme-red: oklch(0.627 0.229 22.5);
-  --theme-green: oklch(0.723 0.219 149.579);
-  --theme-gold: oklch(0.828 0.189 84.429);
-  --theme-blue: oklch(0.623 0.214 259.815);
-  --theme-pink: oklch(0.645 0.246 16.439);
-  --theme-purple: oklch(0.627 0.265 303.9);
-  --theme-teal: oklch(0.704 0.14 182.503);
-  --theme-indigo: oklch(0.511 0.262 276.966);
+  --theme-red: oklch(0.62 0.2 25);
+  --theme-green: oklch(0.62 0.15 160);
+  --theme-gold: oklch(0.8 0.17 85);
+  --theme-blue: oklch(0.62 0.16 250);
+  --theme-pink: oklch(0.7 0.17 355);
+  --theme-purple: oklch(0.6 0.17 300);
+  --theme-teal: oklch(0.66 0.12 195);
+  --theme-indigo: oklch(0.57 0.2 25);
+
+  /* Playful palette used by grades, topics and avatars */
+  --c-coral: oklch(0.68 0.19 25);
+  --c-sun: oklch(0.82 0.16 85);
+  --c-mint: oklch(0.76 0.15 165);
+  --c-sky: oklch(0.73 0.13 230);
+  --c-grape: oklch(0.68 0.16 300);
+  --c-pink: oklch(0.77 0.15 355);
+  --c-teal: oklch(0.74 0.12 195);
+  --c-ocean: oklch(0.62 0.16 255);
 
   /* === Chart colors === */
   --chart-1: oklch(0.511 0.262 276.966);
@@ -204,7 +215,7 @@
   --sidebar-ring: oklch(0.511 0.262 276.966);
 
   /* === Hero section === */
-  --hero: oklch(0.511 0.262 276.966);
+  --hero: oklch(0.57 0.2 25);
   --hero-foreground: oklch(0.985 0 0);
 
   /* === Animation tokens === */
@@ -304,8 +315,17 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    font-family: var(--font-family);
+  }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-family);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
   }
 }
 
@@ -420,38 +440,78 @@
   border-radius: var(--radius);
   box-shadow: var(--ds-shadow-md);
   transition:
-    transform var(--clay-press) var(--ease-out),
+    transform var(--clay-press) var(--ease-bounce),
     box-shadow var(--clay-press) var(--ease-out);
 }
 
 .clay-hover:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px) rotate(-0.6deg);
   box-shadow: var(--ds-shadow-lg);
 }
 
 .clay-hover:active {
-  transform: translateY(1px);
-  box-shadow: var(--ds-shadow-sm);
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 oklch(0.86 0.025 85);
 }
 
 .clay-inset {
   border-radius: var(--radius);
-  box-shadow: inset 0 3px 8px oklch(0.257 0.09 281.288 / 0.12);
+  box-shadow: inset 0 3px 8px oklch(0.3 0.035 280 / 0.1);
 }
 
+/* Solid, colored buttons: a darker bottom edge that squashes when pressed */
 .clay-solid {
-  border: var(--clay-border-width) solid oklch(0.257 0.09 281.288 / 0.14);
-  box-shadow: inset 0 -4px 0 oklch(0 0 0 / 0.12), var(--ds-shadow-md);
+  border: var(--clay-border-width) solid oklch(0 0 0 / 0.1);
+  box-shadow: 0 5px 0 oklch(0 0 0 / 0.26);
+  font-family: var(--font-display);
+  letter-spacing: 0.005em;
+  transition:
+    transform var(--clay-press) var(--ease-bounce),
+    box-shadow var(--clay-press) var(--ease-out);
 }
 
-.clay-solid:active {
-  transform: translateY(2px);
-  box-shadow: inset 0 -2px 0 oklch(0 0 0 / 0.12), var(--ds-shadow-sm);
+.clay-solid:hover:not(:disabled) {
+  transform: translateY(-2px);
 }
 
-.text-display { font-size: var(--font-size-display); }
-.text-headline { font-size: var(--font-size-headline); }
-.text-title { font-size: var(--font-size-title); }
+.clay-solid:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 oklch(0 0 0 / 0.26);
+}
+
+.text-display { font-size: var(--font-size-display); font-family: var(--font-display); }
+.text-headline { font-size: var(--font-size-headline); font-family: var(--font-display); }
+.text-title { font-size: var(--font-size-title); font-family: var(--font-display); }
+.font-display { font-family: var(--font-display); }
+
+/* Visible keyboard focus everywhere */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 4px solid oklch(0.73 0.13 230 / 0.6);
+  outline-offset: 3px;
+}
+
+/* Highlighter swipe behind a word, as in the home page headline */
+.highlight {
+  position: relative;
+  z-index: 0;
+  white-space: nowrap;
+}
+.highlight::after {
+  content: "";
+  position: absolute;
+  inset: 55% -6px 2px -6px;
+  background: var(--highlight, var(--c-sun));
+  border-radius: 8px;
+  z-index: -1;
+  transform: rotate(-1.5deg);
+}
+
+/* Floating decorative shapes */
+.float-shape {
+  position: absolute;
+  pointer-events: none;
+  animation: floaty 6s ease-in-out infinite;
+}
 
 @keyframes gentle-bounce {
   0%, 100% { transform: translateY(0); }
@@ -464,9 +524,27 @@
 
 @keyframes wiggle {
   0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-4deg); }
-  75% { transform: rotate(4deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
 }
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(8deg); }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+}
+
+.animate-pop-in { animation: pop-in 0.45s var(--ease-bounce) both; }
+.animate-pulse-dot { animation: pulse-dot 1.6s ease-in-out infinite; }
 
 .animate-wiggle {
   animation: wiggle 0.5s var(--ease-in-out) 2;
@@ -474,7 +552,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .animate-gentle-bounce,
-  .animate-wiggle {
+  .animate-wiggle,
+  .animate-pop-in,
+  .animate-pulse-dot,
+  .float-shape {
     animation: none !important;
   }
 }

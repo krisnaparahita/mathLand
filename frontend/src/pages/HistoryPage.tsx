@@ -4,7 +4,7 @@ import { CalendarDays, Clock, Filter, Sparkles, Target, Trash2, TrendingUp, Trop
 import { FadeIn, Stagger } from '@/components/MotionPrimitives'
 import { Stars } from '@/components/Stars'
 import { TopicIcon } from '@/components/TopicIcon'
-import { GRADES, getTopic, topicColor, topicSoft } from '@/curriculum'
+import { GRADES, getTopic, topicColor, topicSoft, topicText } from '@/curriculum'
 import { useProfile } from '@/context/ProfileContext'
 import { resultsApi } from '@/lib/api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -192,10 +192,10 @@ export default function HistoryPage() {
             style={{
               marginTop: 'var(--spacing-md)',
               background: 'var(--primary)',
-              color: 'var(--card)',
+              color: 'var(--primary-foreground)',
               paddingInline: 'var(--spacing-lg)',
               paddingBlock: 'var(--spacing-sm)',
-              borderRadius: 'var(--radius)',
+              borderRadius: '999px',
             }}
           >
             Start playing
@@ -206,6 +206,7 @@ export default function HistoryPage() {
           {filtered.map((r) => {
             const topic = getTopic(r.grade, r.topicId)
             const color = topic ? topicColor(topic.color) : 'var(--primary)'
+            const textColor = topic ? topicText(topic.color) : 'var(--primary)'
             const soft = topic ? topicSoft(topic.color) : 'var(--muted)'
             const acc = Math.round((r.correct / r.total) * 100)
             return (
@@ -218,12 +219,13 @@ export default function HistoryPage() {
                   gap: 'var(--spacing-md)',
                   padding: 'var(--spacing-md)',
                   flexWrap: 'wrap',
-                  borderLeft: `8px solid ${color}`,
+                  borderColor: `color-mix(in oklch, ${color} 45%, white)`,
+                  boxShadow: `0 5px 0 color-mix(in oklch, ${color} 45%, white)`,
                 }}
               >
                 {topic && <TopicIcon icon={topic.icon} color={topic.color} size={40} />}
                 <div style={{ flex: 1, minWidth: 200 }}>
-                  <div className="font-bold" style={{ fontSize: 'var(--font-size-body)', color }}>
+                  <div className="font-bold" style={{ fontSize: 'var(--font-size-body)', color: textColor }}>
                     {r.topicName} · Level {r.level}
                   </div>
                   <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 2 }}>
@@ -293,8 +295,8 @@ function StatCard({
         flex: '1 1 130px',
       }}
     >
-      <div className="inline-flex items-center font-semibold" style={{ gap: 6, fontSize: 'var(--font-size-small)', color: tone }}>
-        {icon} {label}
+      <div className="inline-flex items-center font-semibold" style={{ gap: 6, fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
+        <span style={{ color: tone, display: 'inline-flex' }}>{icon}</span> {label}
       </div>
       <div className="font-bold" style={{ fontSize: 'var(--font-size-headline)', marginTop: 2 }}>
         {value}

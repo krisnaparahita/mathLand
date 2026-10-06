@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, BookOpen, Play } from 'lucide-react'
 import { FadeIn, HoverLift, Stagger } from '@/components/MotionPrimitives'
 import { Stars } from '@/components/Stars'
 import { TopicIcon } from '@/components/TopicIcon'
-import { getGrade, topicColor, topicSoft } from '@/curriculum'
+import { getGrade, topicColor, topicEdge, topicInk, topicSoft, topicText } from '@/curriculum'
 import { useProfile } from '@/context/ProfileContext'
 import { resultsApi } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
@@ -48,21 +48,38 @@ export default function GradePage() {
           style={{
             marginTop: 'var(--spacing-md)',
             padding: 'var(--spacing-xl)',
-            background: `linear-gradient(120deg, ${topicSoft(gradeInfo.color)}, var(--card))`,
-            borderLeft: `8px solid ${topicColor(gradeInfo.color)}`,
+            background: topicSoft(gradeInfo.color),
+            borderColor: `color-mix(in oklch, ${topicColor(gradeInfo.color)} 55%, white)`,
+            boxShadow: `0 6px 0 color-mix(in oklch, ${topicColor(gradeInfo.color)} 55%, white)`,
           }}
         >
           <div
             className="flex flex-wrap items-center justify-between"
             style={{ gap: 'var(--spacing-md)' }}
           >
-            <div>
-              <h1 className="font-bold text-headline" style={{ color: topicColor(gradeInfo.color) }}>
-                {gradeInfo.name}
-              </h1>
-              <p style={{ fontSize: 'var(--font-size-body)', marginTop: 'var(--spacing-xs)' }}>
-                {gradeInfo.description}
-              </p>
+            <div className="flex items-center" style={{ gap: 'var(--spacing-md)' }}>
+              <span
+                className="font-display inline-flex items-center justify-center shrink-0"
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: 24,
+                  background: topicColor(gradeInfo.color),
+                  color: topicInk(gradeInfo.color),
+                  fontSize: '2.4rem',
+                  fontWeight: 700,
+                  transform: 'rotate(-5deg)',
+                  boxShadow: `0 5px 0 ${topicEdge(gradeInfo.color)}`,
+                }}
+              >
+                {gradeInfo.grade}
+              </span>
+              <div>
+                <h1 className="font-bold text-headline">{gradeInfo.name}</h1>
+                <p style={{ fontSize: 'var(--font-size-body)', marginTop: 'var(--spacing-xs)', maxWidth: '52ch' }}>
+                  {gradeInfo.description}
+                </p>
+              </div>
             </div>
             <div
               className="clay"
@@ -73,7 +90,7 @@ export default function GradePage() {
               </div>
               <div
                 className="font-bold"
-                style={{ fontSize: 'var(--font-size-title)', color: topicColor(gradeInfo.color) }}
+                style={{ fontSize: 'var(--font-size-title)', color: topicText(gradeInfo.color) }}
               >
                 {totalStars} / {maxStars}
               </div>
@@ -102,7 +119,14 @@ export default function GradePage() {
             const p = progressMap.get(topic.id)
             return (
               <HoverLift key={topic.id} lift={-6}>
-                <div className="clay clay-hover h-full flex flex-col" style={{ padding: 'var(--spacing-lg)' }}>
+                <div
+                  className="clay clay-hover h-full flex flex-col"
+                  style={{
+                    padding: 'var(--spacing-lg)',
+                    borderColor: `color-mix(in oklch, ${topicColor(topic.color)} 45%, white)`,
+                    boxShadow: `0 5px 0 color-mix(in oklch, ${topicColor(topic.color)} 45%, white)`,
+                  }}
+                >
                   <div className="flex items-start" style={{ gap: 'var(--spacing-sm)' }}>
                     <TopicIcon icon={topic.icon} color={topic.color} size={52} />
                     <div className="flex-1">
@@ -137,7 +161,7 @@ export default function GradePage() {
                       color: 'var(--muted-foreground)',
                     }}
                   >
-                    <span>Played {p?.plays ?? 0} {p?.plays === 1 ? 'time' : 'times'}</span>
+                    <span className="font-semibold">Played {p?.plays ?? 0} {p?.plays === 1 ? 'time' : 'times'}</span>
                     {p ? <span>Best {p.bestScore} pts</span> : <span>No results yet</span>}
                   </div>
 
@@ -149,8 +173,8 @@ export default function GradePage() {
                         gap: 'var(--spacing-xs)',
                         paddingBlock: 'var(--spacing-xs)',
                         fontSize: 'var(--font-size-label)',
-                        color: topicColor(topic.color),
-                        borderRadius: 'var(--radius)',
+                        color: topicText(topic.color),
+                        borderRadius: '999px',
                       }}
                     >
                       <BookOpen size={15} /> Study Guide
@@ -163,8 +187,8 @@ export default function GradePage() {
                         paddingBlock: 'var(--spacing-xs)',
                         fontSize: 'var(--font-size-label)',
                         background: topicColor(topic.color),
-                        color: 'var(--card)',
-                        borderRadius: 'var(--radius)',
+                        color: topicInk(topic.color),
+                        borderRadius: '999px',
                       }}
                     >
                       <Play size={15} /> Play
@@ -180,8 +204,9 @@ export default function GradePage() {
       <div className="flex justify-center" style={{ marginTop: 'var(--spacing-xl)' }}>
         <Link
           to={profile ? `/grades/${gradeNumber === 6 ? 1 : gradeNumber + 1}` : '/profile'}
-          className="clay cursor-pointer inline-flex items-center font-semibold"
+          className="clay clay-hover cursor-pointer inline-flex items-center font-bold"
           style={{
+            borderRadius: '999px',
             gap: 'var(--spacing-xs)',
             paddingInline: 'var(--spacing-lg)',
             paddingBlock: 'var(--spacing-sm)',

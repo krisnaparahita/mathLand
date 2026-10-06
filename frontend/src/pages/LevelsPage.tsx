@@ -3,7 +3,7 @@ import { ArrowLeft, BookOpen, Clock, Infinity as InfinityIcon, Lock, Play, Rotat
 import { FadeIn, HoverLift, Stagger } from '@/components/MotionPrimitives'
 import { Stars } from '@/components/Stars'
 import { TopicIcon } from '@/components/TopicIcon'
-import { getGrade, getTopic, topicColor, topicSoft } from '@/curriculum'
+import { getGrade, getTopic, topicColor, topicEdge, topicInk, topicSoft, topicText } from '@/curriculum'
 import { useProfile } from '@/context/ProfileContext'
 import { resultsApi } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
@@ -54,7 +54,9 @@ export default function LevelsPage() {
             marginTop: 'var(--spacing-md)',
             padding: 'var(--spacing-lg)',
             gap: 'var(--spacing-md)',
-            background: `linear-gradient(120deg, ${topicSoft(topic.color)}, var(--card))`,
+            background: topicSoft(topic.color),
+            borderColor: `color-mix(in oklch, ${topicColor(topic.color)} 55%, white)`,
+            boxShadow: `0 6px 0 color-mix(in oklch, ${topicColor(topic.color)} 55%, white)`,
           }}
         >
           <div className="flex items-center" style={{ gap: 'var(--spacing-md)' }}>
@@ -63,9 +65,7 @@ export default function LevelsPage() {
               <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)' }}>
                 {gradeInfo.name} · {topic.name}
               </div>
-              <h1 className="font-bold text-title" style={{ color: topicColor(topic.color) }}>
-                Choose a level
-              </h1>
+              <h1 className="font-bold text-title">Choose a level</h1>
               <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--muted-foreground)', marginTop: 4 }}>
                 Questions are regenerated every time, so a level never repeats the previous round
               </div>
@@ -79,13 +79,87 @@ export default function LevelsPage() {
               paddingInline: 'var(--spacing-md)',
               paddingBlock: 'var(--spacing-xs)',
               fontSize: 'var(--font-size-label)',
-              color: topicColor(topic.color),
-              borderRadius: 'var(--radius)',
+              color: topicText(topic.color),
+              borderRadius: '999px',
             }}
           >
             <BookOpen size={15} /> Review concepts and smart tricks
           </Link>
         </section>
+      </FadeIn>
+
+      {/* ── Level trail ── */}
+      <FadeIn>
+        <ol
+          aria-label="Levels"
+          className="relative flex justify-between items-start"
+          style={{
+            listStyle: 'none',
+            margin: 'var(--spacing-xl) 0 0',
+            padding: 'var(--spacing-md) var(--spacing-xs) 0',
+            gap: 'var(--spacing-xs)',
+          }}
+        >
+          <span
+            aria-hidden="true"
+            className="hidden sm:block"
+            style={{
+              position: 'absolute',
+              left: '8%',
+              right: '8%',
+              top: 54,
+              borderTop: `6px dotted color-mix(in oklch, ${topicColor(topic.color)} 45%, white)`,
+            }}
+          />
+          {topic.levels.map((meta, i) => {
+            const best = bestMap.get(meta.level)
+            const unlocked = isUnlocked(meta.level)
+            const isCurrent = unlocked && (best?.bestStars ?? 0) === 0
+            return (
+              <li
+                key={meta.level}
+                className="flex flex-col items-center"
+                style={{ flex: 1, minWidth: 0, gap: 6, position: 'relative', marginTop: i % 2 === 1 ? 24 : 0 }}
+              >
+                <button
+                  type="button"
+                  disabled={!unlocked}
+                  onClick={() => navigate(`/play/${gradeNumber}/${topic.id}/${meta.level}`)}
+                  aria-label={
+                    unlocked
+                      ? `Level ${meta.level}, ${meta.name}, ${best?.bestStars ?? 0} stars`
+                      : `Level ${meta.level}, locked`
+                  }
+                  className={`font-display ${unlocked ? 'clay-solid cursor-pointer' : ''} ${isCurrent ? 'animate-wiggle' : ''}`}
+                  style={{
+                    width: 'clamp(54px, 13vw, 76px)',
+                    height: 'clamp(54px, 13vw, 76px)',
+                    borderRadius: '50%',
+                    fontSize: 'clamp(1.4rem, 4vw, 1.9rem)',
+                    fontWeight: 700,
+                    display: 'grid',
+                    placeItems: 'center',
+                    background: unlocked ? topicColor(topic.color) : 'var(--muted)',
+                    color: unlocked ? topicInk(topic.color) : 'var(--muted-foreground)',
+                    border: unlocked ? undefined : '3px solid var(--border)',
+                    boxShadow: unlocked ? `0 6px 0 ${topicEdge(topic.color)}` : '0 4px 0 var(--border)',
+                    cursor: unlocked ? 'pointer' : 'not-allowed',
+                  }}
+                >
+                  {unlocked ? meta.level : <Lock size={22} />}
+                </button>
+                <span className="font-display font-semibold text-center" style={{ fontSize: 'var(--font-size-small)' }}>
+                  {meta.name}
+                </span>
+                {unlocked ? (
+                  <Stars value={best?.bestStars ?? 0} size={13} />
+                ) : (
+                  <span style={{ fontSize: 11, color: 'var(--muted-foreground)', textAlign: 'center' }}>Locked</span>
+                )}
+              </li>
+            )
+          })}
+        </ol>
       </FadeIn>
 
       <Stagger className="flex flex-col" style={{ gap: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }} stagger={0.07}>
@@ -104,7 +178,8 @@ export default function LevelsPage() {
                   gap: 'var(--spacing-md)',
                   flexWrap: 'wrap',
                   opacity: unlocked ? 1 : 0.62,
-                  borderLeft: `8px solid ${unlocked ? topicColor(topic.color) : 'var(--border)'}`,
+                  borderColor: unlocked ? `color-mix(in oklch, ${topicColor(topic.color)} 45%, white)` : undefined,
+                  boxShadow: unlocked ? `0 5px 0 color-mix(in oklch, ${topicColor(topic.color)} 45%, white)` : undefined,
                 }}
               >
                 <div
@@ -113,7 +188,7 @@ export default function LevelsPage() {
                     width: 56,
                     height: 56,
                     background: unlocked ? topicSoft(topic.color) : 'var(--muted)',
-                    color: unlocked ? topicColor(topic.color) : 'var(--muted-foreground)',
+                    color: unlocked ? topicText(topic.color) : 'var(--muted-foreground)',
                     fontSize: 'var(--font-size-title)',
                     flexShrink: 0,
                   }}
@@ -165,8 +240,8 @@ export default function LevelsPage() {
                         paddingInline: 'var(--spacing-lg)',
                         paddingBlock: 'var(--spacing-sm)',
                         background: topicColor(topic.color),
-                        color: 'var(--card)',
-                        borderRadius: 'var(--radius)',
+                        color: topicInk(topic.color),
+                        borderRadius: '999px',
                         fontSize: 'var(--font-size-body)',
                       }}
                     >
@@ -195,7 +270,7 @@ export default function LevelsPage() {
                       paddingBlock: 'var(--spacing-sm)',
                       background: 'var(--muted)',
                       color: 'var(--muted-foreground)',
-                      borderRadius: 'var(--radius)',
+                      borderRadius: '999px',
                       fontSize: 'var(--font-size-label)',
                     }}
                   >
