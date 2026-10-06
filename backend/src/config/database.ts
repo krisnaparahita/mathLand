@@ -61,6 +61,11 @@ CREATE TABLE IF NOT EXISTS game_results (
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Profiles belong to the browser (device) that created them. Rows created before
+-- this column existed have no owner and are not visible to anyone.
+ALTER TABLE users ADD COLUMN IF NOT EXISTS device_id VARCHAR(64);
+CREATE INDEX IF NOT EXISTS idx_users_device ON users(device_id);
+
 CREATE INDEX IF NOT EXISTS idx_results_user ON game_results(user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_results_topic ON game_results(user_id, topic_id);
 `

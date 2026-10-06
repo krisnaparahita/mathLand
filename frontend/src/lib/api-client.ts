@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { getDeviceId } from './device';
 
 /**
  * Axios instance configured for API requests
@@ -19,6 +20,8 @@ export const apiClient = axios.create({
  */
 apiClient.interceptors.request.use(
   (config) => {
+    // Profiles and results are private to this browser
+    config.headers['X-Device-Id'] = getDeviceId();
     const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

@@ -14,7 +14,11 @@ A math level-up learning site for primary school **grades 1–6**. Each grade is
 | Learn, then practice | Every topic has a "Concepts" section and a "Smart tricks" section. A wrong answer shows the matching explanation and trick right away |
 | Level timer | L1 = 8 questions × 20 sec → L5 = 16 questions × 12 sec. Grades 1–2 get 2 fewer questions and 5 extra seconds per question, and grades 5–6 get 2 fewer seconds per question. The level is submitted automatically when the clock runs out. There is also an "Untimed practice" mode |
 | Result history | Each round records score, accuracy, time and stars. The history page has stat cards, topic mastery, grade and topic filters, and result deletion |
-| User profiles | Several kids' profiles are supported (nickname / avatar / color / grade). Switch, edit or delete them at any time. The profile page shows progress by grade and the practice streak |
+| User profiles | Several kids' profiles are supported (nickname / avatar / color / grade). Switch, edit or delete them at any time. The profile page shows progress by grade and the practice streak. Profiles are private to the browser that created them: nobody else can see or change them (see "Privacy" below) |
+
+## Privacy
+
+There are no accounts or passwords. The first time a browser opens the site it creates a random device id, keeps it in `localStorage` (`mathland.deviceId`) and sends it with every profile and result request. The server stores that id with each profile and only returns, changes or deletes profiles and results that belong to the same device id, so one visitor can never see another visitor's kids. The id works like a password, so it is never put in a URL. Clearing the browser's site data (or switching to another browser or device) starts with an empty profile list.
 
 ## Tech stack
 

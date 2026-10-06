@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express'
 import { query } from '../config/database'
 import { AppError } from '../middleware/errorHandler'
+import { getDeviceId } from '../middleware/device'
 import {
   createProfileSchema,
   getProfileSchema,
@@ -35,7 +36,9 @@ const ok = <T>(res: Response, data: T, status = 200) => {
 /** POST /api/profiles/list */
 profileRouter.post('/list', async (_req: Request, res: Response) => {
   const result = await query<ProfileRow>(
-    'SELECT id, name, avatar, color, grade, created_at FROM users ORDER BY created_at ASC'
+    `SELECT id, name, avatar, color, grade, created_at FROM users
+     WHERE device_id = $1 ORDER BY created_at ASC`,
+    [getDeviceId(res)]
   )
   ok(res, { profiles: result.rows.map(toProfile) })
 })
@@ -44,9 +47,9 @@ profileRouter.post('/list', async (_req: Request, res: Response) => {
 profileRouter.post('/create', async (req: Request, res: Response) => {
   const input = createProfileSchema.parse(req.body)
   const result = await query<ProfileRow>(
-    `INSERT INTO users (name, avatar, color, grade) VALUES ($1, $2, $3, $4)
+    `INSERT INTO users (name, avatar, color, grade, device_id) VALUES ($1, $2, $3, $4, $5)
      RETURNING id, name, avatar, color, grade, created_at`,
-    [input.name, input.avatar, input.color, input.grade]
+    [input.name, input.avatar, input.color, input.grade, getDeviceId(res)]
   )
   ok(res, { profile: toProfile(result.rows[0]) }, 201)
 })
@@ -55,8 +58,8 @@ profileRouter.post('/create', async (req: Request, res: Response) => {
 profileRouter.post('/get', async (req: Request, res: Response) => {
   const { id } = getProfileSchema.parse(req.body)
   const result = await query<ProfileRow>(
-    'SELECT id, name, avatar, color, grade, created_at FROM users WHERE id = $1',
-    [id]
+    'SELECT id, name, avatar, color, grade, created_at FROM users WHERE id = $1 AND device_id = $2',
+    [id, getDeviceId(res)]
   )
   if (result.rows.length === 0) {
     throw new AppError(404, 'Profile not found')
@@ -84,9 +87,9 @@ profileRouter.post('/update', async (req: Request, res: Response) => {
     throw new AppError(400, 'No fields to update')
   }
 
-  values.push(input.id)
+  values.push(input.id, getDeviceId(res))
   const result = await query<ProfileRow>(
-    `UPDATE users SET ${fields.join(', ')} WHERE id = $${idx}
+    `UPDATE users SET ${fields.join(', ')} WHERE id = $${idx} AND device_id = $${idx + 1}
      RETURNING id, name, avatar, color, grade, created_at`,
     values
   )
@@ -100,6 +103,6 @@ profileRouter.post('/update', async (req: Request, res: Response) => {
 /** POST /api/profiles/delete */
 profileRouter.post('/delete', async (req: Request, res: Response) => {
   const { id } = getProfileSchema.parse(req.body)
-  await query('DELETE FROM users WHERE id = $1', [id])
+  await query('DELETE FROM users WHERE id = $1 AND device_id = $2', [id, getDeviceId(res)])
   ok(res, { deleted: true })
 })

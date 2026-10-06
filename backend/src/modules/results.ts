@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express'
 import { query } from '../config/database'
 import { AppError } from '../middleware/errorHandler'
+import { getDeviceId } from '../middleware/device'
 import {
   createResultSchema,
   listResultsSchema,
@@ -49,6 +50,18 @@ const ok = <T>(res: Response, data: T, status = 200) => {
   res.status(status).json({ status: 'success', data })
 }
 
+/** Throw a 404 unless the profile belongs to the calling device. */
+const assertOwnsProfile = async (userId: number, deviceId: string): Promise<void> => {
+  const owned = await query('SELECT id FROM users WHERE id = $1 AND device_id = $2', [userId, deviceId])
+  if (owned.rows.length === 0) {
+    throw new AppError(404, 'Profile not found')
+  }
+}
+
+/** SQL fragment limiting game_results rows to profiles owned by the device in `$param`. */
+const ownedBy = (param: number): string =>
+  `user_id IN (SELECT id FROM users WHERE device_id = $${param})`
+
 const RESULT_COLUMNS = `id, user_id, grade, topic_id, topic_name, level, correct, total,
   score, stars, duration_ms, timed, created_at`
 
@@ -56,10 +69,7 @@ const RESULT_COLUMNS = `id, user_id, grade, topic_id, topic_name, level, correct
 resultRouter.post('/create', async (req: Request, res: Response) => {
   const input = createResultSchema.parse(req.body)
 
-  const userExists = await query('SELECT id FROM users WHERE id = $1', [input.userId])
-  if (userExists.rows.length === 0) {
-    throw new AppError(404, 'Profile not found. Please create a profile first')
-  }
+  await assertOwnsProfile(input.userId, getDeviceId(res))
 
   const result = await query<ResultRow>(
     `INSERT INTO game_results
@@ -87,6 +97,7 @@ resultRouter.post('/create', async (req: Request, res: Response) => {
 /** POST /api/results/list */
 resultRouter.post('/list', async (req: Request, res: Response) => {
   const { userId, grade, topicId, limit } = listResultsSchema.parse(req.body)
+  await assertOwnsProfile(userId, getDeviceId(res))
 
   const conditions = ['user_id = $1']
   const values: unknown[] = [userId]
@@ -119,8 +130,8 @@ resultRouter.post('/list', async (req: Request, res: Response) => {
 resultRouter.post('/get', async (req: Request, res: Response) => {
   const { id } = getResultSchema.parse(req.body)
   const result = await query<ResultRow>(
-    `SELECT ${RESULT_COLUMNS} FROM game_results WHERE id = $1`,
-    [id]
+    `SELECT ${RESULT_COLUMNS} FROM game_results WHERE id = $1 AND ${ownedBy(2)}`,
+    [id, getDeviceId(res)]
   )
   if (result.rows.length === 0) {
     throw new AppError(404, 'Result not found')
@@ -166,6 +177,7 @@ const computeStreak = (dates: string[]): { streakDays: number; bestStreakDays: n
 /** POST /api/results/stats */
 resultRouter.post('/stats', async (req: Request, res: Response) => {
   const { userId } = statsSchema.parse(req.body)
+  await assertOwnsProfile(userId, getDeviceId(res))
 
   const agg = await query<{
     games: string
@@ -221,6 +233,7 @@ resultRouter.post('/stats', async (req: Request, res: Response) => {
 /** POST /api/results/topic-progress */
 resultRouter.post('/topic-progress', async (req: Request, res: Response) => {
   const { userId, grade } = topicProgressSchema.parse(req.body)
+  await assertOwnsProfile(userId, getDeviceId(res))
 
   const values: unknown[] = [userId]
   let sql = `SELECT topic_id,
@@ -269,6 +282,7 @@ resultRouter.post('/topic-progress', async (req: Request, res: Response) => {
 /** POST /api/results/level-progress — per topic per level best stars */
 resultRouter.post('/level-progress', async (req: Request, res: Response) => {
   const { userId, grade } = topicProgressSchema.parse(req.body)
+  await assertOwnsProfile(userId, getDeviceId(res))
   const values: unknown[] = [userId]
   let sql = `SELECT topic_id, level, MAX(stars)::text AS best_stars, MAX(score)::text AS best_score,
                     COUNT(*)::text AS plays
@@ -304,6 +318,6 @@ resultRouter.post('/delete', async (req: Request, res: Response) => {
   if (!Number.isInteger(id) || id <= 0) {
     throw new AppError(400, 'A valid result id is required')
   }
-  await query('DELETE FROM game_results WHERE id = $1', [id])
+  await query(`DELETE FROM game_results WHERE id = $1 AND ${ownedBy(2)}`, [id, getDeviceId(res)])
   ok(res, { deleted: true })
 })
