@@ -59,34 +59,34 @@ const add100: Topic = {
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
 
-    if (level <= 2) {
-      makers.push(() => {
-        const a = rng.int(11, 89)
-        const b = rng.int(1, 8) * 10
-        const isPlus = rng.bool()
-        const value = isPlus ? a + b : a - b
-        return makeFill({
-          prompt: `${a} ${isPlus ? '+' : '−'} ${b} = ?`,
-          answer: value,
-          explanation: isPlus
-            ? `Do the tens first: ${Math.floor(a / 10) * 10} + ${b} = ${Math.floor(a / 10) * 10 + b}. Then add the ones digit ${a % 10} to get ${value}.`
-            : `Do the tens first: ${Math.floor(a / 10) * 10} − ${b} = ${Math.floor(a / 10) * 10 - b}. Then add the ones digit ${a % 10} to get ${value}.`,
-          smartTip: 'Split and add',
-        })
-      })
-    }
-
     makers.push(() => {
-      const a = rng.int(11, 88)
-      const b = rng.int(11, 88)
-      const isPlus = rng.bool()
-      if (!isPlus && a < b) {
-        return makeFill({
-          prompt: `${b} − ${a} = ?`,
-          answer: b - a,
-          explanation: `Ones: ${b % 10} − ${a % 10}. Tens: ${Math.floor(b / 10)} − ${Math.floor(a / 10)}. The result is ${b - a}.`,
-          smartTip: 'Split and add',
-        })
+      const isPlus = level === 3 || (level !== 4 && rng.bool())
+      let a: number
+      let b: number
+      if (level === 1) {
+        a = rng.int(1, isPlus ? 8 : 9) * 10
+        b = rng.int(1, isPlus ? (100 - a) / 10 : a / 10) * 10
+      } else if (level === 2) {
+        const aTens = rng.int(1, isPlus ? 8 : 9)
+        const aOnes = rng.int(0, 9)
+        a = aTens * 10 + aOnes
+        const bTens = rng.int(1, isPlus ? 9 - aTens : aTens)
+        const bOnes = rng.int(0, isPlus ? 9 - aOnes : aOnes)
+        b = bTens * 10 + bOnes
+      } else if (level === 3) {
+        const aOnes = rng.int(1, 9)
+        const bOnes = rng.int(10 - aOnes, 9)
+        const aTens = rng.int(1, 7)
+        a = aTens * 10 + aOnes
+        b = rng.int(1, 8 - aTens) * 10 + bOnes
+      } else if (level === 4) {
+        const aTens = rng.int(2, 9)
+        const aOnes = rng.int(0, 8)
+        a = aTens * 10 + aOnes
+        b = rng.int(1, aTens - 1) * 10 + rng.int(aOnes + 1, 9)
+      } else {
+        a = rng.int(isPlus ? 11 : 22, isPlus ? 89 : 99)
+        b = rng.int(11, isPlus ? 100 - a : a)
       }
       const value = isPlus ? a + b : a - b
       return makeFill({
@@ -99,10 +99,10 @@ const add100: Topic = {
       })
     })
 
-    if (level >= 3) {
+    if (level === 3 || level === 5) {
       makers.push(() => {
         const near = rng.pick([19, 29, 39, 49, 59, 69, 79])
-        const a = rng.int(12, 60)
+        const a = rng.int(1, Math.min(6, Math.floor((90 - near) / 10))) * 10 + rng.int(1, 9)
         const sum = a + near
         const round = near + 1
         return makeFill({
@@ -114,10 +114,10 @@ const add100: Topic = {
       })
     }
 
-    if (level >= 3) {
+    if (level >= 4) {
       makers.push(() => {
-        const a = rng.int(40, 95)
-        const b = rng.int(15, 39)
+        const a = rng.int(4, 9) * 10 + rng.int(0, 8)
+        const b = rng.int(1, 3) * 10 + rng.int(a % 10 + 1, 9)
         const value = a - b
         return makeFill({
           prompt: `${a} − ${b} = ?`,
@@ -128,11 +128,11 @@ const add100: Topic = {
       })
     }
 
-    if (level >= 4) {
+    if (level >= 5) {
       makers.push(() => {
         const a = rng.int(20, 90)
-        const b = rng.int(10, 40)
-        const c = rng.int(5, 30)
+        const b = rng.int(10, Math.min(40, a))
+        const c = rng.int(5, Math.min(30, 100 - (a - b)))
         return makeFill({
           prompt: `${a} − ${b} + ${c} = ?`,
           answer: a - b + c,
@@ -230,11 +230,12 @@ const carryBorrow: Topic = {
   generate(level, count, exclude?: string[]) {
     const makers: Array<() => Question> = []
 
-    makers.push(() => {
-      const aOnes = rng.int(2, 9)
-      const bOnes = rng.int(11 - aOnes > 0 ? 11 - aOnes : 2, 9)
-      const a = rng.int(1, 8) * 10 + aOnes
-      const b = rng.int(1, 8) * 10 + bOnes
+    if (level <= 2 || level === 5) makers.push(() => {
+      const aOnes = rng.int(1, 9)
+      const bOnes = rng.int(10 - aOnes, 9)
+      const aTens = rng.int(level === 2 ? 5 : 1, level === 1 ? 7 : 8)
+      const a = aTens * 10 + aOnes
+      const b = rng.int(level === 2 ? 9 - aTens : 1, level === 1 ? 8 - aTens : 8) * 10 + bOnes
       const sum = a + b
       return makeFill({
         prompt: `Use column addition: ${a} + ${b} = ?`,
@@ -244,10 +245,10 @@ const carryBorrow: Topic = {
       })
     })
 
-    if (level >= 2) {
+    if (level === 2 || level === 5) {
       makers.push(() => {
-        const a = rng.int(55, 89)
-        const b = rng.int(55, 89)
+        const a = rng.int(5, 8) * 10 + rng.int(1, 9)
+        const b = rng.int(5, 8) * 10 + rng.int(10 - a % 10, 9)
         const sum = a + b
         return makeFill({
           prompt: `${a} + ${b} = ?`,
@@ -258,7 +259,7 @@ const carryBorrow: Topic = {
       })
     }
 
-    if (level >= 3) {
+    if (level === 3 || level === 5) {
       makers.push(() => {
         const aOnes = rng.int(0, 7)
         const bOnes = rng.int(aOnes + 1, 9)
@@ -276,8 +277,11 @@ const carryBorrow: Topic = {
 
     if (level >= 4) {
       makers.push(() => {
-        const a = rng.int(100, 400)
-        const b = rng.int(50, a - 1)
+        const aHundreds = rng.int(1, 4)
+        const aTens = rng.int(0, 8)
+        const aOnes = rng.int(0, 8)
+        const a = aHundreds * 100 + aTens * 10 + aOnes
+        const b = rng.int(aTens, 9) * 10 + rng.int(aOnes + 1, 9)
         const diff = a - b
         return makeFill({
           prompt: `${a} − ${b} = ?`,
@@ -288,7 +292,7 @@ const carryBorrow: Topic = {
       })
     }
 
-    if (level >= 4) {
+    if (level >= 5) {
       makers.push(() => {
         const a = rng.int(30, 95)
         const b = rng.int(15, Math.max(16, a - 1))
@@ -304,8 +308,8 @@ const carryBorrow: Topic = {
 
     if (level >= 5) {
       makers.push(() => {
-        const a = rng.int(24, 78)
-        const b = rng.int(16, 59)
+        const a = rng.int(2, 7) * 10 + rng.int(1, 9)
+        const b = rng.int(1, 5) * 10 + rng.int(10 - a % 10, 9)
         const sum = a + b
         return makeChoice({
           prompt: `${a} + ${b} = ?`,
@@ -394,7 +398,7 @@ const multiplyIntro: Topic = {
     const makers: Array<() => Question> = []
 
     makers.push(() => {
-      const a = rng.int(2, [5, 6, 8, 9, 9][level - 1])
+      const a = rng.int(2, 5)
       const times = rng.int(2, [5, 6, 7, 8, 9][level - 1])
       return makeFill({
         prompt: `${Array.from({ length: times }, () => a).join(' + ')} = ? (give the result as a multiplication)`,
@@ -405,7 +409,7 @@ const multiplyIntro: Topic = {
     })
 
     makers.push(() => {
-      const a = rng.int(2, [5, 7, 9, 9, 9][level - 1])
+      const a = rng.int(2, 5)
       const times = rng.int(2, [5, 6, 8, 9, 9][level - 1])
       return makeFill({
         prompt: `${a} × ${times} = ?`,
@@ -417,7 +421,7 @@ const multiplyIntro: Topic = {
 
     if (level >= 2) {
       makers.push(() => {
-        const each = rng.int(2, 6)
+        const each = rng.int(2, 5)
         const groups = rng.int(2, 6)
         return makeFill({
           prompt: `There are ${groups} plates of apples with ${each} apples on each plate. How many apples are there in all?`,
@@ -431,7 +435,7 @@ const multiplyIntro: Topic = {
 
     if (level >= 3) {
       makers.push(() => {
-        const a = rng.int(2, 9)
+        const a = rng.int(2, 5)
         const b = rng.int(2, 9)
         const product = a * b
         return makeChoice({
@@ -446,7 +450,7 @@ const multiplyIntro: Topic = {
 
     if (level >= 3) {
       makers.push(() => {
-        const a = rng.int(2, 9)
+        const a = rng.int(2, 5)
         const b = rng.int(2, 9)
         const product = a * b
         return makeFill({
@@ -459,8 +463,8 @@ const multiplyIntro: Topic = {
 
     if (level >= 4) {
       makers.push(() => {
-        const a = rng.int(2, 9)
-        const b = rng.int(2, 9)
+        const a = rng.int(3, 5)
+        const b = rng.int(3, 9)
         const product = a * b
         const sum = a + b
         return makeChoice({
@@ -474,7 +478,7 @@ const multiplyIntro: Topic = {
 
     if (level >= 5) {
       makers.push(() => {
-        const a = rng.int(3, 8)
+        const a = rng.int(3, 5)
         const b = rng.int(3, 8)
         const product = a * b
         return makeJudge({
@@ -640,7 +644,7 @@ const time: Topic = {
     if (level >= 4) {
       makers.push(() => {
         const startMin = rng.pick([10, 15, 20, 25, 30])
-        const endMin = startMin + rng.pick([20, 30, 40])
+        const endMin = startMin + rng.pick([20, 30, 40].filter((duration) => startMin + duration < 60))
         return makeFill({
           prompt: `Mia started her homework at 7:${String(startMin).padStart(2, '0')} and finished at 7:${String(endMin).padStart(2, '0')}. How many minutes did she work?`,
           answer: endMin - startMin,

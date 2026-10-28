@@ -2,6 +2,7 @@ import {
   buildLevels,
   buildQuestionSet,
   fracStr,
+  fmtFixed,
   gcd,
   makeChoice,
   makeFill,
@@ -88,8 +89,8 @@ const decimalOps: Topic = {
         const b = rng.pick([0.2, 0.5, 0.4, 0.25, 1.5, 2.5, 0.8])
         return makeFill({
           prompt: `${a} × ${b} = ?`,
-          answer: round2(a * b),
-          explanation: `The two factors have ${((String(a).split('.')[1] || '').length) + ((String(b).split('.')[1] || '').length)} decimal places in total. Count that many places from the right of the whole-number product to get ${round2(a * b)}.`,
+          answer: fmtFixed(a * b, 3),
+          explanation: `The two factors have ${((String(a).split('.')[1] || '').length) + ((String(b).split('.')[1] || '').length)} decimal places in total. Count that many places from the right of the whole-number product to get ${fmtFixed(a * b, 3)}.`,
           smartTip: 'Count the decimal places',
         })
       })
@@ -286,8 +287,8 @@ const fractionMulDiv: Topic = {
 
     if (level >= 5) {
       makers.push(() => {
-        const total = rng.int(12, 60)
         const d = rng.pick([2, 3, 4, 5, 6])
+        const total = rng.int(Math.ceil(12 / d), Math.floor(60 / d)) * d
         const n = rng.int(1, d - 1)
         const part = (total / d) * n
         return makeFill({
@@ -302,9 +303,9 @@ const fractionMulDiv: Topic = {
 
     if (level >= 5) {
       makers.push(() => {
-        const part = rng.int(4, 30)
         const d = rng.pick([2, 3, 4])
         const n = rng.int(1, d - 1)
+        const part = rng.int(Math.ceil(4 / n), Math.floor(30 / n)) * n
         const total = (part * d) / n
         return makeFill({
           prompt: `${part} tons were taken from a pile of coal. That was exactly ${n}/${d} of the original weight. How many tons were there originally?`,
@@ -749,7 +750,7 @@ const percent: Topic = {
       })
     })
 
-    if (level >= 2) {
+    if (level >= 3) {
       makers.push(() => {
         const p = rng.pick([20, 25, 40, 50, 60, 75, 80])
         return makeFill({
@@ -761,7 +762,7 @@ const percent: Topic = {
       })
     }
 
-    if (level >= 3) {
+    if (level >= 4) {
       makers.push(() => {
         const n = rng.int(20, 200)
         const p = rng.pick([10, 20, 25, 50, 75])
@@ -774,11 +775,11 @@ const percent: Topic = {
       })
     }
 
-    if (level >= 3) {
+    if (level >= 5) {
       makers.push(() => {
         const total = rng.int(20, 200)
         const part = rng.int(1, total - 1)
-        const p = round2((part / total) * 100)
+        const p = (part / total) * 100
         return makeFill({
           prompt: `A class has ${total} students and ${part} of them are boys. What percentage of the class are boys? (Round to one decimal place and enter only the number.)`,
           answer: Math.round(p * 10) / 10,
@@ -791,8 +792,9 @@ const percent: Topic = {
 
     if (level >= 4) {
       makers.push(() => {
-        const total = rng.int(50, 400)
         const p = rng.pick([20, 25, 40, 60, 75, 80])
+        const step = 100 / gcd(p, 100)
+        const total = rng.int(Math.ceil(50 / step), Math.floor(400 / step)) * step
         return makeFill({
           prompt: `A book has ${total} pages and you have read ${p}% of it. How many pages have you read?`,
           answer: round2((total * p) / 100),

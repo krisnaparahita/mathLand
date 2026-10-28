@@ -266,7 +266,7 @@ const multiDigit: Topic = {
       })
     })
 
-    makers.push(() => {
+    if (level >= 2) makers.push(() => {
       const a = rng.int(101, [399, 599, 799, 999, 999][level - 1])
       const b = rng.int(11, [29, 49, 69, 89, 99][level - 1])
       return makeFill({
@@ -279,7 +279,7 @@ const multiDigit: Topic = {
 
     if (level >= 2) {
       makers.push(() => {
-        const a = rng.int(11, 99)
+        const a = rng.int(101, 999)
         const b = rng.int(11, 99)
         const product = a * b
         return makeChoice({
@@ -417,7 +417,7 @@ const division2: Topic = {
 
     makers.push(() => {
       const divisor = rng.pick([10, 20, 30, 40, 50, 60, 70, 80, 90])
-      const quotient = rng.int(2, [9, 9, 12, 15, 20][level - 1])
+      const quotient = rng.int(level === 2 ? 10 : 2, level === 2 ? 11 : [9, 9, 12, 15, 20][level - 1])
       const dividend = divisor * quotient
       return makeFill({
         prompt: `${dividend} ÷ ${divisor} = ?`,
@@ -427,9 +427,9 @@ const division2: Topic = {
       })
     })
 
-    makers.push(() => {
+    if (level >= 2) makers.push(() => {
       const divisor = rng.int(11, [29, 49, 69, 89, 99][level - 1])
-      const quotient = rng.int(2, [9, 12, 15, 20, 25][level - 1])
+      const quotient = rng.int(level === 2 ? 10 : 2, [9, 12, 15, 20, 25][level - 1])
       const dividend = divisor * quotient
       return makeFill({
         prompt: `${dividend} ÷ ${divisor} = ?`,
@@ -442,7 +442,7 @@ const division2: Topic = {
     if (level >= 2) {
       makers.push(() => {
         const divisor = rng.int(11, 49)
-        const quotient = rng.int(3, 20)
+        const quotient = rng.int(level === 2 ? 10 : 3, 20)
         const remainder = rng.int(1, divisor - 1)
         const dividend = divisor * quotient + remainder
         return makeFill({
@@ -457,7 +457,7 @@ const division2: Topic = {
     if (level >= 2) {
       makers.push(() => {
         const divisor = rng.int(11, 49)
-        const quotient = rng.int(3, 20)
+        const quotient = rng.int(level === 2 ? 10 : 3, 20)
         const remainder = rng.int(1, divisor - 1)
         const dividend = divisor * quotient + remainder
         return makeFill({
@@ -1035,7 +1035,7 @@ const geometry: Topic = {
 
     if (level >= 5) {
       makers.push(() => {
-        const parts = rng.int(3, 8)
+        const parts = rng.pick([3, 4, 5, 6, 8])
         const each = 360 / parts
         return makeFill({
           prompt: `A full turn is divided equally into ${parts} parts. How many degrees is each part?`,

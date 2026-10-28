@@ -162,8 +162,8 @@ const fractionMixed: Topic = {
 
     if (level >= 5) {
       makers.push(() => {
-        const total = rng.int(30, 120)
         const d = rng.pick([3, 4, 5])
+        const total = rng.int(Math.ceil(30 / d), Math.floor(120 / d)) * d
         const n1 = rng.int(1, d - 2)
         const n2 = d - n1 - 1
         return makeFill({
@@ -306,7 +306,7 @@ const ratio: Topic = {
     if (level >= 4) {
       makers.push(() => {
         const a = rng.int(1, 5)
-        const b = rng.int(1, 5)
+        const b = rng.pick([1, 2, 3, 4, 5].filter((value) => value !== a))
         const parts = a + b
         const per = rng.int(3, 20)
         const total = parts * per
@@ -322,7 +322,7 @@ const ratio: Topic = {
     if (level >= 4) {
       makers.push(() => {
         const a = rng.int(1, 5)
-        const b = rng.int(1, 5)
+        const b = rng.pick([1, 2, 3, 4, 5].filter((value) => value !== a))
         const parts = a + b
         const per = rng.int(3, 20)
         const total = parts * per
