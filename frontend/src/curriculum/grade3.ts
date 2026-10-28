@@ -62,8 +62,8 @@ const multTable: Topic = {
     const maxB = [5, 9, 9, 9, 9][level - 1]
 
     makers.push(() => {
-      const a = rng.int(2, maxA)
-      const b = rng.int(2, maxB)
+      const a = rng.int(level === 1 ? 1 : level === 2 ? 6 : 2, maxA)
+      const b = rng.int(1, maxB)
       return makeFill({
         prompt: `${a} × ${b} = ?`,
         answer: a * b,
@@ -73,8 +73,8 @@ const multTable: Topic = {
     })
 
     makers.push(() => {
-      const a = rng.int(2, maxA)
-      const b = rng.int(2, maxB)
+      const a = rng.int(level === 1 ? 1 : level === 2 ? 6 : 2, maxA)
+      const b = rng.int(1, maxB)
       const product = a * b
       return makeFill({
         prompt: `${b} × ${a} = ?`,
@@ -114,8 +114,7 @@ const multTable: Topic = {
     if (level >= 3) {
       makers.push(() => {
         const a = rng.int(3, 8)
-        const b = rng.int(3, 8)
-        const half = b % 2 === 0 ? b / 2 : b
+        const half = rng.int(1, 4)
         return makeFill({
           prompt: `Given ${a} × ${half} = ${a * half}, what is ${a} × ${half * 2}?`,
           answer: a * half * 2,
@@ -127,9 +126,7 @@ const multTable: Topic = {
 
     if (level >= 4) {
       makers.push(() => {
-        const a = rng.int(2, 9)
-        const b = rng.int(2, 9)
-        const c = rng.int(2, 9)
+        const [a, b, c] = rng.sample([2, 3, 4, 5, 6, 7, 8, 9], 3)
         return makeChoice({
           prompt: `Which expression has the biggest product?\nA. ${a} × ${b} | B. ${a} × ${c} | C. ${b} × ${c}`,
           answer: a * b >= a * c && a * b >= b * c ? 'A' : a * c >= b * c ? 'B' : 'C',
@@ -323,7 +320,7 @@ const division: Topic = {
         return makeJudge({
           prompt: `True or false: ${dividend} ÷ ${divisor} = ${quotient} R ${remainder + divisor}`,
           correct: false,
-          explanation: `The remainder must be smaller than the divisor. ${remainder + divisor} > ${divisor}, so one more share can still be made. The correct result is ${quotient + 1} R ${remainder}.`,
+          explanation: `The remainder must be smaller than the divisor. ${remainder + divisor} > ${divisor}, so one more share can still be made. The correct result is ${quotient} R ${remainder}.`,
           smartTip: 'Check the remainder',
         })
       })
@@ -435,9 +432,9 @@ const mixedOps: Topic = {
 
     if (level >= 2) {
       makers.push(() => {
-        const a = rng.int(30, 90)
         const b = rng.int(2, 9)
         const c = rng.int(2, 9)
+        const a = rng.int(Math.max(30, b * c), 90)
         return makeFill({
           prompt: `${a} − ${b} × ${c} = ?`,
           answer: a - b * c,
@@ -450,7 +447,7 @@ const mixedOps: Topic = {
     if (level >= 3) {
       makers.push(() => {
         const a = rng.int(10, 40)
-        const b = rng.int(5, 20)
+        const b = rng.int(5, Math.min(20, a))
         const c = rng.int(2, 8)
         return makeFill({
           prompt: `(${a} − ${b}) × ${c} = ?`,
@@ -463,9 +460,10 @@ const mixedOps: Topic = {
 
     if (level >= 3) {
       makers.push(() => {
-        const a = rng.int(20, 60)
-        const b = rng.int(10, 30)
         const c = rng.int(2, 9)
+        const total = c * rng.int(Math.ceil(30 / c), Math.floor(90 / c))
+        const a = rng.int(Math.max(20, total - 30), Math.min(60, total - 10))
+        const b = total - a
         return makeFill({
           prompt: `(${a} + ${b}) ÷ ${c} = ?`,
           answer: Math.round(((a + b) / c) * 100) / 100,
@@ -586,7 +584,7 @@ const fractionIntro: Topic = {
 
     makers.push(() => {
       const d = rng.int(2, [5, 8, 9, 12, 12][level - 1])
-      const n = rng.int(1, d - 1)
+      const n = level === 1 ? 1 : rng.int(1, d - 1)
       return makeChoice({
         prompt: `A watermelon is cut into ${d} equal parts and you take ${n} of them. How do you write that as a fraction?`,
         answer: `${n}/${d}`,
@@ -606,7 +604,7 @@ const fractionIntro: Topic = {
       })
     })
 
-    if (level >= 2) {
+    if (level >= 3) {
       makers.push(() => {
         const d = rng.int(3, 9)
         const a = rng.int(1, d - 2)
@@ -635,7 +633,7 @@ const fractionIntro: Topic = {
       })
     }
 
-    if (level >= 3) {
+    if (level >= 4) {
       makers.push(() => {
         const d = rng.int(4, 12)
         const a = rng.int(1, d - 2)
@@ -741,7 +739,7 @@ const perimeter: Topic = {
     makers.push(() => {
       const a = rng.int(3, 15)
       const b = rng.int(3, 15)
-      const c = rng.int(3, 15)
+      const c = rng.int(Math.abs(a - b) + 1, a + b - 1)
       return makeFill({
         prompt: `A triangle has sides of ${a} cm, ${b} cm and ${c} cm. What is its perimeter in centimeters?`,
         answer: a + b + c,
@@ -1007,11 +1005,11 @@ const calendar: Topic = {
       makers.push(() => {
         const start = rng.int(1, 11)
         const hours = rng.int(2, 10)
-        const end24 = start + 12 + hours
+        const end24 = (start + 12 + hours) % 24
         return makeFill({
           prompt: `A train leaves at ${start} p.m. and travels for ${hours} hours. What hour is its arrival time on the 24-hour clock? (Enter the hour only.)`,
           answer: end24,
-          explanation: `${start} p.m. = ${start + 12}:00, and ${start + 12} + ${hours} = ${end24}, so it arrives at ${end24}:00.`,
+          explanation: `${start} p.m. = ${start + 12}:00, and ${start + 12} + ${hours} = ${start + 12 + hours} hours, so it arrives at ${end24}:00${start + 12 + hours >= 24 ? " the next day" : ""}.`,
           smartTip: 'Add 12 for the afternoon',
         })
       })
